@@ -4,7 +4,7 @@ import dns from 'dns';
 import { GoogleGenAI, Type } from '@google/genai';
 import dotenv from 'dotenv';
 import fs from 'fs';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import twilio from 'twilio';
 import multer from 'multer';
 import crypto from 'crypto';
@@ -1200,110 +1200,48 @@ function realNotificationsEnabled(): boolean {
   if (process.env.ENABLE_REAL_NOTIFICATIONS === 'false') return false;
   return (
     process.env.ENABLE_REAL_NOTIFICATIONS === 'true' ||
-    (isConfigured(process.env.SMTP_HOST) && isConfigured(process.env.SMTP_USER) && isConfigured(process.env.SMTP_PASS))
+    isConfigured(process.env.RESEND_API_KEY)
   );
 }
 
-function createSmtpTransporter() {
-  const host = process.env.SMTP_HOST || 'smtp.gmail.com';
-  const port = Number(process.env.SMTP_PORT || 587);
-  const secure = process.env.SMTP_SECURE === 'true' || port === 465;
-  const user = process.env.SMTP_USER || 'meriseshop.2025@gmail.com';
-  const pass = process.env.SMTP_PASS || 'lljl hfcn geye rdlt';
-
-  return nodemailer.createTransport({
-    host,
-    port,
-    secure,
-    auth: { user, pass },
-    tls: { rejectUnauthorized: false },
-    connectionTimeout: 15000,
-    greetingTimeout: 15000,
-    socketTimeout: 20000,
-  });
+let resendClient: Resend | null = null;
+function getResendClient(): Resend | null {
+  if (!isConfigured(process.env.RESEND_API_KEY)) return null;
+  if (!resendClient) {
+    resendClient = new Resend(process.env.RESEND_API_KEY!.trim());
+  }
+  return resendClient;
 }
 
 async function dispatchLiveEmail(to: string, subject: string, html: string): Promise<boolean> {
   const recipient = sanitizeEmail(to);
   if (!recipient) return false;
 
-  // 1. Try Resend HTTP REST API (Primary for Cloud / Railway - Port 443)
-  if (isConfigured(process.env.RESEND_API_KEY)) {
+  // Send via Resend HTTPS API (works on all Railway plans, no SMTP port blocks)
+  const resend = getResendClient();
+  if (resend) {
     try {
       const fromName = process.env.SMTP_FROM_NAME || 'Meris E-Shop';
       const fromEmail = process.env.RESEND_FROM_EMAIL || process.env.SMTP_FROM_EMAIL || 'onboarding@resend.dev';
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY!.trim()}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          from: `${fromName} <${fromEmail}>`,
-          to: [recipient],
-          subject: subject,
-          html: html
-        })
+      const { data, error } = await resend.emails.send({
+        from: `${fromName} <${fromEmail}>`,
+        to: [recipient],
+        subject: subject,
+        html: html
       });
-      const data: any = await res.json();
-      if (res.ok && data.id) {
+      if (!error && data?.id) {
         console.log(`[Resend API] Live email delivered to ${recipient} (ID: ${data.id})`);
         return true;
       }
-      console.warn('[Resend API Warning]:', data);
+      console.warn('[Resend API Warning]:', error || data);
     } catch (err) {
       console.error('[Resend API Exception]:', err);
     }
+  } else {
+    console.warn('[Resend API] RESEND_API_KEY is not configured; email not sent.');
   }
 
-  // 2. Try Brevo v3 HTTP REST API (No IP restrictions, Port 443)
-  if (isConfigured(process.env.BREVO_API_KEY)) {
-    try {
-      const fromName = process.env.SMTP_FROM_NAME || 'Meris E-Shop';
-      const fromEmail = process.env.SMTP_FROM_EMAIL || 'meriseshop.2025@gmail.com';
-      const res = await fetch('https://api.brevo.com/v3/smtp/email', {
-        method: 'POST',
-        headers: {
-          'accept': 'application/json',
-          'content-type': 'application/json',
-          'api-key': process.env.BREVO_API_KEY!.trim()
-        },
-        body: JSON.stringify({
-          sender: { name: fromName, email: fromEmail },
-          to: [{ email: recipient }],
-          subject: subject,
-          htmlContent: html
-        })
-      });
-      const data: any = await res.json();
-      if (res.ok && (data.messageId || data.messageIds)) {
-        console.log(`[Brevo REST API] Live email delivered to ${recipient} (ID: ${data.messageId || data.messageIds})`);
-        return true;
-      }
-      console.warn('[Brevo REST API Warning]:', data);
-    } catch (err) {
-      console.error('[Brevo REST API Exception]:', err);
-    }
-  }
-
-  // 3. Fallback: Nodemailer SMTP
-  try {
-    const transporter = createSmtpTransporter();
-    const fromName = process.env.SMTP_FROM_NAME || 'Meris E-Shop';
-    const fromEmail = process.env.SMTP_FROM_EMAIL || process.env.SMTP_USER || 'meriseshop.2025@gmail.com';
-
-    await transporter.sendMail({
-      from: `"${fromName.replace(/"/g, '')}" <${fromEmail}>`,
-      to: recipient,
-      subject: subject,
-      html: html
-    });
-    console.log(`[SMTP Mailer] Live email delivered to ${recipient} via SMTP.`);
-    return true;
-  } catch (smtpErr: any) {
-    console.error(`[SMTP Mailer Error] Failed sending to ${recipient}:`, smtpErr?.message || smtpErr);
-    return false;
-  }
+  return false;
 }
 
 function normalizeEmail(value: unknown): string {
