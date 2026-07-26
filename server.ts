@@ -5,6 +5,7 @@ import { GoogleGenAI, Type } from '@google/genai';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 import twilio from 'twilio';
 import multer from 'multer';
 import crypto from 'crypto';
@@ -28,6 +29,9 @@ try {
 }
 
 dotenv.config();
+
+// Resend client (preferred email delivery — uses HTTPS API, works on all Railway plans)
+const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
@@ -1296,36 +1300,30 @@ async function dispatchLiveEmail(to: string, subject: string, html: string): Pro
     }
   }
 
-  // 2. Try Resend HTTP REST API (Secondary for Cloud / Railway - Port 443)
-  if (isConfigured(process.env.RESEND_API_KEY)) {
+  // 2. Try Resend SDK (Secondary for Cloud / Railway - HTTPS API, works on Railway Hobby plan)
+  if (resend) {
     try {
       const fromName = process.env.SMTP_FROM_NAME || 'Meris E-Shop';
-      const rawFrom = (process.env.RESEND_FROM_EMAIL || process.env.SMTP_FROM_EMAIL || 'onboarding@resend.dev').trim();
+      const rawFrom = (process.env.RESEND_FROM_EMAIL || process.env.SMTP_FROM_EMAIL || 'noreply@meriseshop.com').trim();
       const fromFormatted = rawFrom.includes('onboarding@resend.dev')
         ? 'onboarding@resend.dev'
         : `${fromName} <${rawFrom}>`;
 
-      const res = await fetch('https://api.resend.com/emails', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.RESEND_API_KEY!.trim()}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          from: fromFormatted,
-          to: [recipient],
-          subject: subject,
-          html: html
-        })
+      const { data, error } = await resend.emails.send({
+        from: fromFormatted,
+        to: recipient,
+        subject: subject,
+        html: html
       });
-      const data: any = await res.json();
-      if (res.ok && data.id) {
-        console.log(`[Resend API] Live email delivered to ${recipient} (ID: ${data.id})`);
+
+      if (error) {
+        console.error(`[Resend SDK Error] Failed sending to ${recipient}:`, error);
+      } else {
+        console.log(`[Resend SDK] Live email delivered to ${recipient} (ID: ${data?.id})`);
         return true;
       }
-      console.warn(`[Resend API Warning] Failed sending to ${recipient}:`, data);
     } catch (err) {
-      console.error('[Resend API Exception]:', err);
+      console.error('[Resend SDK Exception]:', err);
     }
   }
 
