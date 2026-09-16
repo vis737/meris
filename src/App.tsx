@@ -488,7 +488,8 @@ export default function App() {
     payuTxnId?: string,
     payuPaymentId?: string,
     payuHash?: string,
-    payuStatus?: string
+    payuStatus?: string,
+    liveShippingCost?: number
   ): Promise<Order | void> => {
     if (!currentUser) {
       setPendingCheckout(true);
@@ -509,8 +510,12 @@ export default function App() {
     const subtotal = totals.subtotal;
     const discount = totals.bundleDiscount + totals.couponDiscount;
     const tax = totals.tax;
-    const shippingCost = totals.shippingCost;
-    const finalTotal = totals.grandTotal;
+    // Trust the live ST Courier rate the customer was shown at checkout when
+    // available, so the charged total matches the quoted delivery charge.
+    const shippingCost = typeof liveShippingCost === 'number' && liveShippingCost > 0
+      ? liveShippingCost
+      : totals.shippingCost;
+    const finalTotal = totals.grandTotal - totals.shippingCost + shippingCost;
 
     const isUpiPayment = paymentMethod === 'UPI QR Payment';
     const isCodPayment = paymentMethod === 'Cash on Delivery' || paymentMethod === 'COD';
@@ -527,6 +532,7 @@ export default function App() {
       shippingCost,
       shippingWeightKg: totals.shippingWeightKg,
       shippingZone: totals.shippingZone,
+      shippingProvider: typeof liveShippingCost === 'number' && liveShippingCost > 0 ? 'ST Courier Live' : undefined,
       total: finalTotal,
       date: new Date().toISOString().split('T')[0],
       status: 'pending',

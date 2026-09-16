@@ -164,9 +164,9 @@ const PRODUCT_WEIGHT_FALLBACKS_KG: Record<string, number> = {
   bottles: 0.9
 };
 
-const SHIPPING_HANDLING_SURCHARGE = 50;
+export const SHIPPING_HANDLING_SURCHARGE = 50;
 
-function addShippingHandlingSurcharge(cost: number): number {
+export function addShippingHandlingSurcharge(cost: number): number {
   return cost > 0 ? cost + SHIPPING_HANDLING_SURCHARGE : cost;
 }
 
@@ -205,127 +205,103 @@ export function getCartShipmentWeightKg(cartItems: { product: Product; quantity:
   return Math.round(total * 100) / 100;
 }
 
+// ---------------------------------------------------------------------------
+// Fallback delivery rate card (used only when ST Courier has no live rate):
+//   Base rates per 0.5 kg slab
+//   - Intra-City (local / within same city):        Rs.25 - Rs.40  (mid Rs.32)
+//   - Intra-State (e.g. within Tamil Nadu):         Rs.30 - Rs.50  (mid Rs.40)
+//   - Neighboring States (Regional / South India):  Rs.40 - Rs.60  (mid Rs.50)
+//   - Metro to Metro:                               Rs.60 - Rs.90  (mid Rs.75)
+//   - Rest of India (Inter-State / Long Distance):  Rs.80 - Rs.120 (mid Rs.100)
+//   + 5% GST on the shipping base
+//   + Remote Area Surcharge: flat Rs.24 per kg
+//   + Fixed handling tariff for non-document commercial goods (Rs.50)
+// ---------------------------------------------------------------------------
 interface PincodeRateProfile {
   zone: string;
   baseHalfKgRate: number;
-  additionalHalfKgRate: number;
-  remoteSurcharge: number;
+  isRemote: boolean;
 }
 
-function getLastMilePincodeAdjustment(pin: string): number {
-  if (pin.length !== 6) return 0;
+const SHIPPING_GST_RATE = 0.05;
+export const REMOTE_SURCHARGE_PER_KG = 24;
 
-  // Courier partners often rate by serviceable pin clusters. This deterministic
-  // adjustment keeps quotes sensitive to the exact pincode without an external API.
-  const district = Number(pin.slice(0, 3));
-  const localRoute = Number(pin.slice(3));
-  const districtAdjustment = (district % 6) * 4;
-  const routeAdjustment = (localRoute % 5) * 3;
+// Remote / difficult-to-reach destination clusters
+const REMOTE_PREFIX3 = new Set([194, 744, 795]); // Leh, A&N Islands, Manipur
+const REMOTE_PREFIX2 = new Set([78, 79]); // North-East India
+const REMOTE_PREFIX4 = new Set(['6825']); // Lakshadweep islands (Kochi 682xxx stays normal)
+const HIMALAYAN_PREFIX3 = new Set([171, 172, 173, 174, 175, 176, 177]); // Himachal
 
-  return districtAdjustment + routeAdjustment;
-}
+// Major metro city sorting hubs (outside Tamil Nadu; TN metros rate as Intra-State)
+const METRO_PREFIX3 = new Set([110, 380, 400, 411, 500, 560, 700]); // Delhi, Ahmedabad, Mumbai, Pune, Hyderabad, Bengaluru, Kolkata
 
 function getShippingRateProfileFromPincode(pincode?: string): PincodeRateProfile {
   const pin = (pincode || '').replace(/\D/g, '');
   if (pin.length !== 6) {
     return {
       zone: 'Enter pincode for exact rate',
-      baseHalfKgRate: 80,
-      additionalHalfKgRate: 52,
-      remoteSurcharge: 0
+      baseHalfKgRate: 100,
+      isRemote: false
     };
   }
 
   const prefix2 = Number(pin.slice(0, 2));
   const prefix3 = Number(pin.slice(0, 3));
-  const lastMileAdjustment = getLastMilePincodeAdjustment(pin);
 
-  if (prefix3 >= 600 && prefix3 <= 609) {
+  if (
+    REMOTE_PREFIX3.has(prefix3) ||
+    REMOTE_PREFIX2.has(prefix2) ||
+    REMOTE_PREFIX4.has(pin.slice(0, 4)) ||
+    HIMALAYAN_PREFIX3.has(prefix3)
+  ) {
     return {
-      zone: 'Chennai Metro Local',
-      baseHalfKgRate: 58 + lastMileAdjustment,
-      additionalHalfKgRate: 38,
-      remoteSurcharge: 0
+      zone: 'Rest of India (Remote Area)',
+      baseHalfKgRate: 100,
+      isRemote: true
+    };
+  }
+
+  // Store ships from Azhagappapuram 629401 (Kanyakumari district, TN)
+  if (prefix3 === 629) {
+    return {
+      zone: 'Intra-City Local (Kanyakumari)',
+      baseHalfKgRate: 32,
+      isRemote: false
     };
   }
 
   if (prefix2 >= 60 && prefix2 <= 64) {
     return {
-      zone: 'Tamil Nadu Local',
-      baseHalfKgRate: 62 + lastMileAdjustment,
-      additionalHalfKgRate: 40,
-      remoteSurcharge: prefix3 >= 643 ? 15 : 0
+      zone: 'Intra-State (Tamil Nadu)',
+      baseHalfKgRate: 40,
+      isRemote: false
     };
   }
 
-  if (prefix2 >= 56 && prefix2 <= 59) {
+  if (METRO_PREFIX3.has(prefix3)) {
     return {
-      zone: prefix3 === 560 ? 'Bengaluru Metro' : 'Karnataka',
-      baseHalfKgRate: (prefix3 === 560 ? 74 : 82) + lastMileAdjustment,
-      additionalHalfKgRate: prefix3 === 560 ? 48 : 54,
-      remoteSurcharge: 0
+      zone: 'Metro City Delivery',
+      baseHalfKgRate: 75,
+      isRemote: false
     };
   }
 
-  if (prefix2 >= 50 && prefix2 <= 53) {
+  if (
+    (prefix2 >= 50 && prefix2 <= 53) || // Telangana / Andhra
+    (prefix2 >= 56 && prefix2 <= 59) || // Karnataka
+    (prefix2 >= 67 && prefix2 <= 69)    // Kerala
+  ) {
     return {
-      zone: prefix3 === 500 ? 'Hyderabad Metro' : 'Telangana / Andhra',
-      baseHalfKgRate: (prefix3 === 500 ? 78 : 88) + lastMileAdjustment,
-      additionalHalfKgRate: prefix3 === 500 ? 50 : 58,
-      remoteSurcharge: 0
-    };
-  }
-
-  if (prefix2 >= 67 && prefix2 <= 69) {
-    return {
-      zone: 'Kerala',
-      baseHalfKgRate: 92 + lastMileAdjustment,
-      additionalHalfKgRate: 60,
-      remoteSurcharge: prefix3 >= 685 ? 18 : 0
-    };
-  }
-
-  if ((prefix2 >= 78 && prefix2 <= 79) || [194, 744].includes(prefix3)) {
-    return {
-      zone: 'Remote / Special Route',
-      baseHalfKgRate: 168 + lastMileAdjustment,
-      additionalHalfKgRate: 108,
-      remoteSurcharge: [194, 744].includes(prefix3) ? 45 : 30
-    };
-  }
-
-  if ((prefix2 >= 36 && prefix2 <= 49) || (prefix2 >= 30 && prefix2 <= 34)) {
-    return {
-      zone: 'West / Central India',
-      baseHalfKgRate: 108 + lastMileAdjustment,
-      additionalHalfKgRate: 70,
-      remoteSurcharge: 0
-    };
-  }
-
-  if ((prefix2 >= 11 && prefix2 <= 24) || (prefix2 >= 25 && prefix2 <= 29)) {
-    return {
-      zone: 'North India',
-      baseHalfKgRate: 118 + lastMileAdjustment,
-      additionalHalfKgRate: 78,
-      remoteSurcharge: [171, 172, 173, 174, 175, 176, 177].includes(prefix3) ? 25 : 0
-    };
-  }
-
-  if (prefix2 >= 70 && prefix2 <= 77) {
-    return {
-      zone: prefix3 === 700 ? 'Kolkata Metro' : 'East India',
-      baseHalfKgRate: (prefix3 === 700 ? 115 : 132) + lastMileAdjustment,
-      additionalHalfKgRate: prefix3 === 700 ? 76 : 86,
-      remoteSurcharge: 0
+      zone: 'Neighboring State (South India)',
+      baseHalfKgRate: 50,
+      isRemote: false
     };
   }
 
   return {
-    zone: 'Rest of India',
-    baseHalfKgRate: 138 + lastMileAdjustment,
-    additionalHalfKgRate: 90,
-    remoteSurcharge: 10
+    zone: 'Rest of India (Long Distance)',
+    baseHalfKgRate: 100,
+    isRemote: false
   };
 }
 
@@ -344,26 +320,29 @@ function calculateLocalShippingCost(
   const rateProfile = getShippingRateProfileFromPincode(destinationPincode);
   const zone = rateProfile.zone;
 
+  // Delivery charges are only quoted once the full 6-digit pincode is known.
   if (pin.length !== 6) {
-    const fallbackCost = shippingMethod === 'express' ? 180 : subtotal > 1500 ? 0 : 80;
-    return { cost: addShippingHandlingSurcharge(fallbackCost), billableWeightKg, zone };
+    return { cost: 0, billableWeightKg, zone };
   }
 
+  // Every 0.5 kg slab is billed at the zone base rate.
   const halfKgSlabs = Math.ceil(billableWeightKg / 0.5);
-  const standardCost =
-    rateProfile.baseHalfKgRate +
-    Math.max(0, halfKgSlabs - 1) * rateProfile.additionalHalfKgRate +
-    rateProfile.remoteSurcharge;
+  let shippingBase = halfKgSlabs * rateProfile.baseHalfKgRate;
 
-  if (shippingMethod === 'express') {
-    return {
-      cost: addShippingHandlingSurcharge(Math.round(standardCost * 1.45 + 40)),
-      billableWeightKg,
-      zone
-    };
+  // Remote Area Surcharge: flat Rs.24 per kg on billable weight.
+  if (rateProfile.isRemote) {
+    shippingBase += REMOTE_SURCHARGE_PER_KG * billableWeightKg;
   }
 
-  return { cost: addShippingHandlingSurcharge(standardCost), billableWeightKg, zone };
+  // Express uplift on the pre-tax base (faster line-haul + priority last mile).
+  if (shippingMethod === 'express') {
+    shippingBase = Math.round(shippingBase * 1.45 + 40);
+  }
+
+  // GST: additional 5% Government Service Tax on the shipping base.
+  shippingBase = Math.round(shippingBase * (1 + SHIPPING_GST_RATE));
+
+  return { cost: addShippingHandlingSurcharge(shippingBase), billableWeightKg, zone };
 }
 
 export function calculateCartTotals(
@@ -426,9 +405,9 @@ export function calculateCartTotals(
   // 5. Gift wrapping cost (+ Rs.100 for premium wraps)
   const giftWrappingCost = giftWrappingRequested ? 100 : 0;
 
-  // 6. Tax (18% rules on adjusted net)
+  // 6. Tax (5% GST on adjusted net)
   const taxableAmount = Math.max(0, adjustedSubtotal - couponDiscount);
-  const tax = Math.round(taxableAmount * 0.18);
+  const tax = Math.round(taxableAmount * 0.05);
 
   // 7. Local shipping logic: billable weight slab + destination pincode zone
   const shippingWeightKg = getCartShipmentWeightKg(cartItems);

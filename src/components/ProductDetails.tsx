@@ -296,7 +296,7 @@ export default function ProductDetails({
       {/* Structured tabs for details specifications and user reviews */}
       <div id="reviews-section-ref" className="mt-12 bg-white rounded-3xl p-6 md:p-10 border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.015)] text-left">
         {/* Navigation Headings */}
-        <div className="flex gap-6 border-b border-gray-100 pb-3 mb-6">
+        <div className="flex gap-6 max-sm:gap-4 border-b border-gray-100 pb-3 mb-6 overflow-x-auto no-scrollbar">
           {(['description', 'specifications', 'reviews'] as const).map((tab) => (
             <button
               key={tab}

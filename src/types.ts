@@ -102,6 +102,7 @@ export interface Order {
   shippingCost: number;
   shippingWeightKg?: number;
   shippingZone?: string;
+  shippingProvider?: string;
   tax: number;
   discount: number;
   subtotal: number;

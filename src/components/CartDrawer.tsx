@@ -45,8 +45,6 @@ export default function CartDrawer({
   const couponDiscount = totals.couponDiscount;
   const discountAmount = bundleDiscount + couponDiscount;
   const gstTax = totals.tax;
-  const shippingCharges = totals.shippingCost;
-  const billableWeightKg = totals.billableWeightKg;
   const finalTotal = totals.grandTotal;
 
   const handleApplyCouponCode = (e: React.FormEvent) => {
@@ -103,16 +101,16 @@ export default function CartDrawer({
       {/* Black backdrop with fade animation */}
       <div className="absolute inset-0 bg-black/60 backdrop-blur-xs" onClick={onClose} />
 
-      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10">
+      <div className="absolute inset-y-0 right-0 max-w-full flex pl-10 max-sm:pl-0">
         <motion.div
           initial={{ x: '100%' }}
           animate={{ x: 0 }}
           exit={{ x: '100%' }}
           transition={{ type: 'tween', duration: 0.3 }}
-          className="w-screen max-w-md bg-white h-full flex flex-col shadow-2xl relative"
+          className="w-screen max-w-md max-sm:w-full bg-white h-full flex flex-col shadow-2xl relative"
         >
           {/* Header */}
-          <div className="p-6 border-b border-gray-100 flex items-center justify-between">
+          <div className="p-6 max-sm:p-4 border-b border-gray-100 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <ShoppingCart className="w-5 h-5 text-gold-500" />
               <h3 className="font-display font-medium text-sm tracking-widest text-navy-950 uppercase">Your Shopping Bag</h3>
@@ -123,7 +121,7 @@ export default function CartDrawer({
           </div>
 
           {/* Cart items list */}
-          <div className="flex-1 overflow-y-auto p-6 space-y-4 no-scrollbar">
+          <div className="flex-1 overflow-y-auto p-6 max-sm:p-4 space-y-4 no-scrollbar">
             {cartItems.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-3">
                 <div className="w-16 h-16 bg-gold-50 dark:bg-gold-950/40 text-gold-500 rounded-full flex items-center justify-center">
@@ -193,7 +191,7 @@ export default function CartDrawer({
 
           {/* Pricing breakdowns overlay */}
           {cartItems.length > 0 && (
-            <div className="border-t-2 border-gray-200 dark:border-navy-800 p-6 bg-slate-50 dark:bg-navy-900/90 space-y-4 relative">
+            <div className="border-t-2 border-gray-200 dark:border-navy-800 p-6 max-sm:p-4 bg-slate-50 dark:bg-navy-900/90 space-y-4 relative">
               {/* Floating Confetti Particle Burst Layer */}
               <div className="absolute inset-x-0 bottom-full h-0 pointer-events-none overflow-visible flex items-center justify-center">
                 {particles.map((p) => (
@@ -274,7 +272,7 @@ export default function CartDrawer({
                       />
                       Standard
                     </span>
-                    <span className="text-xs font-bold font-mono text-slate-800 dark:text-slate-200">{shippingMethod === 'standard' && shippingCharges === 0 ? 'FREE' : 'By pincode'}</span>
+                    <span className="text-xs font-bold font-mono text-slate-800 dark:text-slate-200">By pincode</span>
                   </label>
                   <label className={`flex-1 p-2.5 rounded-xl border-2 transition flex items-center justify-between cursor-pointer ${shippingMethod === 'express' ? 'border-gold-500 bg-gold-50/60 dark:bg-gold-950/30' : 'border-gray-300 dark:border-navy-700 bg-white dark:bg-navy-950 hover:border-gray-400'}`}>
                     <span className="text-xs text-navy-950 dark:text-white flex items-center gap-2 font-bold">
@@ -313,20 +311,16 @@ export default function CartDrawer({
                     <span className="font-mono text-sm font-extrabold">-Rs.{bundleDiscount}</span>
                   </div>
                 )}
-                <div className="flex justify-between items-center text-navy-950 dark:text-slate-100 font-semibold">
-                  <span className="text-slate-800 dark:text-slate-200 font-bold">GST / Tax (18% inclusive rule)</span>
+                <div className="flex justify-between items-center text-navy-950 dark:text-slate-100 font-semibold">                    <span className="text-slate-800 dark:text-slate-200 font-bold">GST / Tax (5%)</span>
                   <span className="font-mono text-sm font-extrabold text-navy-950 dark:text-white">Rs.{gstTax}</span>
                 </div>
-                <div className="flex justify-between items-center text-navy-950 dark:text-slate-100 font-semibold pb-2 border-b-2 border-gray-200 dark:border-navy-800">
-                  <span className="text-slate-800 dark:text-slate-200 font-bold">
-                    Delivery Charges <span className="text-xs text-slate-600 dark:text-slate-400 font-medium">(final by pincode, {billableWeightKg.toFixed(2)} kg)</span>
-                  </span>
-                  <span className="font-mono text-sm font-extrabold text-navy-950 dark:text-white">{shippingCharges === 0 ? 'FREE' : `Rs.${shippingCharges}`}</span>
-                </div>
-                <div className="flex justify-between items-center text-sm font-bold text-navy-950 dark:text-white pt-2">
+                <div className="flex justify-between items-center text-sm font-bold text-navy-950 dark:text-white pt-2 pb-2 border-b-2 border-gray-200 dark:border-navy-800">
                   <span className="font-display uppercase tracking-wider text-sm font-extrabold">Total Cart Payable</span>
                   <span className="font-mono text-lg font-black text-navy-950 dark:text-gold-400">Rs.{finalTotal}</span>
                 </div>
+                <p className="text-[10px] font-mono tracking-[0.14em] uppercase text-slate-500 dark:text-slate-400">
+                  Delivery charges are calculated at checkout once you enter your pincode
+                </p>
               </div>
 
               {/* Final Proceed Checkout button */}

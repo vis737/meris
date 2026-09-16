@@ -268,7 +268,7 @@ export default function Navbar({
   return (
     <header className="sticky top-0 z-40 bg-[#0F172A] border-b-[3px] border-[#C5A021] text-white font-sans shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20 gap-4">
+        <div className="flex items-center justify-between h-20 max-sm:h-16 gap-4 max-sm:gap-2">
           
           {/* Mobile Menu Icon */}
           <button
@@ -283,14 +283,14 @@ export default function Navbar({
             onClick={() => { onNavigate('home'); clearSearch(); }}
             className="flex items-center gap-2.5 cursor-pointer select-none"
           >
-            <div className="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center shadow-lg shadow-gold-500/10 border border-[#C5A021]/30 bg-[#0F172A] hover:scale-105 transition duration-300">
+            <div className="w-12 h-12 max-sm:w-9 max-sm:h-9 rounded-full overflow-hidden flex items-center justify-center shadow-lg shadow-gold-500/10 border border-[#C5A021]/30 bg-[#0F172A] hover:scale-105 transition duration-300 shrink-0">
               <MerisLogo className="w-full h-full" />
             </div>
             <div>
-              <span className="font-display font-black text-xl sm:text-2xl tracking-[0.5px] text-[#C5A021] uppercase">
+              <span className="font-display font-black text-xl sm:text-2xl max-sm:text-base tracking-[0.5px] max-sm:tracking-[0.3px] text-[#C5A021] uppercase whitespace-nowrap">
                 MERIS<span className="text-white"> E-SHOP</span>
               </span>
-              <p className="text-[9px] text-slate-400 tracking-[0.18em] font-medium leading-none">PREMIUM SELECTION</p>
+              <p className="text-[9px] text-slate-400 tracking-[0.18em] font-medium leading-none max-sm:hidden">PREMIUM SELECTION</p>
             </div>
           </div>
 
@@ -480,6 +480,28 @@ export default function Navbar({
             </button>
           </div>
 
+        </div>
+      </div>
+
+      {/* Mobile search row — keeps product search reachable on phones */}
+      <div className="sm:hidden px-4 pb-3">
+        <div className="relative">
+          <Search className="absolute left-3.5 top-2.5 w-4 h-4 text-slate-400" />
+          <input
+            type="text"
+            placeholder="Search premium toys, gifts..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="w-full pl-10 pr-9 py-2.5 bg-white/10 border border-slate-700 text-slate-200 placeholder-slate-400 rounded-full text-xs focus:outline-none focus:border-[#C5A021] transition"
+          />
+          {searchInput && (
+            <button
+              onClick={clearSearch}
+              className="absolute right-3 top-2 w-6 h-6 text-slate-400 hover:text-slate-200 font-mono text-xs"
+            >
+              x
+            </button>
+          )}
         </div>
       </div>
 

@@ -76,6 +76,28 @@ html.dark body {
   scrollbar-width: none;
 }
 
+/* ------------------------------------------------------------------
+   Mobile-only refinements — desktop layouts are untouched.
+   ------------------------------------------------------------------ */
+@media (max-width: 640px) {
+  /* Prevent iOS Safari auto-zoom when focusing form fields */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Slightly denser rem scale so 12-col paddings/grids breathe on 360-414px screens */
+  html {
+    font-size: 15px;
+  }
+
+  /* Kill accidental double-tap zoom delays on action buttons */
+  button {
+    touch-action: manipulation;
+  }
+}
+
 /* Golden glow keyframe */
 @keyframes gold-pulse {
   0%, 100% {

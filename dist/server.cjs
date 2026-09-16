@@ -1063,7 +1063,7 @@ var DEFAULT_CMS = {
   contactPhone: "+91 93842 92229",
   contactAddress: "5/339, Fathima Road, nager, Azhagappapuram, Tamil Nadu 629401",
   privacyPolicy: "Your personal data (Name, Email, Address) is transmitted through full-stack secured channels. We use client local persistence for speedy loading times and never sell user profiling sheets to marketing aggregates.",
-  termsConditions: "All prices listed on MERIS E-SHOP are inclusive of standard 18% GST rules. Returns have a 7-day windows and of course must remain spotless inside initial package cases."
+  termsConditions: "All prices listed on MERIS E-SHOP are inclusive of standard 5% GST rules. Returns have a 7-day windows and of course must remain spotless inside initial package cases."
 };
 var INITIAL_CMS = DEFAULT_CMS;
 var INITIAL_LOGS = [
@@ -1407,6 +1407,65 @@ var app = (0, import_express.default)();
 app.set("trust proxy", true);
 app.get("/health", (req, res) => res.status(200).send("OK"));
 var PORT = Number(process.env.PORT || 3e3);
+var ST_COURIER_RATE_URL = "https://stcourier.com/tools/do_getrate";
+var ST_COURIER_PICKUP_PINCODE = (process.env.ST_COURIER_PICKUP_PINCODE || "629401").replace(/\D/g, "").slice(0, 6);
+var ST_COURIER_CACHE_TTL_MS = 10 * 60 * 1e3;
+var stCourierQuoteCache = /* @__PURE__ */ new Map();
+async function fetchStCourierRate(pincode, weightGrams) {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8e3);
+    const form = new FormData();
+    form.append("org_pincode", ST_COURIER_PICKUP_PINCODE);
+    form.append("dest_pincode", pincode);
+    form.append("dest_country", "");
+    form.append("doc_type", "N");
+    form.append("act_weight", String(Math.min(Math.max(Math.round(weightGrams), 1), 1e4)));
+    form.append("weight_label", "gram");
+    form.append("d_act_weight", "gram");
+    form.append("length", "");
+    form.append("width", "");
+    form.append("height", "");
+    form.append("q_type", "DM");
+    const response = await fetch(ST_COURIER_RATE_URL, {
+      method: "POST",
+      body: form,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "Referer": "https://stcourier.com/rate-calculator",
+        "User-Agent": "MerisEshop/1.0 (+delivery rate proxy)"
+      },
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    if (!response.ok) {
+      console.warn(`[ST Courier] Rate lookup HTTP ${response.status} for lane ${ST_COURIER_PICKUP_PINCODE} -> ${pincode}.`);
+      return null;
+    }
+    const text = await response.text();
+    let json;
+    try {
+      json = JSON.parse(text.trim());
+    } catch {
+      console.warn("[ST Courier] Unexpected non-JSON rate response.");
+      return null;
+    }
+    const rate = Number(json?.res?.rate);
+    if (json?.code !== 200 || !Number.isFinite(rate) || rate <= 0) {
+      console.warn(`[ST Courier] No published rate for lane ${ST_COURIER_PICKUP_PINCODE} -> ${pincode}: ${json?.msg || "unknown response"}`);
+      return null;
+    }
+    return {
+      cost: Math.round(rate),
+      provider: String(json.res.name || "ST Courier"),
+      source: "st-courier",
+      checkedAt: (/* @__PURE__ */ new Date()).toISOString()
+    };
+  } catch (err) {
+    console.warn("[ST Courier] Rate lookup failed:", err?.message || err);
+    return null;
+  }
+}
 var JWT_SECRET = process.env.JWT_SECRET || "a3f9d2c1e8b74605af319de27c64f8a1b952e0d47618c3f290ab5e86d41379fc";
 if (!process.env.JWT_SECRET) {
   console.warn("\u26A0\uFE0F WARNING: JWT_SECRET not set in environment. Using fallback secret.");
@@ -1494,6 +1553,36 @@ app.use((req, res, next) => {
     return res.sendStatus(200);
   }
   next();
+});
+app.post("/api/shipping/stcourier-rate", rateLimiter(40, 15 * 60 * 1e3), async (req, res) => {
+  try {
+    const pincode = String(req.body?.pincode || "").replace(/\D/g, "");
+    const weightGrams = Math.round(Number(req.body?.weightGrams));
+    if (pincode.length !== 6 || !Number.isFinite(weightGrams) || weightGrams <= 0) {
+      return res.status(400).json({ error: "Provide a 6-digit destination pincode and a positive weightGrams value." });
+    }
+    const grams = Math.min(Math.max(weightGrams, 1), 1e4);
+    const cacheKey = `${pincode}:${grams}`;
+    const cached = stCourierQuoteCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+      return res.json({ ...cached.quote, cached: true });
+    }
+    const liveQuote = await fetchStCourierRate(pincode, grams);
+    if (liveQuote) {
+      stCourierQuoteCache.set(cacheKey, { quote: liveQuote, expiresAt: Date.now() + ST_COURIER_CACHE_TTL_MS });
+      return res.json(liveQuote);
+    }
+    return res.json({
+      cost: null,
+      provider: "ST Courier",
+      source: "estimate",
+      checkedAt: (/* @__PURE__ */ new Date()).toISOString(),
+      message: "ST Courier has not published a rate for this lane yet \u2014 showing the internal zone estimate."
+    });
+  } catch (err) {
+    console.error("ST Courier rate proxy failed:", err);
+    res.status(500).json({ error: "Failed to fetch delivery rate." });
+  }
 });
 var liveSessions = {};
 var liveAlerts = [];

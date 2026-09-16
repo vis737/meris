@@ -958,7 +958,7 @@ export const DEFAULT_CMS: CMSConfig = {
   contactPhone: '+91 93842 92229',
   contactAddress: '5/339, Fathima Road, nager, Azhagappapuram, Tamil Nadu 629401',
   privacyPolicy: 'Your personal data (Name, Email, Address) is transmitted through full-stack secured channels. We use client local persistence for speedy loading times and never sell user profiling sheets to marketing aggregates.',
-  termsConditions: 'All prices listed on MERIS E-SHOP are inclusive of standard 18% GST rules. Returns have a 7-day windows and of course must remain spotless inside initial package cases.'
+  termsConditions: 'All prices listed on MERIS E-SHOP are inclusive of standard 5% GST rules. Returns have a 7-day windows and of course must remain spotless inside initial package cases.'
 };
 
 export function sanitizeProduct(p: any): Product {

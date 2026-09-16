@@ -408,6 +408,88 @@ app.set('trust proxy', true);
 app.get('/health', (req, res) => res.status(200).send('OK'));
 const PORT = Number(process.env.PORT || 3000);
 
+// ---------------------------------------------------------------------------
+// ST Courier live delivery-rate proxy (https://stcourier.com/rate-calculator)
+// The storefront posts the destination pincode + cart weight here; the server
+// queries ST Courier's rate calculator and caches the result. When ST Courier
+// has not published a rate for a lane, the response falls back to source
+// 'estimate' and the UI shows the internal zone estimate instead.
+// ---------------------------------------------------------------------------
+const ST_COURIER_RATE_URL = 'https://stcourier.com/tools/do_getrate';
+const ST_COURIER_PICKUP_PINCODE = (process.env.ST_COURIER_PICKUP_PINCODE || '629401').replace(/\D/g, '').slice(0, 6);
+const ST_COURIER_CACHE_TTL_MS = 10 * 60 * 1000; // 10 minutes
+
+interface StCourierQuote {
+  cost: number | null;
+  provider: string;
+  source: 'st-courier' | 'estimate';
+  checkedAt: string;
+  message?: string;
+}
+
+const stCourierQuoteCache = new Map<string, { quote: StCourierQuote; expiresAt: number }>();
+
+async function fetchStCourierRate(pincode: string, weightGrams: number): Promise<StCourierQuote | null> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const form = new FormData();
+    form.append('org_pincode', ST_COURIER_PICKUP_PINCODE);
+    form.append('dest_pincode', pincode);
+    form.append('dest_country', '');
+    form.append('doc_type', 'N');
+    form.append('act_weight', String(Math.min(Math.max(Math.round(weightGrams), 1), 10000)));
+    form.append('weight_label', 'gram');
+    form.append('d_act_weight', 'gram');
+    form.append('length', '');
+    form.append('width', '');
+    form.append('height', '');
+    form.append('q_type', 'DM');
+
+    const response = await fetch(ST_COURIER_RATE_URL, {
+      method: 'POST',
+      body: form,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'Referer': 'https://stcourier.com/rate-calculator',
+        'User-Agent': 'MerisEshop/1.0 (+delivery rate proxy)'
+      },
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      console.warn(`[ST Courier] Rate lookup HTTP ${response.status} for lane ${ST_COURIER_PICKUP_PINCODE} -> ${pincode}.`);
+      return null;
+    }
+
+    const text = await response.text();
+    let json: any;
+    try {
+      json = JSON.parse(text.trim());
+    } catch {
+      console.warn('[ST Courier] Unexpected non-JSON rate response.');
+      return null;
+    }
+
+    const rate = Number(json?.res?.rate);
+    if (json?.code !== 200 || !Number.isFinite(rate) || rate <= 0) {
+      console.warn(`[ST Courier] No published rate for lane ${ST_COURIER_PICKUP_PINCODE} -> ${pincode}: ${json?.msg || 'unknown response'}`);
+      return null;
+    }
+
+    return {
+      cost: Math.round(rate),
+      provider: String(json.res.name || 'ST Courier'),
+      source: 'st-courier',
+      checkedAt: new Date().toISOString()
+    };
+  } catch (err: any) {
+    console.warn('[ST Courier] Rate lookup failed:', err?.message || err);
+    return null;
+  }
+}
+
 const JWT_SECRET = process.env.JWT_SECRET || 'a3f9d2c1e8b74605af319de27c64f8a1b952e0d47618c3f290ab5e86d41379fc';
 if (!process.env.JWT_SECRET) {
   console.warn('⚠️ WARNING: JWT_SECRET not set in environment. Using fallback secret.');
@@ -510,6 +592,41 @@ app.use((req, res, next) => {
     return res.sendStatus(200);
   }
   next();
+});
+
+// Live delivery-rate quote endpoint (ST Courier with estimate fallback).
+app.post('/api/shipping/stcourier-rate', rateLimiter(40, 15 * 60 * 1000), async (req, res) => {
+  try {
+    const pincode = String(req.body?.pincode || '').replace(/\D/g, '');
+    const weightGrams = Math.round(Number(req.body?.weightGrams));
+    if (pincode.length !== 6 || !Number.isFinite(weightGrams) || weightGrams <= 0) {
+      return res.status(400).json({ error: 'Provide a 6-digit destination pincode and a positive weightGrams value.' });
+    }
+
+    const grams = Math.min(Math.max(weightGrams, 1), 10000);
+    const cacheKey = `${pincode}:${grams}`;
+    const cached = stCourierQuoteCache.get(cacheKey);
+    if (cached && cached.expiresAt > Date.now()) {
+      return res.json({ ...cached.quote, cached: true });
+    }
+
+    const liveQuote = await fetchStCourierRate(pincode, grams);
+    if (liveQuote) {
+      stCourierQuoteCache.set(cacheKey, { quote: liveQuote, expiresAt: Date.now() + ST_COURIER_CACHE_TTL_MS });
+      return res.json(liveQuote);
+    }
+
+    return res.json({
+      cost: null,
+      provider: 'ST Courier',
+      source: 'estimate',
+      checkedAt: new Date().toISOString(),
+      message: 'ST Courier has not published a rate for this lane yet — showing the internal zone estimate.'
+    } as StCourierQuote);
+  } catch (err) {
+    console.error('ST Courier rate proxy failed:', err);
+    res.status(500).json({ error: 'Failed to fetch delivery rate.' });
+  }
 });
 
 // In-memory live tracking state

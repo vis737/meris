@@ -10,7 +10,7 @@ export default function WhatsAppChat() {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 z-40 font-sans">
+    <div className="fixed bottom-6 right-6 max-sm:bottom-4 max-sm:right-3.5 z-40 font-sans">
       {/* Floating launcher trigger */}
       <motion.button
         whileHover={{ scale: 1.08 }}

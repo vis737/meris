@@ -4,6 +4,7 @@ import { CreditCard, ShieldCheck, Truck, Lock, ArrowLeft, Landmark, Wallet, Phon
 import { CartItem, CustomerInfo, Coupon, Order } from '../types';
 import { handleImageError } from '../utils/imageUtils';
 import { calculateCartTotals } from '../utils/premiumData';
+import { fetchStCourierRate, LiveShippingInfo } from '../utils/shippingRates';
 import { preparePayUPaymentPayload } from '../utils/payu';
 
 interface CheckoutPanelProps {
@@ -27,7 +28,8 @@ interface CheckoutPanelProps {
     payuTxnId?: string,
     payuPaymentId?: string,
     payuHash?: string,
-    payuStatus?: string
+    payuStatus?: string,
+    liveShippingCost?: number
   ) => Order | Promise<Order | void> | void;
   codEnabled?: boolean;
   upiEnabled?: boolean;
@@ -54,6 +56,8 @@ export default function CheckoutPanel({
   const [phone, setPhone] = useState('');
   const [address, setAddress] = useState('');
   const [pincode, setPincode] = useState('');
+  const [liveShipping, setLiveShipping] = useState<LiveShippingInfo | null>(null);
+  const [isFetchingShipping, setIsFetchingShipping] = useState(false);
 
   // Selected payment route
   const [upiNotes, setUpiNotes] = useState('');
@@ -106,17 +110,50 @@ export default function CheckoutPanel({
   const couponDiscount = totals.couponDiscount;
   const discountAmount = bundleDiscount + couponDiscount;
   const gstTax = totals.tax;
-  const shippingCharges = totals.shippingCost;
+  // Live ST Courier rate (fetched on pincode entry) overrides the internal zone
+  // estimate. Shown as-is — the calculator price is what the customer pays.
+  const liveRateBase = liveShipping && liveShipping.source === 'st-courier' && typeof liveShipping.cost === 'number' && liveShipping.cost > 0
+    ? liveShipping.cost
+    : null;
+  const shippingCharges = liveRateBase != null ? liveRateBase : totals.shippingCost;
+  const isLiveShippingRate = liveRateBase != null;
   const shippingWeightKg = totals.shippingWeightKg;
-  const billableWeightKg = totals.billableWeightKg;
-  const shippingZone = totals.shippingZone;
+  const billableWeightKg = liveShipping?.billableWeightKg ?? totals.billableWeightKg;
+  const shippingZone = isLiveShippingRate
+    ? `ST Courier Live (${liveShipping?.provider || 'ST Courier'})`
+    : totals.shippingZone;
   const giftWrappingCost = totals.giftWrappingCost;
-  const finalTotal = totals.grandTotal;
+  const finalTotal = totals.grandTotal - totals.shippingCost + shippingCharges;
   const normalizedPincode = pincode.replace(/\D/g, '').slice(0, 6);
   const hasCompletePincode = normalizedPincode.length === 6;
   const shippingPreviewLabel = shippingMethod === 'express'
     ? `BLUEDART EXPRESS DELIVERY - RS.${shippingCharges} - ${shippingZone} - 3 DAYS`
     : `NATIONAL STANDARD DELIVERY - RS.${shippingCharges} - ${shippingZone} - 6 DAYS`;
+
+  // Pull the live ST Courier delivery charge whenever the pincode completes,
+  // the delivery speed changes or the cart weight changes.
+  useEffect(() => {
+    if (!hasCompletePincode) {
+      setLiveShipping(null);
+      return;
+    }
+    let cancelled = false;
+    setIsFetchingShipping(true);
+    fetchStCourierRate(normalizedPincode, shippingMethod, cartItems)
+      .then((info) => {
+        if (!cancelled) setLiveShipping(info);
+      })
+      .catch(() => {
+        if (!cancelled) setLiveShipping(null);
+      })
+      .finally(() => {
+        if (!cancelled) setIsFetchingShipping(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [normalizedPincode, shippingMethod, totals.shippingWeightKg]);
 
   const handleNextStep = (step: number) => {
     if (step === 1) {
@@ -197,7 +234,8 @@ export default function CheckoutPanel({
           orderNumber,
           undefined,
           payuData.hash,
-          'initiated'
+          'initiated',
+          liveRateBase ?? undefined
         ));
 
         submitPayUForm(payuData.actionUrl, {
@@ -225,7 +263,16 @@ export default function CheckoutPanel({
           giftMessage,
           giftTheme,
           giftSender,
-          giftHidePrice
+          giftHidePrice,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          liveRateBase ?? undefined
         );
       } else if (paymentMethod === 'upi_qr') {
         if (!upiTxnId.trim()) {
@@ -249,7 +296,12 @@ export default function CheckoutPanel({
           upiTxnId,
           upiSenderName ? `${upiSenderName} (${paymentApp})` : paymentApp,
           upiScreenshot,
-          upiNotes
+          upiNotes,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          liveRateBase ?? undefined
         );
       }
     } catch (err: any) {
@@ -278,7 +330,7 @@ export default function CheckoutPanel({
   );
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 font-sans relative">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 max-sm:py-5 font-sans relative">
       
       {/* Loading Overlay */}
       <AnimatePresence>
@@ -381,6 +433,21 @@ export default function CheckoutPanel({
                         ) : (
                           <p className="mt-2 text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-gray-400">
                             Enter 6-digit pincode for shipping preview
+                          </p>
+                        )}
+                        {hasCompletePincode && isFetchingShipping && (
+                          <p className="mt-1 text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-gold-600 dark:text-gold-400 animate-pulse">
+                            Checking live ST Courier delivery charge…
+                          </p>
+                        )}
+                        {hasCompletePincode && !isFetchingShipping && isLiveShippingRate && (
+                          <p className="mt-1 text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-emerald-600 dark:text-emerald-400">
+                            Live ST Courier rate to {normalizedPincode}: Rs.{shippingCharges}
+                          </p>
+                        )}
+                        {hasCompletePincode && !isFetchingShipping && !isLiveShippingRate && liveShipping?.source === 'estimate' && (
+                          <p className="mt-1 text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-amber-600 dark:text-amber-400">
+                            ST Courier rate unpublished for {normalizedPincode} — zone estimate incl. 5% GST
                           </p>
                         )}
                       </div>
@@ -781,10 +848,10 @@ export default function CheckoutPanel({
                       })}
                     </div>
 
-                    <div className="p-5 rounded-2xl bg-navy-900 text-white shadow-xl space-y-3 font-sans">
-                      <div className="flex justify-between text-navy-200 text-sm">
+                    <div className="p-5 max-sm:p-4 rounded-2xl bg-navy-900 text-white shadow-xl space-y-3 font-sans">
+                      <div className="flex justify-between gap-3 text-navy-200 text-sm">
                         <span>Items Subtotal</span>
-                        <span>Rs.{subtotal}</span>
+                        <span className="shrink-0">Rs.{subtotal}</span>
                       </div>
                       {couponDiscount > 0 && (
                         <div className="flex justify-between text-emerald-400 text-sm font-semibold">
@@ -807,12 +874,14 @@ export default function CheckoutPanel({
                         </div>
                       )}
                       <div className="flex justify-between text-navy-200 text-sm">
-                        <span>GST (18%)</span>
+                        <span>GST (5%)</span>
                         <span>Rs.{gstTax}</span>
                       </div>
-                      <div className="flex justify-between text-navy-200 text-sm">
-                        <span>Shipping ({shippingMethod}, {billableWeightKg.toFixed(2)} kg)</span>
-                        <span>{shippingCharges === 0 ? 'FREE' : `Rs.${shippingCharges}`}</span>
+                      <div className="flex justify-between gap-3 text-navy-200 text-sm">
+                        <span>
+                          Delivery Charges ({shippingMethod}, {billableWeightKg.toFixed(2)} kg){isLiveShippingRate ? ' — ST Courier live' : ''}
+                        </span>
+                        <span className="shrink-0">{!hasCompletePincode ? 'After pincode' : shippingCharges === 0 ? 'FREE' : `Rs.${shippingCharges}`}</span>
                       </div>
                       <div className="flex justify-between text-navy-300 text-xs">
                         <span>Delivery zone</span>
