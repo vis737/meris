@@ -388,6 +388,12 @@ function writeLocalJsonDb(filePath: string, data: any) {
 }
 
 function parseProductWeightKg(product: any): number | undefined {
+  // freeShipping products have zero billable weight
+  if (product?.freeShipping) return 0;
+
+  // Explicit 0 means the seller declared it weightless — honour it
+  if (typeof product?.weightKg === 'number' && product.weightKg === 0) return 0;
+
   if (typeof product?.weightKg === 'number' && Number.isFinite(product.weightKg) && product.weightKg > 0) {
     return product.weightKg;
   }
@@ -990,7 +996,9 @@ app.get('/api/catalog/products', async (req, res) => {
             isBestseller: Boolean(p.is_bestseller),
             brand: p.brand || 'Meris Couture',
             availability: p.availability || 'in-stock',
-            vendorId: p.vendor_id || null
+            vendorId: p.vendor_id || null,
+            freeShipping: Boolean(p.free_shipping || localMatch?.freeShipping),
+            gstExempt: Boolean(p.gst_exempt || localMatch?.gstExempt)
           };
         });
 
