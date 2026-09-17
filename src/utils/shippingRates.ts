@@ -41,7 +41,13 @@ const RATE_CACHE_TTL_MS = 10 * 60 * 1000;
 export function getCartWeightGrams(cartItems: CartItem[]): number {
   const kg = getCartShipmentWeightKg(cartItems);
   const grams = Math.round(kg * 1000);
-  return grams > 0 ? grams : 500; // sensible default when weights are missing
+  // Return 0 when all items are freeShipping (genuinely zero weight).
+  // The 500g sensible default only kicks in for normal products with missing weight data.
+  if (grams === 0) {
+    const hasNonFreeShippingItem = cartItems.some(item => !item.product.freeShipping);
+    return hasNonFreeShippingItem ? 500 : 0;
+  }
+  return grams;
 }
 
 function cacheKey(pincode: string, method: 'standard' | 'express', grams: number): string {
@@ -55,7 +61,7 @@ export async function fetchStCourierRate(
 ): Promise<LiveShippingInfo> {
   const normalized = (pincode || '').replace(/\D/g, '').slice(0, 6);
   const grams = getCartWeightGrams(cartItems);
-  const billableWeightKg = Math.max(0.5, Math.ceil(grams / 500) / 2);
+  const billableWeightKg = grams === 0 ? 0 : Math.max(0.5, Math.ceil(grams / 500) / 2);
 
   const placeholder: LiveShippingInfo = {
     pincode: normalized,
@@ -64,6 +70,9 @@ export async function fetchStCourierRate(
     cost: null,
     source: 'none'
   };
+
+  // All items are freeShipping — no courier lookup needed, shipping is free.
+  if (grams === 0) return { ...placeholder, cost: 0, source: 'estimate' };
 
   if (normalized.length !== 6) return placeholder;
 

@@ -188,6 +188,12 @@ function parseWeightValueToKg(value?: string | number): number | null {
 }
 
 export function getProductWeightKg(product: Product): number {
+  // freeShipping products have zero billable weight regardless of specs
+  if (product.freeShipping) return 0;
+
+  // Explicit numeric weightKg=0 means the seller declared it weightless (digital/freeShipping)
+  if (typeof product.weightKg === 'number' && product.weightKg === 0) return 0;
+
   const explicitWeight = parseWeightValueToKg(product.weightKg);
   if (explicitWeight) return explicitWeight;
 
@@ -199,6 +205,8 @@ export function getProductWeightKg(product: Product): number {
 
 export function getCartShipmentWeightKg(cartItems: { product: Product; quantity: number }[]): number {
   const total = cartItems.reduce((sum, item) => {
+    // freeShipping products contribute zero weight to shipping calculations
+    if (item.product.freeShipping) return sum;
     return sum + getProductWeightKg(item.product) * item.quantity;
   }, 0);
 
