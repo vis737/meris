@@ -489,7 +489,10 @@ export default function App() {
     payuPaymentId?: string,
     payuHash?: string,
     payuStatus?: string,
-    liveShippingCost?: number
+    liveShippingCost?: number,
+    razorpayPaymentId?: string,
+    razorpayOrderId?: string,
+    razorpaySignature?: string
   ): Promise<Order | void> => {
     if (!currentUser) {
       setPendingCheckout(true);
@@ -520,6 +523,7 @@ export default function App() {
     const isUpiPayment = paymentMethod === 'UPI QR Payment';
     const isCodPayment = paymentMethod === 'Cash on Delivery' || paymentMethod === 'COD';
     const isPayUPayment = paymentMethod.toLowerCase().includes('payu');
+    const isRazorpayPayment = paymentMethod.toLowerCase().includes('razorpay');
 
     const newOrder: Order = {
       id: 'ord-' + Date.now(),
@@ -535,10 +539,14 @@ export default function App() {
       shippingProvider: typeof liveShippingCost === 'number' && liveShippingCost > 0 ? 'ST Courier Live' : undefined,
       total: finalTotal,
       date: new Date().toISOString().split('T')[0],
-      status: 'pending',
+      status: isRazorpayPayment && razorpayPaymentId ? 'processing' : 'pending',
       paymentMethod,
       shippingMethod,
-      paymentStatus: isUpiPayment || isPayUPayment ? 'pending' : (isCodPayment ? 'unpaid' : 'paid'),
+      // Razorpay orders reach this point only after the server verified the
+      // payment signature, so they are recorded as paid immediately.
+      paymentStatus: isRazorpayPayment && razorpayPaymentId ? 'paid'
+        : isUpiPayment || isPayUPayment || isRazorpayPayment ? 'pending'
+        : (isCodPayment ? 'unpaid' : 'paid'),
       codStatus: isCodPayment ? 'pending' : undefined,
       giftWrappingRequested: giftWrapped,
       giftMessage: giftMsg,
@@ -554,7 +562,10 @@ export default function App() {
       payuTxnId: isPayUPayment ? orderNum : undefined,
       payuPaymentId,
       payuHash,
-      payuStatus
+      payuStatus,
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature
     };
 
     try {

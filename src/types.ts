@@ -119,6 +119,10 @@ export interface Order {
   payuPaymentId?: string;
   payuHash?: string;
   payuStatus?: string;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+  razorpayStatus?: string;
   
   // UPI QR parameters
   upiTxnId?: string;

@@ -1531,7 +1531,15 @@ var verifyAdminToken = (req, res, next) => {
     return res.status(401).json({ error: "Administrative session expired or invalid." });
   }
 };
-app.use(import_express.default.json({ limit: "1mb" }));
+app.use(import_express.default.json({
+  limit: "1mb",
+  verify: (req, _res, buf) => {
+    try {
+      req.rawBody = buf.toString("utf8");
+    } catch {
+    }
+  }
+}));
 app.use(import_express.default.urlencoded({ limit: "1mb", extended: true }));
 app.use((0, import_cookie_parser.default)());
 app.use((req, res, next) => {
@@ -1622,7 +1630,7 @@ app.use((req, res, next) => {
   const supabaseHttps = supabaseHost ? `https://${supabaseHost}` : "";
   res.setHeader(
     "Content-Security-Policy",
-    `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://*.unsplash.com https://api.qrserver.com https://img.clerk.com ${supabaseHttps}; connect-src 'self' ${supabaseHttps} ${supabaseWs} https://*.clerk.accounts.dev https://*.clerk.com; worker-src 'self' blob:; frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com; form-action 'self' https://test.payu.in https://secure.payu.in; object-src 'none'; base-uri 'self';`
+    `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://checkout.razorpay.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://images.unsplash.com https://*.unsplash.com https://api.qrserver.com https://img.clerk.com https://cdn.razorpay.com ${supabaseHttps}; connect-src 'self' ${supabaseHttps} ${supabaseWs} https://*.clerk.accounts.dev https://*.clerk.com https://api.razorpay.com https://lumberjack.razorpay.com; worker-src 'self' blob:; frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://api.razorpay.com https://checkout.razorpay.com; form-action 'self' https://test.payu.in https://secure.payu.in; object-src 'none'; base-uri 'self';`
   );
   res.setHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
   res.setHeader("X-Frame-Options", "DENY");
@@ -3667,6 +3675,172 @@ app.post("/api/payu/webhook", rateLimiter(80, 15 * 60 * 1e3), async (req, res) =
   } catch (err) {
     console.error("PayU webhook handling failed:", err);
     res.status(500).json({ error: "PayU webhook handling failed." });
+  }
+});
+function getRazorpayAuth() {
+  const keyId = process.env.RAZORPAY_KEY_ID;
+  const keySecret = process.env.RAZORPAY_KEY_SECRET;
+  if (!isConfigured(keyId) || !isConfigured(keySecret)) return null;
+  return { keyId: keyId.trim(), keySecret: keySecret.trim() };
+}
+function razorpaySignatureIsValid(rawSecret, payload, receivedSignature) {
+  const expected = import_crypto.default.createHmac("sha256", rawSecret).update(payload).digest("hex");
+  const received = String(receivedSignature || "");
+  if (expected.length !== received.length) return false;
+  try {
+    return import_crypto.default.timingSafeEqual(Buffer.from(expected), Buffer.from(received));
+  } catch {
+    return false;
+  }
+}
+async function applyRazorpayResult(params) {
+  const orderNumber = sanitizeString(params.orderNumber || "", 30);
+  const razorpayOrderId = sanitizeString(params.razorpayOrderId || "", 80);
+  if (!orderNumber && !razorpayOrderId) return null;
+  const dbOrders = readOrdersDb();
+  const index = dbOrders.findIndex(
+    (o) => orderNumber && String(o.orderNumber || "").toUpperCase() === orderNumber.toUpperCase() || razorpayOrderId && String(o.razorpayOrderId || "") === razorpayOrderId
+  );
+  if (index < 0) return null;
+  const previousPaymentStatus = dbOrders[index].paymentStatus;
+  dbOrders[index] = {
+    ...dbOrders[index],
+    paymentMethod: "Razorpay Secure Online Payment",
+    paymentStatus: params.paid ? "paid" : "rejected",
+    status: params.paid ? "processing" : dbOrders[index].status,
+    razorpayOrderId: params.razorpayOrderId || dbOrders[index].razorpayOrderId,
+    razorpayPaymentId: params.razorpayPaymentId || dbOrders[index].razorpayPaymentId,
+    razorpaySignature: params.razorpaySignature || dbOrders[index].razorpaySignature,
+    razorpayStatus: params.gatewayStatus || (params.paid ? "captured" : "failed")
+  };
+  writeOrdersDb(dbOrders);
+  if (previousPaymentStatus !== "paid" && params.paid) {
+    try {
+      await sendBookingEmail(dbOrders[index]);
+      await sendAdminVendorNotificationEmail(dbOrders[index]);
+      await sendSMSAlert(dbOrders[index]);
+    } catch (notifyErr) {
+      console.error("Failed to dispatch Razorpay confirmation notifications:", notifyErr);
+    }
+  }
+  return dbOrders[index];
+}
+app.post("/api/razorpay/create-order", rateLimiter(20, 15 * 60 * 1e3), async (req, res) => {
+  try {
+    const auth = getRazorpayAuth();
+    if (!auth) {
+      return res.status(503).json({
+        error: "Razorpay is not configured yet. Set RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in the deployment environment before accepting online payments."
+      });
+    }
+    const orderNumber = sanitizeString(req.body?.orderNumber, 30);
+    const amount = Math.round(Number(req.body?.amount) * 100) / 100;
+    if (!orderNumber || !Number.isFinite(amount) || amount <= 0) {
+      return res.status(400).json({ error: "Missing order number or a positive amount." });
+    }
+    const razorpayOrder = await fetch("https://api.razorpay.com/v1/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Basic " + Buffer.from(`${auth.keyId}:${auth.keySecret}`).toString("base64")
+      },
+      body: JSON.stringify({
+        amount: Math.round(amount * 100),
+        // paise
+        currency: "INR",
+        receipt: orderNumber,
+        notes: {
+          orderNumber,
+          customer: sanitizeString(req.body?.customerName || "", 80),
+          email: sanitizeEmail(req.body?.email) || ""
+        }
+      })
+    });
+    const rzpJson = await razorpayOrder.json();
+    if (!razorpayOrder.ok || !rzpJson?.id) {
+      console.error("Razorpay order creation failed:", rzpJson);
+      return res.status(502).json({ error: rzpJson?.error?.description || "Razorpay order creation failed." });
+    }
+    res.json({
+      keyId: auth.keyId,
+      amount: rzpJson.amount,
+      currency: rzpJson.currency || "INR",
+      razorpayOrderId: rzpJson.id,
+      orderNumber
+    });
+  } catch (err) {
+    console.error("Razorpay create-order failed:", err);
+    res.status(500).json({ error: "Failed to initialize Razorpay payment." });
+  }
+});
+app.post("/api/razorpay/verify", rateLimiter(40, 15 * 60 * 1e3), async (req, res) => {
+  try {
+    const auth = getRazorpayAuth();
+    if (!auth) {
+      return res.status(503).json({ error: "Razorpay is not configured on the server." });
+    }
+    const razorpayOrderId = sanitizeString(req.body?.razorpay_order_id, 80);
+    const razorpayPaymentId = sanitizeString(req.body?.razorpay_payment_id, 80);
+    const razorpaySignature = String(req.body?.razorpay_signature || "");
+    if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature) {
+      return res.status(400).json({ error: "Missing Razorpay verification parameters." });
+    }
+    const valid = razorpaySignatureIsValid(
+      auth.keySecret,
+      `${razorpayOrderId}|${razorpayPaymentId}`,
+      razorpaySignature
+    );
+    if (!valid) {
+      return res.status(400).json({ verified: false, error: "Payment signature verification failed." });
+    }
+    await applyRazorpayResult({
+      razorpayOrderId,
+      razorpayPaymentId,
+      razorpaySignature,
+      paid: true,
+      gatewayStatus: "captured"
+    });
+    res.json({ verified: true, razorpayOrderId, razorpayPaymentId });
+  } catch (err) {
+    console.error("Razorpay verification failed:", err);
+    res.status(500).json({ error: "Payment verification failed." });
+  }
+});
+app.post("/api/razorpay/webhook", rateLimiter(80, 15 * 60 * 1e3), async (req, res) => {
+  try {
+    const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+    if (!isConfigured(webhookSecret)) {
+      return res.status(503).json({ error: "Razorpay webhook secret is not configured." });
+    }
+    const rawBody = typeof req.rawBody === "string" ? req.rawBody : JSON.stringify(req.body || {});
+    const signature = req.get("x-razorpay-signature");
+    if (!razorpaySignatureIsValid(webhookSecret.trim(), rawBody, signature || "")) {
+      return res.status(400).json({ error: "Invalid webhook signature." });
+    }
+    const event = req.body?.event || "";
+    const payment = req.body?.payload?.payment?.entity || {};
+    const orderNumber = sanitizeString(payment.notes?.orderNumber, 30);
+    if (event === "payment.captured" || event === "payment.authorized") {
+      await applyRazorpayResult({
+        orderNumber,
+        razorpayOrderId: payment.order_id,
+        razorpayPaymentId: payment.id,
+        paid: true,
+        gatewayStatus: event === "payment.captured" ? "captured" : "authorized"
+      });
+    } else if (event === "payment.failed") {
+      await applyRazorpayResult({
+        orderNumber,
+        razorpayOrderId: payment.order_id,
+        razorpayPaymentId: payment.id,
+        paid: false,
+        gatewayStatus: "failed"
+      });
+    }
+    res.json({ ok: true });
+  } catch (err) {
+    console.error("Razorpay webhook handling failed:", err);
+    res.status(500).json({ error: "Razorpay webhook handling failed." });
   }
 });
 app.post("/api/orders", rateLimiter(10, 15 * 60 * 1e3), async (req, res) => {
