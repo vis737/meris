@@ -990,15 +990,15 @@ app.get('/api/catalog/products', async (req, res) => {
             shortDescription: p.short_description || '',
             description: p.description || '',
             specifications: p.specifications || {},
-            weightKg: parseProductWeightKg(p),
+            weightKg: (p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10') ? 0 : parseProductWeightKg(p),
             reviews: Array.isArray(p.reviews) ? p.reviews : [],
             isNew: Boolean(p.is_new),
             isBestseller: Boolean(p.is_bestseller),
             brand: p.brand || 'Meris Couture',
             availability: p.availability || 'in-stock',
             vendorId: p.vendor_id || null,
-            freeShipping: Boolean(p.free_shipping || localMatch?.freeShipping),
-            gstExempt: Boolean(p.gst_exempt || localMatch?.gstExempt)
+            freeShipping: Boolean(p.free_shipping || localMatch?.freeShipping || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test'),
+            gstExempt: Boolean(p.gst_exempt || localMatch?.gstExempt || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test')
           };
         });
 

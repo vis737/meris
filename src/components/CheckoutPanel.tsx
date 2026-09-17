@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { CreditCard, ShieldCheck, Truck, Lock, ArrowLeft, Landmark, Wallet, PhoneCall, CheckCircle, Gift, Sparkles, Copy, Check, Upload, Image, FileText, QrCode, AlertCircle, Hash, User, Link, ChevronRight, Edit3 } from 'lucide-react';
 import { CartItem, CustomerInfo, Coupon, Order } from '../types';
 import { handleImageError } from '../utils/imageUtils';
-import { calculateCartTotals } from '../utils/premiumData';
+import { calculateCartTotals, isProductFreeShipping } from '../utils/premiumData';
 import { fetchStCourierRate, LiveShippingInfo } from '../utils/shippingRates';
 
 interface CheckoutPanelProps {
@@ -107,6 +107,7 @@ export default function CheckoutPanel({
 
   // Math calculators
   const totals = calculateCartTotals(cartItems, activeCoupon, shippingMethod, giftWrapped, pincode);
+  const isAllFreeShipping = cartItems.length > 0 && cartItems.every(item => isProductFreeShipping(item.product));
   const subtotal = totals.subtotal;
   const bundleDiscount = totals.bundleDiscount;
   const couponDiscount = totals.couponDiscount;
@@ -114,23 +115,27 @@ export default function CheckoutPanel({
   const gstTax = totals.tax;
   // Live ST Courier rate (fetched on pincode entry) overrides the internal zone
   // estimate. Shown as-is — the calculator price is what the customer pays.
-  const liveRateBase = liveShipping && liveShipping.source === 'st-courier' && typeof liveShipping.cost === 'number' && liveShipping.cost > 0
+  const liveRateBase = !isAllFreeShipping && liveShipping && liveShipping.source === 'st-courier' && typeof liveShipping.cost === 'number' && liveShipping.cost > 0
     ? liveShipping.cost
     : null;
-  const shippingCharges = liveRateBase != null ? liveRateBase : totals.shippingCost;
+  const shippingCharges = isAllFreeShipping ? 0 : (liveRateBase != null ? liveRateBase : totals.shippingCost);
   const isLiveShippingRate = liveRateBase != null;
-  const shippingWeightKg = totals.shippingWeightKg;
-  const billableWeightKg = liveShipping?.billableWeightKg ?? totals.billableWeightKg;
-  const shippingZone = isLiveShippingRate
-    ? `ST Courier Live (${liveShipping?.provider || 'ST Courier'})`
-    : totals.shippingZone;
+  const shippingWeightKg = isAllFreeShipping ? 0 : totals.shippingWeightKg;
+  const billableWeightKg = isAllFreeShipping ? 0 : (liveShipping?.billableWeightKg ?? totals.billableWeightKg);
+  const shippingZone = isAllFreeShipping
+    ? 'Free Delivery'
+    : (isLiveShippingRate ? `ST Courier Live (${liveShipping?.provider || 'ST Courier'})` : totals.shippingZone);
   const giftWrappingCost = totals.giftWrappingCost;
-  const finalTotal = totals.grandTotal - totals.shippingCost + shippingCharges;
+  const finalTotal = isAllFreeShipping
+    ? Math.max(0, subtotal - discountAmount + gstTax + giftWrappingCost)
+    : totals.grandTotal - totals.shippingCost + shippingCharges;
   const normalizedPincode = pincode.replace(/\D/g, '').slice(0, 6);
   const hasCompletePincode = normalizedPincode.length === 6;
-  const shippingPreviewLabel = shippingMethod === 'express'
-    ? `BLUEDART EXPRESS DELIVERY - RS.${shippingCharges} - ${shippingZone} - 3 DAYS`
-    : `NATIONAL STANDARD DELIVERY - RS.${shippingCharges} - ${shippingZone} - 6 DAYS`;
+  const shippingPreviewLabel = isAllFreeShipping
+    ? 'FREE DELIVERY - RS.0'
+    : (shippingMethod === 'express'
+        ? `BLUEDART EXPRESS DELIVERY - RS.${shippingCharges} - ${shippingZone} - 3 DAYS`
+        : `NATIONAL STANDARD DELIVERY - RS.${shippingCharges} - ${shippingZone} - 6 DAYS`);
 
   // Pull the live ST Courier delivery charge whenever the pincode completes,
   // the delivery speed changes or the cart weight changes.
@@ -904,9 +909,9 @@ export default function CheckoutPanel({
                       </div>
                       <div className="flex justify-between gap-3 text-navy-200 text-sm">
                         <span>
-                          Delivery Charges ({shippingMethod}, {billableWeightKg.toFixed(2)} kg){isLiveShippingRate ? ' — ST Courier live' : ''}
+                          Delivery Charges ({shippingMethod}{billableWeightKg > 0 ? `, ${billableWeightKg.toFixed(2)} kg` : ''}){isLiveShippingRate ? ' — ST Courier live' : ''}
                         </span>
-                        <span className="shrink-0">{!hasCompletePincode ? 'After pincode' : shippingCharges === 0 ? 'FREE' : `Rs.${shippingCharges}`}</span>
+                        <span className="shrink-0">{isAllFreeShipping || shippingCharges === 0 ? 'FREE' : (!hasCompletePincode ? 'After pincode' : `Rs.${shippingCharges}`)}</span>
                       </div>
                       <div className="flex justify-between text-navy-300 text-xs">
                         <span>Delivery zone</span>

@@ -187,9 +187,24 @@ function parseWeightValueToKg(value?: string | number): number | null {
   return unit === 'g' || unit === 'gm' || unit === 'grams' ? amount / 1000 : amount;
 }
 
+export function isProductFreeShipping(product?: Product | null): boolean {
+  if (!product) return false;
+  if (product.freeShipping) return true;
+  if (product.id === 'test-razorpay-10rs' || product.sku === 'TEST-RZP-10' || product.categorySlug === 'test') return true;
+  if (typeof product.weightKg === 'number' && product.weightKg === 0) return true;
+  return false;
+}
+
+export function isProductGstExempt(product?: Product | null): boolean {
+  if (!product) return false;
+  if (product.gstExempt) return true;
+  if (product.id === 'test-razorpay-10rs' || product.sku === 'TEST-RZP-10' || product.categorySlug === 'test') return true;
+  return false;
+}
+
 export function getProductWeightKg(product: Product): number {
   // freeShipping products have zero billable weight regardless of specs
-  if (product.freeShipping) return 0;
+  if (isProductFreeShipping(product)) return 0;
 
   // Explicit numeric weightKg=0 means the seller declared it weightless (digital/freeShipping)
   if (typeof product.weightKg === 'number' && product.weightKg === 0) return 0;
@@ -206,7 +221,7 @@ export function getProductWeightKg(product: Product): number {
 export function getCartShipmentWeightKg(cartItems: { product: Product; quantity: number }[]): number {
   const total = cartItems.reduce((sum, item) => {
     // freeShipping products contribute zero weight to shipping calculations
-    if (item.product.freeShipping) return sum;
+    if (isProductFreeShipping(item.product)) return sum;
     return sum + getProductWeightKg(item.product) * item.quantity;
   }, 0);
 
@@ -320,7 +335,7 @@ function calculateLocalShippingCost(
   subtotal: number
 ): { cost: number; billableWeightKg: number; zone: string } {
   if (subtotal <= 0 || totalWeightKg <= 0) {
-    return { cost: 0, billableWeightKg: 0, zone: 'No shipment' };
+    return { cost: 0, billableWeightKg: 0, zone: 'Free Delivery' };
   }
 
   const pin = (destinationPincode || '').replace(/\D/g, '');
@@ -415,7 +430,7 @@ export function calculateCartTotals(
 
   // 6. Tax (5% GST) — gstExempt products are excluded from the taxable base
   const gstExemptAmount = cartItems.reduce((sum, item) => {
-    if (!item.product.gstExempt) return sum;
+    if (!isProductGstExempt(item.product)) return sum;
     const price = item.product.discountPrice || item.product.price;
     return sum + price * item.quantity;
   }, 0);
@@ -424,11 +439,14 @@ export function calculateCartTotals(
 
   // 7. Local shipping logic — freeShipping products contribute 0 weight
   const shippingWeightKg = cartItems.reduce((sum, item) => {
-    if (item.product.freeShipping) return sum;
+    if (isProductFreeShipping(item.product)) return sum;
     return sum + getProductWeightKg(item.product) * item.quantity;
   }, 0);
-  const shippingQuote = calculateLocalShippingCost(shippingWeightKg, destinationPincode, shippingMethod, subtotal);
-  const shippingCost = shippingQuote.cost;
+  const allFreeShipping = cartItems.length > 0 && cartItems.every(item => isProductFreeShipping(item.product));
+  const shippingQuote = allFreeShipping
+    ? { cost: 0, billableWeightKg: 0, zone: 'Free Delivery' }
+    : calculateLocalShippingCost(shippingWeightKg, destinationPincode, shippingMethod, subtotal);
+  const shippingCost = allFreeShipping ? 0 : shippingQuote.cost;
 
   // 8. Grand total payable
   const grandTotal = Math.max(0, taxableAmount + tax + shippingCost + giftWrappingCost);

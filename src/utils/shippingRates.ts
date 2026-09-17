@@ -1,5 +1,5 @@
 import { CartItem } from '../types';
-import { getCartShipmentWeightKg } from './premiumData';
+import { getCartShipmentWeightKg, isProductFreeShipping } from './premiumData';
 
 // ---------------------------------------------------------------------------
 // Live delivery-rate quotes from ST Courier (https://stcourier.com/rate-calculator)
@@ -44,7 +44,7 @@ export function getCartWeightGrams(cartItems: CartItem[]): number {
   // Return 0 when all items are freeShipping (genuinely zero weight).
   // The 500g sensible default only kicks in for normal products with missing weight data.
   if (grams === 0) {
-    const hasNonFreeShippingItem = cartItems.some(item => !item.product.freeShipping);
+    const hasNonFreeShippingItem = cartItems.some(item => !isProductFreeShipping(item.product));
     return hasNonFreeShippingItem ? 500 : 0;
   }
   return grams;

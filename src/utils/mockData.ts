@@ -13,6 +13,38 @@ export const CATEGORIES = [
 ];
 
 export const INITIAL_PRODUCTS: Product[] = [
+  {
+    id: 'test-razorpay-10rs',
+    sku: 'TEST-RZP-10',
+    name: '🧪 Razorpay Test Product (₹10)',
+    category: 'Test',
+    categorySlug: 'test',
+    price: 10,
+    discountPrice: undefined,
+    stock: 9999,
+    rating: 5.0,
+    ratingCount: 1,
+    images: [
+      'https://placehold.co/600x600/4f46e5/ffffff?text=Test+%E2%82%B910'
+    ],
+    shortDescription: 'Use this product to test Razorpay live payment integration.',
+    description: 'This is a test product priced at ₹10 to verify the Razorpay live payment gateway is working correctly. It has no delivery charges and is GST-exempt. Remove this product after testing.',
+    specifications: {
+      'Purpose': 'Payment Gateway Testing',
+      'Price': '₹10 flat',
+      'Delivery': 'Free',
+      'GST': 'Exempt'
+    },
+    weightKg: 0,
+    freeShipping: true,
+    gstExempt: true,
+    reviews: [],
+    isNew: false,
+    isBestseller: false,
+    brand: 'Meris E-Shop',
+    availability: 'in-stock',
+    vendorId: null
+  },
   // --- KIDS TOYS ---
   {
     id: 'toy-1',
@@ -989,7 +1021,10 @@ export function sanitizeProduct(p: any): Product {
     isNew: Boolean(p?.isNew || p?.is_new),
     isBestseller: Boolean(p?.isBestseller || p?.is_bestseller),
     brand: String(p?.brand || 'MERIS'),
-    availability: p?.availability || 'in-stock'
+    availability: p?.availability || 'in-stock',
+    weightKg: typeof p?.weightKg === 'number' ? p.weightKg : (p?.id === 'test-razorpay-10rs' || p?.sku === 'TEST-RZP-10' ? 0 : undefined),
+    freeShipping: Boolean(p?.freeShipping || p?.free_shipping || p?.id === 'test-razorpay-10rs' || p?.sku === 'TEST-RZP-10' || p?.categorySlug === 'test'),
+    gstExempt: Boolean(p?.gstExempt || p?.gst_exempt || p?.id === 'test-razorpay-10rs' || p?.sku === 'TEST-RZP-10' || p?.categorySlug === 'test')
   };
 }
 

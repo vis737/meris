@@ -129,6 +129,38 @@ init_passwordValidator();
 
 // src/utils/mockData.ts
 var INITIAL_PRODUCTS = [
+  {
+    id: "test-razorpay-10rs",
+    sku: "TEST-RZP-10",
+    name: "\u{1F9EA} Razorpay Test Product (\u20B910)",
+    category: "Test",
+    categorySlug: "test",
+    price: 10,
+    discountPrice: void 0,
+    stock: 9999,
+    rating: 5,
+    ratingCount: 1,
+    images: [
+      "https://placehold.co/600x600/4f46e5/ffffff?text=Test+%E2%82%B910"
+    ],
+    shortDescription: "Use this product to test Razorpay live payment integration.",
+    description: "This is a test product priced at \u20B910 to verify the Razorpay live payment gateway is working correctly. It has no delivery charges and is GST-exempt. Remove this product after testing.",
+    specifications: {
+      "Purpose": "Payment Gateway Testing",
+      "Price": "\u20B910 flat",
+      "Delivery": "Free",
+      "GST": "Exempt"
+    },
+    weightKg: 0,
+    freeShipping: true,
+    gstExempt: true,
+    reviews: [],
+    isNew: false,
+    isBestseller: false,
+    brand: "Meris E-Shop",
+    availability: "in-stock",
+    vendorId: null
+  },
   // --- KIDS TOYS ---
   {
     id: "toy-1",
@@ -1392,6 +1424,8 @@ function writeLocalJsonDb(filePath, data) {
   }
 }
 function parseProductWeightKg(product) {
+  if (product?.freeShipping) return 0;
+  if (typeof product?.weightKg === "number" && product.weightKg === 0) return 0;
   if (typeof product?.weightKg === "number" && Number.isFinite(product.weightKg) && product.weightKg > 0) {
     return product.weightKg;
   }
@@ -1838,13 +1872,15 @@ app.get("/api/catalog/products", async (req, res) => {
             shortDescription: p.short_description || "",
             description: p.description || "",
             specifications: p.specifications || {},
-            weightKg: parseProductWeightKg(p),
+            weightKg: p.id === "test-razorpay-10rs" || p.sku === "TEST-RZP-10" ? 0 : parseProductWeightKg(p),
             reviews: Array.isArray(p.reviews) ? p.reviews : [],
             isNew: Boolean(p.is_new),
             isBestseller: Boolean(p.is_bestseller),
             brand: p.brand || "Meris Couture",
             availability: p.availability || "in-stock",
-            vendorId: p.vendor_id || null
+            vendorId: p.vendor_id || null,
+            freeShipping: Boolean(p.free_shipping || localMatch?.freeShipping || p.id === "test-razorpay-10rs" || p.sku === "TEST-RZP-10" || p.category_slug === "test"),
+            gstExempt: Boolean(p.gst_exempt || localMatch?.gstExempt || p.id === "test-razorpay-10rs" || p.sku === "TEST-RZP-10" || p.category_slug === "test")
           };
         });
         const supabaseIds = new Set(mapped.map((m) => m.id));

@@ -34,7 +34,7 @@ import {
   saveStoredDb
 } from './utils/mockData';
 
-import { calculateCartTotals } from './utils/premiumData';
+import { calculateCartTotals, isProductFreeShipping } from './utils/premiumData';
 
 import { Product, CartItem, Coupon, Order, CustomerInfo, ActivityLog, CMSConfig, Review, BannerCampaign } from './types';
 
@@ -515,10 +515,15 @@ export default function App() {
     const tax = totals.tax;
     // Trust the live ST Courier rate the customer was shown at checkout when
     // available, so the charged total matches the quoted delivery charge.
-    const shippingCost = typeof liveShippingCost === 'number' && liveShippingCost > 0
-      ? liveShippingCost
-      : totals.shippingCost;
-    const finalTotal = totals.grandTotal - totals.shippingCost + shippingCost;
+    const isAllFreeShipping = cartItems.length > 0 && cartItems.every(item => isProductFreeShipping(item.product));
+    const shippingCost = isAllFreeShipping
+      ? 0
+      : (typeof liveShippingCost === 'number' && liveShippingCost > 0
+          ? liveShippingCost
+          : totals.shippingCost);
+    const finalTotal = isAllFreeShipping
+      ? Math.max(0, subtotal - discount + tax + totals.giftWrappingCost)
+      : totals.grandTotal - totals.shippingCost + shippingCost;
 
     const isUpiPayment = paymentMethod === 'UPI QR Payment';
     const isCodPayment = paymentMethod === 'Cash on Delivery' || paymentMethod === 'COD';
