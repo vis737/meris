@@ -1,4 +1,4 @@
-﻿import { Vendor, BundleOffer, BulkOrderInquiry, Product } from '../types';
+import { Vendor, BundleOffer, BulkOrderInquiry, Product } from '../types';
 
 export const INITIAL_VENDORS: Vendor[] = [
   {
@@ -405,12 +405,20 @@ export function calculateCartTotals(
   // 5. Gift wrapping cost (+ Rs.100 for premium wraps)
   const giftWrappingCost = giftWrappingRequested ? 100 : 0;
 
-  // 6. Tax (5% GST on adjusted net)
-  const taxableAmount = Math.max(0, adjustedSubtotal - couponDiscount);
+  // 6. Tax (5% GST) — gstExempt products are excluded from the taxable base
+  const gstExemptAmount = cartItems.reduce((sum, item) => {
+    if (!item.product.gstExempt) return sum;
+    const price = item.product.discountPrice || item.product.price;
+    return sum + price * item.quantity;
+  }, 0);
+  const taxableAmount = Math.max(0, adjustedSubtotal - couponDiscount - gstExemptAmount);
   const tax = Math.round(taxableAmount * 0.05);
 
-  // 7. Local shipping logic: billable weight slab + destination pincode zone
-  const shippingWeightKg = getCartShipmentWeightKg(cartItems);
+  // 7. Local shipping logic — freeShipping products contribute 0 weight
+  const shippingWeightKg = cartItems.reduce((sum, item) => {
+    if (item.product.freeShipping) return sum;
+    return sum + getProductWeightKg(item.product) * item.quantity;
+  }, 0);
   const shippingQuote = calculateLocalShippingCost(shippingWeightKg, destinationPincode, shippingMethod, subtotal);
   const shippingCost = shippingQuote.cost;
 

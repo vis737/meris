@@ -66,6 +66,8 @@ export interface Product {
   };
   seoTitle?: string;
   seoDescription?: string;
+  freeShipping?: boolean;  // If true, no delivery charge is applied for this product
+  gstExempt?: boolean;     // If true, product is excluded from 5% GST calculation
 }
 
 export interface CartItem {
