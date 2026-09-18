@@ -1,5 +1,68 @@
 [
   {
+    "id": "ord-1789661400033",
+    "orderNumber": "MR-136712-117",
+    "customerInfo": {
+      "name": "Vishnu vardhan",
+      "email": "vishnuvardhan7219@gmail.com",
+      "phone": "+919108319758",
+      "address": "Muthkur\nYadagondanahalli",
+      "pincode": "560067"
+    },
+    "items": [
+      {
+        "product": {
+          "id": "test-razorpay-10rs",
+          "sku": "TEST-RZP-10",
+          "name": "🧪 Razorpay Test Product (₹10)",
+          "brand": "Meris E-Shop",
+          "isNew": false,
+          "price": 10,
+          "stock": 9999,
+          "images": [
+            "https://placehold.co/600x600/4f46e5/ffffff?text=Test+%E2%82%B910"
+          ],
+          "rating": 5,
+          "reviews": [],
+          "category": "Test",
+          "weightKg": 0,
+          "gstExempt": true,
+          "description": "This is a test product priced at ₹10 to verify the Razorpay live payment gateway is working correctly. It has no delivery charges and is GST-exempt. Remove this product after testing.",
+          "ratingCount": 1,
+          "availability": "in-stock",
+          "categorySlug": "test",
+          "freeShipping": true,
+          "isBestseller": false,
+          "discountPrice": null,
+          "specifications": {
+            "GST": "Exempt",
+            "Price": "₹10 flat",
+            "Purpose": "Payment Gateway Testing",
+            "Delivery": "Free"
+          },
+          "shortDescription": "Use this product to test Razorpay live payment integration."
+        },
+        "quantity": 1
+      }
+    ],
+    "shippingMethod": "standard",
+    "shippingCost": 0,
+    "tax": 0,
+    "discount": 0,
+    "subtotal": 10,
+    "total": 10,
+    "status": "processing",
+    "couponCode": null,
+    "date": "2026-09-17",
+    "paymentMethod": "Razorpay Secure Online Payment",
+    "paymentStatus": "paid",
+    "giftWrappingRequested": false,
+    "giftWrappingType": "Generic",
+    "giftMessage": null,
+    "accountEmail": "vishnuvardhan7219@gmail.com",
+    "accountName": "Vishnu vardhan"
+  },
+  {
     "id": "ord-1784995631712",
     "orderNumber": "MR-563171-318",
     "customerInfo": {
