@@ -283,7 +283,7 @@ export default function CartDrawer({
                         name="shippingOption"
                         className="w-4 h-4 text-gold-500 accent-gold-500 focus:ring-gold-400 cursor-pointer"
                       />
-                      Express
+                      Priority
                     </span>
                     <span className="text-xs font-bold font-mono text-slate-800 dark:text-slate-200">By pincode</span>
                   </label>

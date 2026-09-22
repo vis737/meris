@@ -98,12 +98,8 @@ export default function CheckoutPanel({
     }
   };
 
-  // Gift wrapping and messages options
+  // Optional handcrafted gift wrapping
   const [giftWrapped, setGiftWrapped] = useState(false);
-  const [giftMessage, setGiftMessage] = useState('');
-  const [giftTheme, setGiftTheme] = useState<'Birthday' | 'Anniversary' | 'Wedding' | 'Baby Shower' | 'Christmas' | 'Diwali' | 'Generic'>('Generic');
-  const [giftSender, setGiftSender] = useState('');
-  const [giftHidePrice, setGiftHidePrice] = useState(false);
 
   // Math calculators
   const totals = calculateCartTotals(cartItems, activeCoupon, shippingMethod, giftWrapped, pincode);
@@ -113,8 +109,8 @@ export default function CheckoutPanel({
   const couponDiscount = totals.couponDiscount;
   const discountAmount = bundleDiscount + couponDiscount;
   const gstTax = totals.tax;
-  // Live ST Courier rate (fetched on pincode entry) overrides the internal zone
-  // estimate. Shown as-is — the calculator price is what the customer pays.
+  // Use ST Courier's published response when available; otherwise use the
+  // supplied domestic rate card for the customer’s pincode and parcel weight.
   const liveRateBase = !isAllFreeShipping && liveShipping && liveShipping.source === 'st-courier' && typeof liveShipping.cost === 'number' && liveShipping.cost > 0
     ? liveShipping.cost
     : null;
@@ -131,11 +127,14 @@ export default function CheckoutPanel({
     : totals.grandTotal - totals.shippingCost + shippingCharges;
   const normalizedPincode = pincode.replace(/\D/g, '').slice(0, 6);
   const hasCompletePincode = normalizedPincode.length === 6;
+  const isRateCardEstimate = !isAllFreeShipping && liveShipping?.source === 'rate-card';
   const shippingPreviewLabel = isAllFreeShipping
     ? 'FREE DELIVERY - RS.0'
-    : (shippingMethod === 'express'
-        ? `BLUEDART EXPRESS DELIVERY - RS.${shippingCharges} - ${shippingZone} - 3 DAYS`
-        : `NATIONAL STANDARD DELIVERY - RS.${shippingCharges} - ${shippingZone} - 6 DAYS`);
+    : (isLiveShippingRate
+        ? `ST COURIER DELIVERY - RS.${shippingCharges} - LIVE QUOTE`
+        : (hasCompletePincode
+            ? `ST COURIER ${shippingMethod === 'express' ? 'PRIORITY' : 'STANDARD'} - RS.${shippingCharges} - ESTIMATE`
+            : 'ENTER PINCODE FOR DELIVERY ESTIMATE'));
 
   // Pull the live ST Courier delivery charge whenever the pincode completes,
   // the delivery speed changes or the cart weight changes.
@@ -234,10 +233,10 @@ export default function CheckoutPanel({
               { name, email, phone, address, pincode },
               'Razorpay Secure Online Payment',
               giftWrapped,
-              giftMessage,
-              giftTheme,
-              giftSender,
-              giftHidePrice,
+              undefined,
+              'Generic',
+              undefined,
+              false,
               undefined,
               undefined,
               undefined,
@@ -274,7 +273,6 @@ export default function CheckoutPanel({
       setActiveStep(1);
       return;
     }
-
     setIsProcessing(true);
     setPaymentError('');
 
@@ -290,10 +288,10 @@ export default function CheckoutPanel({
           { name, email, phone, address, pincode },
           'Cash on Delivery',
           giftWrapped,
-          giftMessage,
-          giftTheme,
-          giftSender,
-          giftHidePrice,
+          undefined,
+          'Generic',
+          undefined,
+          false,
           undefined,
           undefined,
           undefined,
@@ -319,10 +317,10 @@ export default function CheckoutPanel({
           { name, email, phone, address, pincode },
           'UPI QR Payment',
           giftWrapped,
-          giftMessage,
-          giftTheme,
-          giftSender,
-          giftHidePrice,
+          undefined,
+          'Generic',
+          undefined,
+          false,
           upiTxnId,
           upiSenderName ? `${upiSenderName} (${paymentApp})` : paymentApp,
           upiScreenshot,
@@ -475,9 +473,9 @@ export default function CheckoutPanel({
                             Live ST Courier rate to {normalizedPincode}: Rs.{shippingCharges}
                           </p>
                         )}
-                        {hasCompletePincode && !isFetchingShipping && !isLiveShippingRate && liveShipping?.source === 'estimate' && (
+                        {isRateCardEstimate && !isFetchingShipping && (
                           <p className="mt-1 text-[10px] font-mono font-bold tracking-[0.16em] uppercase text-amber-600 dark:text-amber-400">
-                            ST Courier rate unpublished for {normalizedPincode} — zone estimate incl. 5% GST
+                            ST Courier estimate for up to 1 kg: {shippingZone}
                           </p>
                         )}
                       </div>
@@ -495,8 +493,8 @@ export default function CheckoutPanel({
                       />
                     </div>
 
-                    {/* Gift Options */}
-                    <div className="p-5 rounded-2xl bg-orange-50/40 dark:bg-orange-500/5 border border-orange-250/30 dark:border-orange-500/20 space-y-4">
+                    {/* Gift Wrap */}
+                    <div className="p-5 rounded-2xl bg-orange-50/40 dark:bg-orange-500/5 border border-orange-250/30 dark:border-orange-500/20">
                       <label className="flex items-center gap-3 cursor-pointer select-none">
                         <input
                           type="checkbox"
@@ -504,63 +502,11 @@ export default function CheckoutPanel({
                           onChange={(e) => setGiftWrapped(e.target.checked)}
                           className="w-5 h-5 text-orange-500 rounded border-gray-300 focus:ring-orange-400"
                         />
-                        <div className="text-left">
-                          <span className="text-sm font-bold text-gray-800 dark:text-orange-300 flex items-center gap-2 uppercase tracking-wide">
-                            <Gift className="w-4.5 h-4.5 text-orange-500" />
-                            Add Handcrafted Gift Wrap (Rs.100)
-                          </span>
-                          <p className="text-xs text-gray-500 dark:text-slate-400 mt-1">Authentic wax-sealed banana fiber pouch with dried marigold buds.</p>
-                        </div>
+                        <span className="text-sm font-bold text-gray-800 dark:text-orange-300 flex items-center gap-2 uppercase tracking-wide">
+                          <Gift className="w-4.5 h-4.5 text-orange-500" />
+                          Add Handcrafted Gift Wrap (Rs.70)
+                        </span>
                       </label>
-
-                      {giftWrapped && (
-                        <div className="space-y-4 pt-4 border-t border-orange-200/20">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div>
-                              <label className="block text-[10px] font-mono tracking-wider uppercase text-gray-500 dark:text-gray-400 mb-2 font-semibold">Gift Sender Name</label>
-                              <input
-                                type="text"
-                                value={giftSender}
-                                onChange={(e) => setGiftSender(e.target.value)}
-                                placeholder="e.g. Grandma & Grandpa"
-                                className="w-full px-4 py-3 text-sm bg-white dark:bg-navy-950 text-navy-950 dark:text-white border border-gray-200 dark:border-navy-700/60 rounded-2xl focus:ring-2 focus:ring-orange-400/55 focus:border-orange-400 focus:outline-none transition-all shadow-sm"
-                              />
-                            </div>
-                            <div>
-                              <label className="block text-[10px] font-mono tracking-wider uppercase text-gray-500 dark:text-gray-400 mb-2 font-semibold">Select Theme</label>
-                              <select
-                                value={giftTheme}
-                                onChange={(e: any) => setGiftTheme(e.target.value)}
-                                className="w-full px-4 py-3 text-sm bg-white dark:bg-navy-950 text-navy-950 dark:text-white border border-gray-200 dark:border-navy-700/60 rounded-2xl focus:ring-2 focus:ring-orange-400/55 focus:border-orange-400 focus:outline-none transition-all shadow-sm cursor-pointer"
-                              >
-                                {['Birthday', 'Anniversary', 'Wedding', 'Baby Shower', 'Christmas', 'Diwali', 'Generic'].map(theme => (
-                                  <option key={theme} value={theme}>{theme} Theme</option>
-                                ))}
-                              </select>
-                            </div>
-                          </div>
-                          <div>
-                            <label className="block text-[10px] font-mono tracking-wider uppercase text-gray-500 dark:text-gray-400 mb-2 font-semibold">Calligraphy Message</label>
-                            <textarea
-                              rows={2}
-                              maxLength={250}
-                              value={giftMessage}
-                              onChange={(e) => setGiftMessage(e.target.value)}
-                              placeholder="Enter a message to be written with an ink dip pen..."
-                              className="w-full px-4 py-3 text-sm bg-white dark:bg-navy-950 text-navy-950 dark:text-white border border-gray-200 dark:border-navy-700/60 rounded-2xl focus:ring-2 focus:ring-orange-400/55 focus:border-orange-400 focus:outline-none transition-all shadow-sm resize-none"
-                            />
-                          </div>
-                          <label className="flex items-center gap-2.5 cursor-pointer select-none">
-                            <input
-                              type="checkbox"
-                              checked={giftHidePrice}
-                              onChange={(e) => setGiftHidePrice(e.target.checked)}
-                              className="w-4 h-4 text-orange-500 rounded border-gray-300 focus:ring-orange-400"
-                            />
-                            <span className="text-xs text-gray-600 dark:text-slate-400 font-medium">Hide item prices on invoice receipt (Gift Invoice)</span>
-                          </label>
-                        </div>
-                      )}
                     </div>
 
                     <div className="flex justify-end pt-2">
@@ -584,7 +530,7 @@ export default function CheckoutPanel({
                     <p>{address}</p>
                     <p>Pincode: {pincode}</p>
                     {giftWrapped && (
-                      <p className="mt-2 text-orange-600 dark:text-orange-400 text-xs font-semibold flex items-center gap-1.5"><Gift className="w-3.5 h-3.5"/> Gift Wrapped ({giftTheme})</p>
+                      <p className="mt-2 text-orange-600 dark:text-orange-400 text-xs font-semibold flex items-center gap-1.5"><Gift className="w-3.5 h-3.5"/> Handcrafted gift wrap added</p>
                     )}
                   </div>
                 </motion.div>
@@ -909,9 +855,11 @@ export default function CheckoutPanel({
                       </div>
                       <div className="flex justify-between gap-3 text-navy-200 text-sm">
                         <span>
-                          Delivery Charges ({shippingMethod}{billableWeightKg > 0 ? `, ${billableWeightKg.toFixed(2)} kg` : ''}){isLiveShippingRate ? ' — ST Courier live' : ''}
+                          Delivery Charges ({shippingMethod === 'express' ? 'priority' : 'standard'}{billableWeightKg > 0 ? `, ${billableWeightKg.toFixed(2)} kg` : ''}){isLiveShippingRate ? ' — ST Courier live' : (isRateCardEstimate ? ' — ST Courier estimate' : '')}
                         </span>
-                        <span className="shrink-0">{isAllFreeShipping || shippingCharges === 0 ? 'FREE' : (!hasCompletePincode ? 'After pincode' : `Rs.${shippingCharges}`)}</span>
+                        <span className="shrink-0">
+                          {isAllFreeShipping ? 'FREE' : (!hasCompletePincode ? 'After pincode' : (isFetchingShipping ? 'Checking…' : `Rs.${shippingCharges}`))}
+                        </span>
                       </div>
                       <div className="flex justify-between text-navy-300 text-xs">
                         <span>Delivery zone</span>

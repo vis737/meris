@@ -1445,7 +1445,7 @@ var ST_COURIER_RATE_URL = "https://stcourier.com/tools/do_getrate";
 var ST_COURIER_PICKUP_PINCODE = (process.env.ST_COURIER_PICKUP_PINCODE || "629401").replace(/\D/g, "").slice(0, 6);
 var ST_COURIER_CACHE_TTL_MS = 10 * 60 * 1e3;
 var stCourierQuoteCache = /* @__PURE__ */ new Map();
-async function fetchStCourierRate(pincode, weightGrams) {
+async function fetchStCourierRate(pincode, weightGrams, dimensions) {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 8e3);
@@ -1457,9 +1457,9 @@ async function fetchStCourierRate(pincode, weightGrams) {
     form.append("act_weight", String(Math.min(Math.max(Math.round(weightGrams), 1), 1e4)));
     form.append("weight_label", "gram");
     form.append("d_act_weight", "gram");
-    form.append("length", "");
-    form.append("width", "");
-    form.append("height", "");
+    form.append("length", String(dimensions.lengthCm));
+    form.append("width", String(dimensions.widthCm));
+    form.append("height", String(dimensions.heightCm));
     form.append("q_type", "DM");
     const response = await fetch(ST_COURIER_RATE_URL, {
       method: "POST",
@@ -1600,16 +1600,22 @@ app.post("/api/shipping/stcourier-rate", rateLimiter(40, 15 * 60 * 1e3), async (
   try {
     const pincode = String(req.body?.pincode || "").replace(/\D/g, "");
     const weightGrams = Math.round(Number(req.body?.weightGrams));
-    if (pincode.length !== 6 || !Number.isFinite(weightGrams) || weightGrams <= 0) {
-      return res.status(400).json({ error: "Provide a 6-digit destination pincode and a positive weightGrams value." });
+    const dimensions = {
+      lengthCm: Math.ceil(Number(req.body?.lengthCm)),
+      widthCm: Math.ceil(Number(req.body?.widthCm)),
+      heightCm: Math.ceil(Number(req.body?.heightCm))
+    };
+    const validDimensions = Object.values(dimensions).every((value) => Number.isFinite(value) && value >= 1 && value <= 200);
+    if (pincode.length !== 6 || !Number.isFinite(weightGrams) || weightGrams <= 0 || !validDimensions) {
+      return res.status(400).json({ error: "Provide a 6-digit destination pincode, a positive weightGrams value, and parcel dimensions from 1 to 200 cm." });
     }
     const grams = Math.min(Math.max(weightGrams, 1), 1e4);
-    const cacheKey = `${pincode}:${grams}`;
+    const cacheKey = `${pincode}:${grams}:${dimensions.lengthCm}x${dimensions.widthCm}x${dimensions.heightCm}`;
     const cached = stCourierQuoteCache.get(cacheKey);
     if (cached && cached.expiresAt > Date.now()) {
       return res.json({ ...cached.quote, cached: true });
     }
-    const liveQuote = await fetchStCourierRate(pincode, grams);
+    const liveQuote = await fetchStCourierRate(pincode, grams, dimensions);
     if (liveQuote) {
       stCourierQuoteCache.set(cacheKey, { quote: liveQuote, expiresAt: Date.now() + ST_COURIER_CACHE_TTL_MS });
       return res.json(liveQuote);
@@ -1617,9 +1623,9 @@ app.post("/api/shipping/stcourier-rate", rateLimiter(40, 15 * 60 * 1e3), async (
     return res.json({
       cost: null,
       provider: "ST Courier",
-      source: "estimate",
+      source: "unavailable",
       checkedAt: (/* @__PURE__ */ new Date()).toISOString(),
-      message: "ST Courier has not published a rate for this lane yet \u2014 showing the internal zone estimate."
+      message: "ST Courier has not published a rate for this lane yet. Delivery charges are not available for checkout."
     });
   } catch (err) {
     console.error("ST Courier rate proxy failed:", err);

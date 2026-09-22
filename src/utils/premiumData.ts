@@ -164,12 +164,6 @@ const PRODUCT_WEIGHT_FALLBACKS_KG: Record<string, number> = {
   bottles: 0.9
 };
 
-export const SHIPPING_HANDLING_SURCHARGE = 50;
-
-export function addShippingHandlingSurcharge(cost: number): number {
-  return cost > 0 ? cost + SHIPPING_HANDLING_SURCHARGE : cost;
-}
-
 function parseWeightValueToKg(value?: string | number): number | null {
   if (typeof value === 'number') {
     return Number.isFinite(value) && value > 0 ? value : null;
@@ -228,107 +222,57 @@ export function getCartShipmentWeightKg(cartItems: { product: Product; quantity:
   return Math.round(total * 100) / 100;
 }
 
-// ---------------------------------------------------------------------------
-// Fallback delivery rate card (used only when ST Courier has no live rate):
-//   Base rates per 0.5 kg slab
-//   - Intra-City (local / within same city):        Rs.25 - Rs.40  (mid Rs.32)
-//   - Intra-State (e.g. within Tamil Nadu):         Rs.30 - Rs.50  (mid Rs.40)
-//   - Neighboring States (Regional / South India):  Rs.40 - Rs.60  (mid Rs.50)
-//   - Metro to Metro:                               Rs.60 - Rs.90  (mid Rs.75)
-//   - Rest of India (Inter-State / Long Distance):  Rs.80 - Rs.120 (mid Rs.100)
-//   + 5% GST on the shipping base
-//   + Remote Area Surcharge: flat Rs.24 per kg
-//   + Fixed handling tariff for non-document commercial goods (Rs.50)
-// ---------------------------------------------------------------------------
-interface PincodeRateProfile {
+// Estimated ST Courier domestic rate card supplied for parcels up to 1 kg.
+// When the carrier's live calculator has no published lane rate, checkout uses
+// the entry price from the appropriate card range. The displayed range keeps
+// the estimate transparent to the customer.
+interface StCourierRateCardTier {
   zone: string;
-  baseHalfKgRate: number;
-  isRemote: boolean;
+  standard: readonly [number, number];
+  priority: readonly [number, number];
 }
 
-const SHIPPING_GST_RATE = 0.05;
-export const REMOTE_SURCHARGE_PER_KG = 24;
-
-// Remote / difficult-to-reach destination clusters
-const REMOTE_PREFIX3 = new Set([194, 744, 795]); // Leh, A&N Islands, Manipur
-const REMOTE_PREFIX2 = new Set([78, 79]); // North-East India
-const REMOTE_PREFIX4 = new Set(['6825']); // Lakshadweep islands (Kochi 682xxx stays normal)
-const HIMALAYAN_PREFIX3 = new Set([171, 172, 173, 174, 175, 176, 177]); // Himachal
-
-// Major metro city sorting hubs (outside Tamil Nadu; TN metros rate as Intra-State)
-const METRO_PREFIX3 = new Set([110, 380, 400, 411, 500, 560, 700]); // Delhi, Ahmedabad, Mumbai, Pune, Hyderabad, Bengaluru, Kolkata
-
-function getShippingRateProfileFromPincode(pincode?: string): PincodeRateProfile {
-  const pin = (pincode || '').replace(/\D/g, '');
-  if (pin.length !== 6) {
-    return {
-      zone: 'Enter pincode for exact rate',
-      baseHalfKgRate: 100,
-      isRemote: false
-    };
+const ST_COURIER_RATE_CARD: Record<'local' | 'same-state' | 'south-india' | 'rest-of-india', StCourierRateCardTier> = {
+  local: {
+    zone: 'Local / Intra-city',
+    standard: [30, 50],
+    priority: [70, 90]
+  },
+  'same-state': {
+    zone: 'Same State (Tamil Nadu)',
+    standard: [40, 60],
+    priority: [90, 120]
+  },
+  'south-india': {
+    zone: 'South India (Neighboring States)',
+    standard: [60, 90],
+    priority: [120, 160]
+  },
+  'rest-of-india': {
+    zone: 'North India & Rest of India',
+    standard: [90, 150],
+    priority: [180, 250]
   }
+};
 
-  const prefix2 = Number(pin.slice(0, 2));
-  const prefix3 = Number(pin.slice(0, 3));
+function getStCourierRateCardTier(pincode: string): StCourierRateCardTier {
+  const prefix2 = Number(pincode.slice(0, 2));
+  const prefix3 = Number(pincode.slice(0, 3));
 
+  // Shipments originate from 629401 in Kanyakumari, Tamil Nadu.
+  if (prefix3 === 629) return ST_COURIER_RATE_CARD.local;
+  if (prefix2 >= 60 && prefix2 <= 64) return ST_COURIER_RATE_CARD['same-state'];
   if (
-    REMOTE_PREFIX3.has(prefix3) ||
-    REMOTE_PREFIX2.has(prefix2) ||
-    REMOTE_PREFIX4.has(pin.slice(0, 4)) ||
-    HIMALAYAN_PREFIX3.has(prefix3)
-  ) {
-    return {
-      zone: 'Rest of India (Remote Area)',
-      baseHalfKgRate: 100,
-      isRemote: true
-    };
-  }
-
-  // Store ships from Azhagappapuram 629401 (Kanyakumari district, TN)
-  if (prefix3 === 629) {
-    return {
-      zone: 'Intra-City Local (Kanyakumari)',
-      baseHalfKgRate: 32,
-      isRemote: false
-    };
-  }
-
-  if (prefix2 >= 60 && prefix2 <= 64) {
-    return {
-      zone: 'Intra-State (Tamil Nadu)',
-      baseHalfKgRate: 40,
-      isRemote: false
-    };
-  }
-
-  if (METRO_PREFIX3.has(prefix3)) {
-    return {
-      zone: 'Metro City Delivery',
-      baseHalfKgRate: 75,
-      isRemote: false
-    };
-  }
-
-  if (
-    (prefix2 >= 50 && prefix2 <= 53) || // Telangana / Andhra
+    (prefix2 >= 50 && prefix2 <= 53) || // Andhra Pradesh and Telangana
     (prefix2 >= 56 && prefix2 <= 59) || // Karnataka
     (prefix2 >= 67 && prefix2 <= 69)    // Kerala
   ) {
-    return {
-      zone: 'Neighboring State (South India)',
-      baseHalfKgRate: 50,
-      isRemote: false
-    };
+    return ST_COURIER_RATE_CARD['south-india'];
   }
-
-  return {
-    zone: 'Rest of India (Long Distance)',
-    baseHalfKgRate: 100,
-    isRemote: false
-  };
+  return ST_COURIER_RATE_CARD['rest-of-india'];
 }
 
-function calculateLocalShippingCost(
+function calculateStCourierRateCardCost(
   totalWeightKg: number,
   destinationPincode: string | undefined,
   shippingMethod: 'standard' | 'express',
@@ -340,32 +284,21 @@ function calculateLocalShippingCost(
 
   const pin = (destinationPincode || '').replace(/\D/g, '');
   const billableWeightKg = Math.max(0.5, Math.ceil(totalWeightKg * 2) / 2);
-  const rateProfile = getShippingRateProfileFromPincode(destinationPincode);
-  const zone = rateProfile.zone;
-
-  // Delivery charges are only quoted once the full 6-digit pincode is known.
   if (pin.length !== 6) {
-    return { cost: 0, billableWeightKg, zone };
+    return { cost: 0, billableWeightKg, zone: 'Enter pincode for delivery estimate' };
   }
 
-  // Every 0.5 kg slab is billed at the zone base rate.
-  const halfKgSlabs = Math.ceil(billableWeightKg / 0.5);
-  let shippingBase = halfKgSlabs * rateProfile.baseHalfKgRate;
+  const rateCardTier = getStCourierRateCardTier(pin);
+  const rateRange = shippingMethod === 'express' ? rateCardTier.priority : rateCardTier.standard;
+  const shipmentSlabs = Math.max(1, Math.ceil(billableWeightKg));
+  const serviceName = shippingMethod === 'express' ? 'Priority' : 'Standard';
+  const cost = rateRange[0] * shipmentSlabs;
 
-  // Remote Area Surcharge: flat Rs.24 per kg on billable weight.
-  if (rateProfile.isRemote) {
-    shippingBase += REMOTE_SURCHARGE_PER_KG * billableWeightKg;
-  }
-
-  // Express uplift on the pre-tax base (faster line-haul + priority last mile).
-  if (shippingMethod === 'express') {
-    shippingBase = Math.round(shippingBase * 1.45 + 40);
-  }
-
-  // GST: additional 5% Government Service Tax on the shipping base.
-  shippingBase = Math.round(shippingBase * (1 + SHIPPING_GST_RATE));
-
-  return { cost: addShippingHandlingSurcharge(shippingBase), billableWeightKg, zone };
+  return {
+    cost,
+    billableWeightKg,
+    zone: `${rateCardTier.zone} — ${serviceName} ₹${rateRange[0]}–₹${rateRange[1]} per kg`
+  };
 }
 
 export function calculateCartTotals(
@@ -425,8 +358,8 @@ export function calculateCartTotals(
     }
   }
 
-  // 5. Gift wrapping cost (+ Rs.100 for premium wraps)
-  const giftWrappingCost = giftWrappingRequested ? 100 : 0;
+  // 5. Optional handcrafted gift wrapping
+  const giftWrappingCost = giftWrappingRequested ? 70 : 0;
 
   // 6. Tax (5% GST) — gstExempt products are excluded from the taxable base
   const gstExemptAmount = cartItems.reduce((sum, item) => {
@@ -437,7 +370,7 @@ export function calculateCartTotals(
   const taxableAmount = Math.max(0, adjustedSubtotal - couponDiscount - gstExemptAmount);
   const tax = Math.round(taxableAmount * 0.05);
 
-  // 7. Local shipping logic — freeShipping products contribute 0 weight
+  // 7. ST Courier rate-card shipping — freeShipping products contribute 0 weight
   const shippingWeightKg = cartItems.reduce((sum, item) => {
     if (isProductFreeShipping(item.product)) return sum;
     return sum + getProductWeightKg(item.product) * item.quantity;
@@ -445,7 +378,7 @@ export function calculateCartTotals(
   const allFreeShipping = cartItems.length > 0 && cartItems.every(item => isProductFreeShipping(item.product));
   const shippingQuote = allFreeShipping
     ? { cost: 0, billableWeightKg: 0, zone: 'Free Delivery' }
-    : calculateLocalShippingCost(shippingWeightKg, destinationPincode, shippingMethod, subtotal);
+    : calculateStCourierRateCardCost(shippingWeightKg, destinationPincode, shippingMethod, subtotal);
   const shippingCost = allFreeShipping ? 0 : shippingQuote.cost;
 
   // 8. Grand total payable

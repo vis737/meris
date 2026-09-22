@@ -513,8 +513,8 @@ export default function App() {
     const subtotal = totals.subtotal;
     const discount = totals.bundleDiscount + totals.couponDiscount;
     const tax = totals.tax;
-    // Trust the live ST Courier rate the customer was shown at checkout when
-    // available, so the charged total matches the quoted delivery charge.
+    // Trust ST Courier's live rate when available, otherwise retain the
+    // configured domestic rate-card amount shown during checkout.
     const isAllFreeShipping = cartItems.length > 0 && cartItems.every(item => isProductFreeShipping(item.product));
     const shippingCost = isAllFreeShipping
       ? 0
