@@ -5,8 +5,7 @@ import {
   Gift, Award, TrendingUp, ShieldCheck, Settings, LogOut, Menu, Bell, Search,
   CreditCard
 } from 'lucide-react';
-import { Product, Coupon, BannerCampaign, CMSConfig, Order, ActivityLog, Review } from '../types';
-import { CATEGORIES as INITIAL_CATEGORIES } from '../utils/mockData';
+import { Product, Coupon, BannerCampaign, CMSConfig, Order, ActivityLog, Review, Category } from '../types';
 import { jsPDF } from 'jspdf';
 import ToastNotification, { ToastMessage } from './ToastNotification';
 
@@ -27,6 +26,8 @@ import AdminPaymentsTab from './admin/AdminPaymentsTab';
 
 interface AdminDashboardProps {
   products: Product[];
+  categories: Category[];
+  onUpdateCategories: (categories: Category[]) => void;
   coupons: Coupon[];
   campaigns: BannerCampaign[];
   cms: CMSConfig;
@@ -58,6 +59,8 @@ interface AdminDashboardProps {
 
 export default function AdminDashboard({
   products,
+  categories,
+  onUpdateCategories,
   coupons,
   campaigns,
   cms,
@@ -106,9 +109,6 @@ export default function AdminDashboard({
     { id: '3', text: 'New customer signed up: Alok Sharma', type: 'customer' }
   ]);
   const [isNotifOpen, setIsNotifOpen] = useState(false);
-
-  // Categories local state
-  const [categories, setCategories] = useState(INITIAL_CATEGORIES);
 
   const addToast = (text: string, type: ToastMessage['type'] = 'success') => {
     const id = Math.random().toString();
@@ -483,7 +483,8 @@ export default function AdminDashboard({
             {activeTab === 'categories' && (
               <AdminCategoriesTab
                 key="categories"
-                initialCategories={categories}
+                categories={categories}
+                onCategoriesChange={onUpdateCategories}
                 products={products}
                 onLogActivity={onLogActivity}
                 addToast={addToast}

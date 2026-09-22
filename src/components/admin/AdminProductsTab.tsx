@@ -6,12 +6,12 @@ import {
   Link as LinkIcon, ChevronLeft, ChevronRight, X,
   Check, CheckCircle
 } from 'lucide-react';
-import { Product } from '../../types';
+import { Category, Product } from '../../types';
 import { getProductWeightKg } from '../../utils/premiumData';
 
 export interface AdminProductsTabProps {
   products: Product[];
-  categories: Array<{id: string; name: string; description: string; imageUrl: string}>;
+  categories: Category[];
   onAddProduct: (product: Product) => void;
   onEditProduct: (product: Product) => void;
   onDeleteProduct: (productId: string) => void;
@@ -79,7 +79,7 @@ export default function AdminProductsTab({
     }
     
     if (categoryFilter !== 'all') {
-      result = result.filter(p => p.category === categoryFilter);
+      result = result.filter(p => p.categorySlug === categoryFilter || p.category === categoryFilter);
     }
     
     if (availabilityFilter !== 'all') {
@@ -380,7 +380,7 @@ export default function AdminProductsTab({
                         </div>
                         <div>
                           <p className="font-medium text-slate-200">{product.name}</p>
-                          <p className="text-xs text-slate-500">{categories.find(c => c.id === product.category)?.name || product.category}</p>
+                          <p className="text-xs text-slate-500">{categories.find(c => c.id === product.categorySlug)?.name || product.category}</p>
                         </div>
                       </div>
                     </td>
@@ -732,12 +732,15 @@ function ProductForm({ product, categories, onChange, addToast }: {
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Category</label>
               <select
-                value={product.category || ''}
-                onChange={e => updateField('category', e.target.value)}
+                value={product.categorySlug || product.category || ''}
+                onChange={e => {
+                  const category = categories.find(c => c.id === e.target.value);
+                  onChange({ ...product, category: category?.name || '', categorySlug: category?.id || '' });
+                }}
                 className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-slate-200 focus:outline-none focus:border-yellow-500"
               >
                 <option value="">Select Category...</option>
-                {categories.map(c => (
+                {categories.filter(c => c.enabled !== false).map(c => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
@@ -1035,7 +1038,7 @@ function ProductForm({ product, categories, onChange, addToast }: {
         </div>
 
         {/* Toy Parameters (Conditional) */}
-        {categories.find(c => c.id === product.category)?.name.toLowerCase().includes('toy') && (
+        {categories.find(c => c.id === product.categorySlug)?.name.toLowerCase().includes('toy') && (
           <div className="space-y-4 md:col-span-2 p-4 bg-blue-500/5 rounded-xl border border-blue-500/20">
             <h4 className="text-lg font-semibold text-blue-400 border-b border-blue-500/20 pb-2 flex items-center gap-2">
               <Package className="w-5 h-5" /> Toy Specific Parameters

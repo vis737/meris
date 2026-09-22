@@ -70,6 +70,14 @@ export interface Product {
   gstExempt?: boolean;     // If true, product is excluded from 5% GST calculation
 }
 
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+  enabled?: boolean;
+}
+
 export interface CartItem {
   product: Product;
   quantity: number;

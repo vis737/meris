@@ -17,7 +17,8 @@ import {
   INITIAL_PRODUCTS,
   INITIAL_COUPONS,
   INITIAL_CAMPAIGNS,
-  INITIAL_CMS
+  INITIAL_CMS,
+  CATEGORIES
 } from './src/utils/mockData';
 
 // Force Node DNS to resolve IPv4 addresses first (prevents IPv6 ENETUNREACH timeouts on Render)
@@ -103,7 +104,20 @@ async function seedSupabaseDatabase() {
       await supabase.from('coupons').insert(mapped);
     }
 
-    // 3. Seed campaigns
+    // 3. Seed categories, including their storefront images.
+    const { data: categoryRows, error: categoryErr } = await supabase.from('categories').select('id').limit(1);
+    if (!categoryErr && (!categoryRows || categoryRows.length === 0)) {
+      console.log('Seeding categories to Supabase...');
+      await supabase.from('categories').insert(CATEGORIES.map(category => ({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        image_url: category.imageUrl,
+        enabled: category.enabled !== false,
+      })));
+    }
+
+    // 4. Seed campaigns
     const { data: camps, error: campErr } = await supabase.from('campaigns').select('id').limit(1);
     if (!campErr && (!camps || camps.length === 0)) {
       console.log('Seeding campaigns to Supabase...');
@@ -119,14 +133,14 @@ async function seedSupabaseDatabase() {
       await supabase.from('campaigns').insert(mapped);
     }
 
-    // 4. Seed CMS
+    // 5. Seed CMS
     const { data: cmsConf, error: cmsErr } = await supabase.from('cms_config').select('key').limit(1);
     if (!cmsErr && (!cmsConf || cmsConf.length === 0)) {
       console.log('Seeding CMS to Supabase...');
       await supabase.from('cms_config').insert({ key: 'main', value: INITIAL_CMS });
     }
 
-    // 5. Seed admin config
+    // 6. Seed admin config
     const { data: adminConf, error: adminErr } = await supabase.from('admin_config').select('username').limit(1);
     if (!adminErr && (!adminConf || adminConf.length === 0)) {
       console.log('Seeding Admin Config to Supabase...');
@@ -358,6 +372,7 @@ try {
   console.warn('[Storage] Could not create local data directory:', err);
 }
 const PRODUCTS_FILE_PATH = path.join(LOCAL_DATA_DIR, 'products_db.json');
+const CATEGORIES_FILE_PATH = path.join(LOCAL_DATA_DIR, 'categories_db.json');
 const COUPONS_FILE_PATH = path.join(LOCAL_DATA_DIR, 'coupons_db.json');
 const CAMPAIGNS_FILE_PATH = path.join(LOCAL_DATA_DIR, 'campaigns_db.json');
 const CMS_FILE_PATH = path.join(LOCAL_DATA_DIR, 'cms_db.json');
@@ -1090,6 +1105,98 @@ app.post('/api/catalog/products', verifyAdminToken, express.json({ limit: '10mb'
     res.json({ success: true, message: 'Products catalog synchronized successfully.' });
   } catch (err) {
     res.status(500).json({ error: 'Failed to synchronize products catalog' });
+  }
+});
+
+// --- CATEGORIES ENDPOINTS ---
+const mapCategoryRow = (category: any) => ({
+  id: String(category.id || ''),
+  name: String(category.name || ''),
+  description: String(category.description || ''),
+  imageUrl: String(category.image_url || category.imageUrl || ''),
+  enabled: category.enabled !== false,
+});
+
+app.get('/api/catalog/categories', async (_req, res) => {
+  try {
+    if (supabase) {
+      const { data, error } = await supabase.from('categories').select('*').order('name');
+      if (!error && data && data.length > 0) {
+        const categories = data.map(mapCategoryRow);
+        writeLocalJsonDb(CATEGORIES_FILE_PATH, categories);
+        return res.json(categories);
+      }
+      if (error) console.warn('Supabase categories fetch error, using local database:', error.message);
+    }
+    return res.json(readLocalJsonDb(CATEGORIES_FILE_PATH, CATEGORIES));
+  } catch (error) {
+    return res.json(readLocalJsonDb(CATEGORIES_FILE_PATH, CATEGORIES));
+  }
+});
+
+app.post('/api/catalog/categories', verifyAdminToken, express.json({ limit: '2mb' }), async (req, res) => {
+  try {
+    if (!Array.isArray(req.body) || req.body.length > 100) {
+      return res.status(400).json({ error: 'Body must be a list of up to 100 categories.' });
+    }
+
+    const categories = req.body.map(mapCategoryRow);
+    const ids = new Set<string>();
+    for (const category of categories) {
+      if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(category.id) || !category.name || !category.imageUrl) {
+        return res.status(400).json({ error: 'Every category needs a valid slug, name, and image.' });
+      }
+      if (ids.has(category.id)) return res.status(400).json({ error: `Duplicate category slug: ${category.id}` });
+      ids.add(category.id);
+    }
+
+    const previousCategories: any[] = readLocalJsonDb(CATEGORIES_FILE_PATH, CATEGORIES);
+    const previousById = new Map(previousCategories.map(category => [category.id, category]));
+    const nextProducts = readLocalJsonDb(PRODUCTS_FILE_PATH, INITIAL_PRODUCTS).map((product: any) => {
+      const category = categories.find(item => item.id === product.categorySlug || item.id === product.category);
+      const previous = category ? previousById.get(category.id) : undefined;
+      return category && (product.categorySlug === category.id || product.category === previous?.name || product.category === category.id)
+        ? { ...product, category: category.name, categorySlug: category.id }
+        : product;
+    });
+
+    writeLocalJsonDb(CATEGORIES_FILE_PATH, categories);
+    writeLocalJsonDb(PRODUCTS_FILE_PATH, nextProducts);
+
+    if (supabase) {
+      const rows = categories.map(category => ({
+        id: category.id,
+        name: category.name,
+        description: category.description,
+        image_url: category.imageUrl,
+        enabled: category.enabled !== false,
+      }));
+      const { error: upsertError } = await supabase.from('categories').upsert(rows);
+      if (upsertError) {
+        console.error('Supabase categories upsert failed:', upsertError);
+        return res.status(500).json({ error: 'Category database sync failed.' });
+      }
+      const renamedCategories = categories.filter(category => {
+        const previous = previousById.get(category.id);
+        return previous && previous.name !== category.name;
+      });
+      for (const category of renamedCategories) {
+        const { error: productUpdateError } = await supabase.from('products')
+          .update({ category: category.name, category_slug: category.id })
+          .eq('category_slug', category.id);
+        if (productUpdateError) console.warn('Supabase product category rename warning:', productUpdateError.message);
+      }
+      const categoryIds = categories.map(category => category.id);
+      if (categoryIds.length > 0) {
+        const { error: deleteError } = await supabase.from('categories').delete().not('id', 'in', `(${categoryIds.join(',')})`);
+        if (deleteError) console.warn('Supabase category cleanup warning:', deleteError.message);
+      }
+    }
+
+    return res.json({ success: true, categories });
+  } catch (error) {
+    console.error('Failed to save categories:', error);
+    return res.status(500).json({ error: 'Failed to save categories.' });
   }
 });
 

@@ -36,7 +36,7 @@ import {
 
 import { calculateCartTotals, isProductFreeShipping } from './utils/premiumData';
 
-import { Product, CartItem, Coupon, Order, CustomerInfo, ActivityLog, CMSConfig, Review, BannerCampaign } from './types';
+import { Product, CartItem, Coupon, Order, CustomerInfo, ActivityLog, CMSConfig, Review, BannerCampaign, Category } from './types';
 
 // Framer Motion staggered grid entrance variants
 const staggersContainerVariants = {
@@ -72,6 +72,7 @@ export default function App() {
     const db = getStoredDb();
     return db.products || INITIAL_PRODUCTS;
   });
+  const [categories, setCategories] = useState<Category[]>(CATEGORIES);
   const [coupons, setCoupons] = useState<Coupon[]>(() => {
     const db = getStoredDb();
     return db.coupons || INITIAL_COUPONS;
@@ -123,7 +124,7 @@ export default function App() {
     if (initP && initP.images && initP.images[0]) {
       return initP.images[0];
     }
-    const cat = CATEGORIES.find(c => c.id === p.categorySlug || c.name?.toLowerCase() === p.category?.toLowerCase());
+    const cat = categories.find(c => c.id === p.categorySlug || c.name?.toLowerCase() === p.category?.toLowerCase());
     if (cat && cat.imageUrl) return cat.imageUrl;
     return 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800&auto=format&fit=crop&q=80';
   };
@@ -265,11 +266,12 @@ export default function App() {
   useEffect(() => {
     const loadCatalogFromBackend = async () => {
       try {
-        const [prodsRes, coupsRes, campsRes, cmsRes, sessionRes] = await Promise.all([
+        const [prodsRes, coupsRes, campsRes, cmsRes, categoriesRes, sessionRes] = await Promise.all([
           fetch('/api/catalog/products', { cache: 'no-store' }),
           fetch('/api/catalog/coupons', { cache: 'no-store' }),
           fetch('/api/catalog/campaigns', { cache: 'no-store' }),
           fetch('/api/catalog/cms', { cache: 'no-store' }),
+          fetch('/api/catalog/categories', { cache: 'no-store' }),
           fetch('/api/admin/session', { cache: 'no-store', credentials: 'include' }).catch(() => null)
         ]);
         
@@ -294,6 +296,12 @@ export default function App() {
         if (cmsRes && cmsRes.ok) {
           const cmsData = await cmsRes.json();
           setCms(cmsData);
+        }
+        if (categoriesRes && categoriesRes.ok) {
+          const categoryData = await categoriesRes.json();
+          if (Array.isArray(categoryData) && categoryData.length > 0) {
+            setCategories(categoryData);
+          }
         }
         if (sessionRes && sessionRes.ok) {
           const sessionData = await sessionRes.json();
@@ -798,7 +806,7 @@ export default function App() {
     (p) => p.categorySlug === activeProductModel.categorySlug && p.id !== activeProductModel.id
   );
 
-  const activeCategoryObject = CATEGORIES.find((c) => c.id === currentCategorySlug);
+  const activeCategoryObject = categories.find((c) => c.id === currentCategorySlug);
   const categoryProductsFiltered = products
     .filter((p) => p.categorySlug === currentCategorySlug)
     .filter((p) => (stockOnly ? p.stock > 0 : true))
@@ -1080,7 +1088,7 @@ export default function App() {
                 </div>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
-                  {(CATEGORIES as any[]).map((category) => (
+                  {categories.filter((category) => category.enabled !== false).map((category) => (
                     <div
                       key={category.id}
                       onClick={() => handleSelectCategoryGroup(category.id)}
@@ -1285,7 +1293,7 @@ export default function App() {
                   <div>
                     <h3 className="font-display font-bold text-xs uppercase tracking-wider text-navy-900 mb-2">Category Selector</h3>
                     <div className="flex flex-col gap-1 text-xs">
-                      {CATEGORIES.map((category, idx) => (
+                      {categories.filter((category) => category.enabled !== false).map((category, idx) => (
                         <motion.button
                           key={category.id}
                           initial={{ opacity: 0, x: -12 }}
@@ -1552,6 +1560,14 @@ export default function App() {
             >
               <AdminDashboard
                 products={products}
+                categories={categories}
+                onUpdateCategories={(nextCategories) => {
+                  setCategories(nextCategories);
+                  setProducts((currentProducts) => currentProducts.map((product) => {
+                    const category = nextCategories.find((item) => item.id === product.categorySlug);
+                    return category ? { ...product, category: category.name, categorySlug: category.id } : product;
+                  }));
+                }}
                 coupons={coupons}
                 campaigns={campaigns}
                 cms={cms}

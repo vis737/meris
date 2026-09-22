@@ -1,30 +1,23 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Search, Plus, Edit2, Trash2, X, Image as ImageIcon, BarChart2, Tag, CheckCircle } from 'lucide-react';
-import { Product } from '../../types';
-
-interface Category {
-  id: string;
-  name: string;
-  description: string;
-  imageUrl: string;
-  enabled?: boolean;
-}
+import { Search, Plus, Edit2, Trash2, X, Image as ImageIcon, BarChart2, Tag, CheckCircle, UploadCloud, Loader2 } from 'lucide-react';
+import { Category, Product } from '../../types';
 
 interface AdminCategoriesTabProps {
-  initialCategories: Category[];
+  categories: Category[];
   products: Product[];
+  onCategoriesChange: (categories: Category[]) => void;
   onLogActivity: (action: string, details: string) => void;
   addToast: (text: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
 }
 
 export default function AdminCategoriesTab({
-  initialCategories,
+  categories,
   products,
+  onCategoriesChange,
   onLogActivity,
   addToast,
 }: AdminCategoriesTabProps) {
-  const [categories, setCategories] = useState<Category[]>(initialCategories);
   const [searchQuery, setSearchQuery] = useState('');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -38,12 +31,54 @@ export default function AdminCategoriesTab({
   const [editCatName, setEditCatName] = useState('');
   const [editCatImage, setEditCatImage] = useState('');
   const [editCatDesc, setEditCatDesc] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
+  const [isDraggingImage, setIsDraggingImage] = useState<'new' | 'edit' | null>(null);
+  const newImageInputRef = useRef<HTMLInputElement>(null);
+  const editImageInputRef = useRef<HTMLInputElement>(null);
 
   const getProductCountForCategory = (cat: Category) => {
-    return products.filter(p => p.category === cat.name || p.category === cat.id).length;
+    return products.filter(p => p.categorySlug === cat.id || p.category === cat.name || p.category === cat.id).length;
   };
 
-  const handleCreateCategory = (e: React.FormEvent) => {
+  const saveCategories = async (nextCategories: Category[]) => {
+    const response = await fetch('/api/catalog/categories', {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(nextCategories),
+    });
+    const payload = await response.json().catch(() => ({}));
+    if (!response.ok) throw new Error(payload.error || 'Could not save categories.');
+    onCategoriesChange(Array.isArray(payload.categories) ? payload.categories : nextCategories);
+  };
+
+  const uploadCategoryImage = async (file: File | undefined, target: 'new' | 'edit') => {
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      addToast('Please select an image file.', 'warning');
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const formData = new FormData();
+      formData.append('image', file);
+      const response = await fetch('/api/upload-image', { method: 'POST', body: formData, credentials: 'include' });
+      const payload = await response.json().catch(() => ({}));
+      if (!response.ok || !payload.url) throw new Error(payload.error || 'Image upload failed.');
+      if (target === 'new') setNewCatImage(payload.url);
+      else setEditCatImage(payload.url);
+      addToast('Category image uploaded.', 'success');
+    } catch (error) {
+      addToast(error instanceof Error ? error.message : 'Could not upload the image.', 'error');
+    } finally {
+      setIsSaving(false);
+      setIsDraggingImage(null);
+      if (target === 'new' && newImageInputRef.current) newImageInputRef.current.value = '';
+      if (target === 'edit' && editImageInputRef.current) editImageInputRef.current.value = '';
+    }
+  };
+
+  const handleCreateCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newCatName.trim() || !newCatImage.trim()) {
       addToast('Name and Image URL are required', 'warning');
@@ -58,16 +93,26 @@ export default function AdminCategoriesTab({
       enabled: true,
     };
 
-    setCategories([...categories, newCat]);
-    addToast(`Category "${newCat.name}" created`, 'success');
-    onLogActivity('CREATE_CATEGORY', `Created category ${newCat.name}`);
-    
-    setNewCatName('');
-    setNewCatImage('');
-    setNewCatDesc('');
+    if (!newCat.id) {
+      addToast('Enter a valid category name.', 'warning');
+      return;
+    }
+    setIsSaving(true);
+    try {
+      await saveCategories([...categories, newCat]);
+      addToast(`Category "${newCat.name}" created`, 'success');
+      onLogActivity('CREATE_CATEGORY', `Created category ${newCat.name}`);
+      setNewCatName('');
+      setNewCatImage('');
+      setNewCatDesc('');
+    } catch (error) {
+      addToast(error instanceof Error ? error.message : 'Category could not be created.', 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
-  const handleDeleteCategory = (cat: Category) => {
+  const handleDeleteCategory = async (cat: Category) => {
     const productCount = getProductCountForCategory(cat);
     if (productCount > 0) {
       addToast(`Cannot delete: ${productCount} products are in this category. Reassign them first.`, 'error');
@@ -75,19 +120,25 @@ export default function AdminCategoriesTab({
     }
     
     if (window.confirm(`Are you sure you want to delete the category "${cat.name}"?`)) {
-      setCategories(categories.filter(c => c.id !== cat.id));
-      addToast(`Category "${cat.name}" deleted`, 'info');
-      onLogActivity('DELETE_CATEGORY', `Deleted category ${cat.name}`);
+      try {
+        await saveCategories(categories.filter(c => c.id !== cat.id));
+        addToast(`Category "${cat.name}" deleted`, 'info');
+        onLogActivity('DELETE_CATEGORY', `Deleted category ${cat.name}`);
+      } catch (error) {
+        addToast(error instanceof Error ? error.message : 'Category could not be deleted.', 'error');
+      }
     }
   };
 
-  const handleToggleCategory = (cat: Category) => {
-    setCategories(categories.map(c => 
-      c.id === cat.id ? { ...c, enabled: !c.enabled } : c
-    ));
+  const handleToggleCategory = async (cat: Category) => {
     const action = !cat.enabled ? 'Enabled' : 'Disabled';
-    addToast(`${action} category "${cat.name}"`, 'success');
-    onLogActivity('TOGGLE_CATEGORY', `${action} category ${cat.name}`);
+    try {
+      await saveCategories(categories.map(c => c.id === cat.id ? { ...c, enabled: !cat.enabled } : c));
+      addToast(`${action} category "${cat.name}"`, 'success');
+      onLogActivity('TOGGLE_CATEGORY', `${action} category ${cat.name}`);
+    } catch (error) {
+      addToast(error instanceof Error ? error.message : 'Category could not be updated.', 'error');
+    }
   };
 
   const openEditModal = (cat: Category) => {
@@ -98,7 +149,7 @@ export default function AdminCategoriesTab({
     setIsEditModalOpen(true);
   };
 
-  const handleUpdateCategory = (e: React.FormEvent) => {
+  const handleUpdateCategory = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editingCategory) return;
     if (!editCatName.trim() || !editCatImage.trim()) {
@@ -106,15 +157,17 @@ export default function AdminCategoriesTab({
       return;
     }
 
-    setCategories(categories.map(c => 
-      c.id === editingCategory.id 
-        ? { ...c, name: editCatName.trim(), imageUrl: editCatImage.trim(), description: editCatDesc.trim() } 
-        : c
-    ));
-    
-    addToast(`Category "${editCatName}" updated`, 'success');
-    onLogActivity('UPDATE_CATEGORY', `Updated category ${editCatName}`);
-    setIsEditModalOpen(false);
+    setIsSaving(true);
+    try {
+      await saveCategories(categories.map(c => c.id === editingCategory.id ? { ...c, name: editCatName.trim(), imageUrl: editCatImage.trim(), description: editCatDesc.trim() } : c));
+      addToast(`Category "${editCatName}" updated`, 'success');
+      onLogActivity('UPDATE_CATEGORY', `Updated category ${editCatName}`);
+      setIsEditModalOpen(false);
+    } catch (error) {
+      addToast(error instanceof Error ? error.message : 'Category could not be updated.', 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   const filteredCategories = useMemo(() => {
@@ -187,7 +240,19 @@ export default function AdminCategoriesTab({
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-400 mb-1">Image URL *</label>
+                <label className="block text-sm font-medium text-slate-400 mb-1">Category Image *</label>
+                <input ref={newImageInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => uploadCategoryImage(e.target.files?.[0], 'new')} />
+                <div
+                  onDragOver={(e) => { e.preventDefault(); if (!isSaving) setIsDraggingImage('new'); }}
+                  onDragLeave={() => setIsDraggingImage(null)}
+                  onDrop={(e) => { e.preventDefault(); uploadCategoryImage(e.dataTransfer.files?.[0], 'new'); }}
+                  className={`mb-3 rounded-xl border-2 border-dashed p-4 text-center transition-colors ${isDraggingImage === 'new' ? 'border-[#C5A021] bg-[#C5A021]/10' : 'border-slate-600 bg-slate-900/60'}`}
+                >
+                  {isSaving && isDraggingImage === 'new' ? <Loader2 className="mx-auto mb-2 animate-spin text-[#C5A021]" size={22} /> : <UploadCloud className="mx-auto mb-2 text-[#C5A021]" size={22} />}
+                  <p className="text-sm text-slate-200">Drag and drop an image here</p>
+                  <button type="button" onClick={() => newImageInputRef.current?.click()} disabled={isSaving} className="mt-2 rounded-lg bg-slate-700 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-600 disabled:opacity-60">Browse local files</button>
+                </div>
+                <label className="block text-xs font-medium text-slate-500 mb-1">Or paste an image URL</label>
                 <input
                   type="url"
                   value={newCatImage}
@@ -216,9 +281,10 @@ export default function AdminCategoriesTab({
               </div>
               <button
                 type="submit"
+                disabled={isSaving}
                 className="w-full bg-[#C5A021] hover:bg-[#b08d1a] text-slate-900 font-bold py-3 rounded-xl transition-colors mt-2"
               >
-                Publish Category
+                {isSaving ? 'Saving...' : 'Publish Category'}
               </button>
             </form>
           </div>
@@ -346,7 +412,19 @@ export default function AdminCategoriesTab({
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-400 mb-1">Image URL *</label>
+                  <label className="block text-sm font-medium text-slate-400 mb-1">Category Image *</label>
+                  <input ref={editImageInputRef} type="file" accept="image/*" className="hidden" onChange={(e) => uploadCategoryImage(e.target.files?.[0], 'edit')} />
+                  <div
+                    onDragOver={(e) => { e.preventDefault(); if (!isSaving) setIsDraggingImage('edit'); }}
+                    onDragLeave={() => setIsDraggingImage(null)}
+                    onDrop={(e) => { e.preventDefault(); uploadCategoryImage(e.dataTransfer.files?.[0], 'edit'); }}
+                    className={`mb-3 rounded-xl border-2 border-dashed p-4 text-center transition-colors ${isDraggingImage === 'edit' ? 'border-[#C5A021] bg-[#C5A021]/10' : 'border-slate-600 bg-slate-900/60'}`}
+                  >
+                    {isSaving && isDraggingImage === 'edit' ? <Loader2 className="mx-auto mb-2 animate-spin text-[#C5A021]" size={22} /> : <UploadCloud className="mx-auto mb-2 text-[#C5A021]" size={22} />}
+                    <p className="text-sm text-slate-200">Drag and drop an image here</p>
+                    <button type="button" onClick={() => editImageInputRef.current?.click()} disabled={isSaving} className="mt-2 rounded-lg bg-slate-700 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-600 disabled:opacity-60">Browse local files</button>
+                  </div>
+                  <label className="block text-xs font-medium text-slate-500 mb-1">Or paste an image URL</label>
                   <input
                     type="url"
                     value={editCatImage}
@@ -378,9 +456,10 @@ export default function AdminCategoriesTab({
                   </button>
                   <button
                     type="submit"
+                    disabled={isSaving}
                     className="flex-1 bg-[#C5A021] hover:bg-[#b08d1a] text-slate-900 font-bold py-3 rounded-xl transition-colors"
                   >
-                    Save Changes
+                    {isSaving ? 'Saving...' : 'Save Changes'}
                   </button>
                 </div>
               </form>

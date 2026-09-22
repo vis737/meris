@@ -1,6 +1,6 @@
-import { Product, Coupon, BannerCampaign, CMSConfig, Order, ActivityLog } from '../types';
+import { Product, Coupon, BannerCampaign, CMSConfig, Order, ActivityLog, Category } from '../types';
 
-export const CATEGORIES = [
+export const CATEGORIES: Category[] = [
   { id: 'toys', name: 'Kids Toys', description: 'Cute rotating pandas, dancing cacti, wind-up octopuses, projection flashlights & toys.', imageUrl: 'https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800&auto=format&fit=crop&q=80' },
   { id: 'wood-gifts', name: 'Wood Crafted Gifts', description: 'Traditional handcrafted wooden miniature instruments (Veenas, drums) & art pieces.', imageUrl: 'https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&auto=format&fit=crop&q=80' },
   { id: 'handbags', name: 'Handbags & Clutches', description: 'Handwoven plastic wire basket bags, jute gift bags & embroidered peacock clutches.', imageUrl: 'https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&auto=format&fit=crop&q=80' },
