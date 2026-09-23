@@ -80,15 +80,15 @@ export default function ExitIntentOffer({ onApplyCoupon }: ExitIntentOfferProps)
           </div>
 
           <h3 className="font-display font-bold text-xl uppercase tracking-wider text-slate-900 dark:text-white">
-            Wait! Before You Leave...
+            One Thing Before You Go...
           </h3>
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 max-w-sm mx-auto leading-relaxed">
-            Our local artisans have woven an exclusive keepsake opportunity. Enjoy <span className="font-semibold text-gold-500 text-sm">15% off</span> your entire cart, standard packaging included.
+            We'd hate to see you leave empty-handed. Here's <span className="font-semibold text-gold-500 text-sm">15% off</span> your cart — from all of us at the workshop.
           </p>
 
           {/* Coupon Code Block */}
           <div className="my-6 p-4 rounded-2xl bg-gray-50 dark:bg-navy-900 border border-dashed border-gold-400 flex flex-col items-center justify-center gap-2">
-            <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">Exclusive Voucher</span>
+            <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">Your Coupon Code</span>
             <span className="text-2xl font-mono font-black tracking-widest text-gold-500">STAYGOLD15</span>
           </div>
 

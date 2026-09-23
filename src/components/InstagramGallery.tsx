@@ -66,10 +66,10 @@ export default function InstagramGallery() {
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
           <span className="text-[10px] font-mono text-gold-500 uppercase tracking-widest font-black block">
-            Inside the Workspace Guilds
+From Our Workshop Floor
           </span>
           <h3 className="font-display font-black text-slate-800 dark:text-white text-lg uppercase tracking-wider mt-1">
-            Follow Our Artisan Journey
+Life At Meris, In Pictures
           </h3>
           <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded"></div>
         </div>

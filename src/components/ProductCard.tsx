@@ -52,7 +52,7 @@ export default function ProductCard({
       whileHover={{ y: -6 }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      className="bg-white dark:bg-navy-900 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] border border-gray-100 dark:border-navy-800 flex flex-col h-full group transition-all duration-300 relative select-none text-slate-800 dark:text-slate-200"
+      className="bg-white dark:bg-navy-900 rounded-2xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.03)] hover:shadow-[0_20px_40px_rgb(0,0,0,0.08)] border border-gray-100 dark:border-navy-800 hover:border-gold-400/50 flex flex-col h-full group transition-all duration-300 relative select-none text-slate-800 dark:text-slate-200"
     >
       {/* Absolute Badges Layer */}
       <div className="absolute top-3.5 left-3.5 z-10 flex flex-col gap-1.5 items-start">
@@ -162,7 +162,7 @@ export default function ProductCard({
           <div className="flex flex-col text-left">
             {product.discountPrice ? (
               <>
-                <span className="text-sm font-bold text-navy-900 dark:text-white font-sans leading-none">
+                <span className="text-sm font-bold text-navy-900 dark:text-white font-sans leading-none transition-transform duration-300 group-hover:scale-110 origin-left inline-block">
                   Rs.{product.discountPrice}
                 </span>
                 <span className="text-[10px] line-through text-gray-400 font-mono mt-1">
@@ -170,7 +170,7 @@ export default function ProductCard({
                 </span>
               </>
             ) : (
-              <span className="text-sm font-bold text-navy-900 dark:text-white font-sans">
+              <span className="text-sm font-bold text-navy-900 dark:text-white font-sans transition-transform duration-300 group-hover:scale-110 origin-left inline-block">
                 Rs.{product.price}
               </span>
             )}
@@ -179,7 +179,7 @@ export default function ProductCard({
           <button
             onClick={() => onAddToCart(product)}
             disabled={product.stock === 0}
-            className={`px-3 py-2 bg-navy-900 hover:bg-gold-500 hover:text-navy-950 text-white rounded-xl text-xs font-medium tracking-wide flex items-center gap-1.5 active:scale-95 transition cursor-pointer shadow-md select-none border border-navy-800 disabled:opacity-40 disabled:cursor-not-allowed`}
+            className={`px-3 py-2 bg-navy-900 hover:bg-gold-500 hover:text-navy-950 hover:shadow-lg hover:shadow-gold-500/30 text-white rounded-xl text-xs font-medium tracking-wide flex items-center gap-1.5 active:scale-95 transition-all duration-200 cursor-pointer shadow-md select-none border border-navy-800 hover:border-gold-500 disabled:opacity-40 disabled:cursor-not-allowed`}
           >
             <ShoppingCart className="w-3.5 h-3.5" />
             <span>Add</span>

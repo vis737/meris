@@ -63,6 +63,37 @@ const staggerCardVariants = {
   }
 };
 
+/**
+ * Scroll-reveal wrapper: fades/slides children in the first time they enter
+ * the viewport. Lightweight IntersectionObserver, no extra dependency.
+ */
+function Reveal({ children, className = '', delay = 0 }: { children: React.ReactNode; className?: string; delay?: number }) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = React.useState(false);
+  useEffect(() => {
+    const node = ref.current;
+    if (!node) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Reveal when entering the viewport, or when already scrolled past
+        // (e.g. after an instant jump / restored scroll position).
+        if (entry.isIntersecting || entry.boundingClientRect.top < 0) {
+          setVisible(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className={`reveal ${visible ? 'is-visible' : ''} ${className}`} style={{ transitionDelay: `${delay}ms` }}>
+      {children}
+    </div>
+  );
+}
+
 export default function App() {
   // Router views
   const [activeView, setActiveView] = useState<'home' | 'category' | 'product' | 'checkout' | 'account' | 'admin' | 'ordersuccess'>('home');
@@ -140,6 +171,15 @@ export default function App() {
   // Newsletter states
   const [newsletterEmail, setNewsletterEmail] = useState('');
   const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);
+
+  // Back-to-top visibility (appears past the hero)
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShowBackToTop(window.scrollY > 600);
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   // Active review submission tracking modal
   const [selectedSuccessOrder, setSelectedSuccessOrder] = useState<Order | null>(null);
@@ -956,6 +996,13 @@ export default function App() {
                       <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-8 w-full h-full flex items-center py-12">
                         <div className="max-w-2xl space-y-6 text-left">
                           <div className="flex flex-wrap items-center gap-3">
+                            <span className="inline-flex items-center gap-2 text-[10px] sm:text-[11px] font-mono uppercase tracking-[0.3em] text-gold-300">
+                              <span className="w-6 h-px bg-gradient-to-r from-transparent to-gold-400" />
+                              The Meris Craft House
+                              <span className="w-6 h-px bg-gradient-to-l from-transparent to-gold-400" />
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap items-center gap-3">
                             <span className="px-3.5 py-1 bg-emerald-400/20 border border-emerald-400/40 text-emerald-300 uppercase text-[10px] sm:text-xs font-mono font-bold tracking-[0.18em] rounded-full inline-flex items-center gap-1.5 shadow-lg backdrop-blur-md">
                               <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
                               {heroProducts[activeHeroIndex].category || 'Artisan Featured'}
@@ -997,7 +1044,7 @@ export default function App() {
                                     setActiveView('product');
                                   }
                                 }}
-                                className="py-3 px-6 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-display font-bold uppercase tracking-widest transition cursor-pointer active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+                                className="py-3 px-6 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-slate-950 text-xs font-display font-bold uppercase tracking-widest transition cursor-pointer active:scale-95 shadow-lg shadow-emerald-500/20 flex items-center gap-2 btn-shimmer"
                               >
                                 Shop Now <ArrowRight className="w-4 h-4" />
                               </button>
@@ -1015,16 +1062,43 @@ export default function App() {
                   )}
                 </AnimatePresence>
 
-                {/* Dot Controls */}
-                <div className="absolute bottom-6 right-6 z-20 flex gap-2">
+                {/* Dot Controls — slim gold progress bars with fill state */}
+                <div className="absolute bottom-6 right-6 z-20 flex gap-1.5">
                   {heroProducts.map((_, i) => (
                     <button
                       key={i}
                       onClick={() => setActiveHeroIndex(i)}
-                      className={`w-3 h-3 rounded-full cursor-pointer transition-all ${
-                        i === activeHeroIndex ? 'bg-emerald-400 scale-125 shadow-lg shadow-emerald-400/50' : 'bg-white/40 hover:bg-white/70'
+                      aria-label={`Go to slide ${i + 1}`}
+                      className={`h-1.5 rounded-full cursor-pointer transition-all duration-500 ${
+                        i === activeHeroIndex ? 'w-8 bg-gold-400 shadow-lg shadow-gold-400/40' : 'w-3 bg-white/35 hover:bg-white/60'
                       }`}
                     />
+                  ))}
+                </div>
+              </div>
+
+              {/* Gold trust marquee — scrolling promises under the hero */}
+              <div className="relative bg-navy-950 border-y border-gold-400/25 py-3 overflow-hidden select-none">
+                <div className="absolute inset-y-0 left-0 w-16 bg-gradient-to-r from-navy-950 to-transparent z-10 pointer-events-none" />
+                <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-l from-navy-950 to-transparent z-10 pointer-events-none" />
+                <div className="animate-marquee flex w-max">
+                  {[0, 1].map((copy) => (
+                    <div key={copy} className="flex items-center shrink-0" aria-hidden={copy === 1}>
+                      {[
+                        { icon: <Truck className="w-4 h-4 text-gold-400" />, text: 'Free shipping over Rs.499' },
+                        { icon: <ShieldCheck className="w-4 h-4 text-gold-400" />, text: '100% secure Razorpay checkout' },
+                        { icon: <RefreshCw className="w-4 h-4 text-gold-400" />, text: '7-day easy returns' },
+                        { icon: <Award className="w-4 h-4 text-gold-400" />, text: 'Handmade by Indian artisans' },
+                        { icon: <Sparkles className="w-4 h-4 text-gold-400" />, text: 'ISO 8124 certified safe toys' },
+                        { icon: <Truck className="w-4 h-4 text-gold-400" />, text: 'ST Courier delivery nationwide' },
+                      ].map((item, idx) => (
+                        <span key={idx} className="flex items-center gap-2 mx-7 text-[11px] font-mono uppercase tracking-[0.18em] text-navy-100 whitespace-nowrap">
+                          {item.icon}
+                          {item.text}
+                          <span className="ml-6 w-1 h-1 rounded-full bg-gold-500/60" />
+                        </span>
+                      ))}
+                    </div>
                   ))}
                 </div>
               </div>
@@ -1037,7 +1111,7 @@ export default function App() {
                         Search Results
                       </h3>
                       <p className="text-xs text-slate-500 mt-1">
-                        Matching products from the live catalog.
+                        Here's what we found in the shop.
                       </p>
                     </div>
                     <span className="text-xs font-mono text-slate-400">{searchResultsList.length} shown</span>
@@ -1080,12 +1154,13 @@ export default function App() {
 
               {/* Dynamic Featured Category Grid Shelf */}
               <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none">
-                <div className="mb-6">
+                <Reveal className="mb-6">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-500 font-semibold">Curated Worlds</span>
                   <h3 className="font-sans font-bold text-lg uppercase tracking-wider text-slate-800 dark:text-white">
                     Featured Collection Categories
                   </h3>
                   <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded"></div>
-                </div>
+                </Reveal>
                 
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 sm:gap-6">
                   {categories.filter((category) => category.enabled !== false).map((category) => (
@@ -1120,8 +1195,9 @@ export default function App() {
 
               {/* Best Sellers showcase lists */}
               <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none">
-                <div className="flex justify-between items-end mb-6">
+                <Reveal className="flex justify-between items-end mb-6">
                   <div>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-500 font-semibold">Family Favourites</span>
                     <h3 className="font-sans font-bold text-lg uppercase tracking-wider text-slate-800 dark:text-white">
                       Heritage Best Sellers
                     </h3>
@@ -1133,7 +1209,7 @@ export default function App() {
                   >
                     View All <ChevronRight className="w-4 h-4" />
                   </button>
-                </div>
+                </Reveal>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   {bestSellersList.map((product) => (
@@ -1152,8 +1228,9 @@ export default function App() {
 
               {/* New Arrivals Section */}
               <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none">
-                <div className="flex justify-between items-end mb-6">
+                <Reveal className="flex justify-between items-end mb-6">
                   <div>
+                    <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-500 font-semibold">Fresh From The Workshop</span>
                     <h3 className="font-sans font-bold text-lg uppercase tracking-wider text-slate-800 dark:text-white">
                       New Craft Arrivals
                     </h3>
@@ -1165,7 +1242,7 @@ export default function App() {
                   >
                     View Arrivals <ChevronRight className="w-4 h-4" />
                   </button>
-                </div>
+                </Reveal>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                   {newArrivalsList.map((product) => (
@@ -1180,6 +1257,62 @@ export default function App() {
                     />
                   ))}
                 </div>
+              </section>
+
+              {/* Complete catalog, shelf by shelf — every product grouped under its category */}
+              <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none space-y-12">
+                <Reveal className="text-center space-y-2">
+                  <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-500 font-semibold block">Browse The Whole Shop</span>
+                  <h3 className="font-sans font-bold text-lg uppercase tracking-wider text-slate-800 dark:text-white">
+                    Everything We Make, Shelf By Shelf
+                  </h3>
+                  <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded mx-auto"></div>
+                </Reveal>
+
+                {categories
+                  .filter((category) => category.enabled !== false)
+                  .map((category) => {
+                    const shelfProducts = products.filter(
+                      (p) => p.categorySlug === category.id || p.category === category.name
+                    );
+                    if (shelfProducts.length === 0) return null;
+                    return (
+                      <Reveal key={category.id} className="space-y-5">
+                        <div className="flex justify-between items-end">
+                          <div>
+                            <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-500 font-semibold">Shelf</span>
+                            <h4 className="font-sans font-bold text-base uppercase tracking-wider text-slate-800 dark:text-white">
+                              {category.name}
+                              <span className="ml-2 text-[10px] font-mono text-gray-400 normal-case tracking-normal">
+                                {shelfProducts.length} {shelfProducts.length === 1 ? 'item' : 'items'}
+                              </span>
+                            </h4>
+                            <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded"></div>
+                          </div>
+                          <button
+                            onClick={() => handleSelectCategoryGroup(category.id)}
+                            className="text-xs font-semibold text-[#C5A021] hover:text-[#C5A021]/80 flex items-center gap-1"
+                          >
+                            View Shelf <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                          {shelfProducts.map((product) => (
+                            <ProductCard
+                              key={product.id}
+                              product={product}
+                              isWishlisted={wishlistIds.includes(product.id)}
+                              onToggleWishlist={handleToggleProductWishlist}
+                              onAddToCart={(p) => handleAddProductToCart(p)}
+                              onQuickView={(p) => setQuickViewProduct(p)}
+                              onSelectProduct={handleViewProductDetails}
+                            />
+                          ))}
+                        </div>
+                      </Reveal>
+                    );
+                  })}
               </section>
 
               {/* Dynamic AI Recommendation Section */}
@@ -1221,31 +1354,53 @@ export default function App() {
                   <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-8 py-8 border-t border-gray-100 dark:border-navy-800">
                     <div>
                       <h3 className="font-sans font-bold text-lg uppercase tracking-wider text-slate-800 dark:text-white flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-[#C5A021]" /> AI Personalized Recommendations
+                        <Sparkles className="w-5 h-5 text-[#C5A021]" /> Picked For You
                       </h3>
                       <p className="text-xs text-gray-400 dark:text-gray-500 font-sans mt-1">
-                        Moris algorithmic scoring engine computing affinity profiles dynamically.
+                        Little suggestions based on what you've been browsing — like a shopkeeper who remembers what you liked.
                       </p>
                       <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded"></div>
                     </div>
 
-                    {renderShelf("Recommended For You", recs.recommendedForYou)}
+                    {renderShelf("Picked For You", recs.recommendedForYou)}
                     {renderShelf("You May Also Like", recs.youMayAlsoLike)}
-                    {renderShelf("Customers Similar To You Bought", recs.customersSimilar)}
-                    {renderShelf("Because You Viewed", recs.becauseYouViewed)}
-                    {renderShelf("Inspired By Your Wishlist", recs.inspiredByWishlist)}
-                    {renderShelf("Recently Trending", recs.recentlyTrending)}
+                    {renderShelf("Loved By Shoppers Like You", recs.customersSimilar)}
+                    {renderShelf("Since You Looked At That...", recs.becauseYouViewed)}
+                    {renderShelf("From Your Wishlist", recs.inspiredByWishlist)}
+                    {renderShelf("Trending This Week", recs.recentlyTrending)}
                   </section>
                 );
               })()}
+
+              {/* Founder's note — a personal word from the workshop */}
+              <Reveal>
+                <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none">
+                  <div className="relative max-w-3xl mx-auto rounded-3xl bg-gradient-to-br from-gold-50 to-white dark:from-navy-800 dark:to-navy-900 border border-gold-400/30 shadow-xl p-8 sm:p-10 overflow-hidden">
+                    {/* Oversized decorative quote mark */}
+                    <span className="absolute -top-4 left-6 font-hand text-[120px] leading-none text-gold-400/25 select-none" aria-hidden>"</span>
+                    <div className="relative z-10 space-y-5">
+                      <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-600 dark:text-gold-400 font-semibold block">From Our Family To Yours</span>
+                      <p className="text-sm sm:text-base text-slate-700 dark:text-navy-100 leading-relaxed font-light">
+                        Namaste! Meris began at our dining table in Kanyakumari — sanding little wooden trains late into the night for my daughter's birthday. Everything we sell is still checked by hand, wrapped by hand, and posted with the same care. If a toy ever reaches you less than perfect, tell us — we'll make it right.
+                      </p>
+                      <div className="flex items-center gap-3 pt-1">
+                        <div>
+                          <p className="font-hand text-2xl text-navy-900 dark:text-gold-200 leading-none">— The Meris Family</p>
+                          <p className="text-[10px] font-mono text-gray-400 dark:text-navy-300 tracking-wider uppercase mt-1.5">Founders, MERIS E-SHOP · Kanyakumari</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </Reveal>
 
               {/* Professional testimonials review widgets */}
               <section className="bg-slate-950 text-white py-16 text-left select-none relative overflow-hidden border-t border-b border-emerald-300/25">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_0%,rgba(20,184,166,0.18),transparent_30%)] pointer-events-none" />
                 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gold-400 font-semibold block text-center">Reviews of the Meris Family</span>
-                  <h3 className="font-display font-medium text-xl sm:text-2xl text-center uppercase tracking-widest mt-2 mb-10 text-white">Loved by Families Worldwide</h3>
+                  <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-gold-400 font-semibold block text-center">Kind Words From Customers</span>
+                  <h3 className="font-display font-medium text-xl sm:text-2xl text-center uppercase tracking-widest mt-2 mb-10 text-white">Families Say It Best</h3>
 
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {[
@@ -1957,7 +2112,23 @@ export default function App() {
       {/* Exit Intent Offer Popup */}
       <ExitIntentOffer onApplyCoupon={setActiveCoupon} />
 
-
+      {/* Back-to-top — appears after scrolling past the hero */}
+      <AnimatePresence>
+        {showBackToTop && (
+          <motion.button
+            key="backToTop"
+            initial={{ opacity: 0, y: 16, scale: 0.85 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 16, scale: 0.85 }}
+            transition={{ duration: 0.25 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Back to top"
+            className="fixed bottom-24 right-5 z-30 p-3 rounded-full bg-navy-900/90 hover:bg-navy-800 text-gold-400 border border-gold-400/30 shadow-xl backdrop-blur-md transition cursor-pointer hover:-translate-y-0.5"
+          >
+            <ArrowUp className="w-5 h-5" />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       {/* Universal brand footer */}
       <footer className="bg-navy-950 text-white py-12 border-t border-gold-400/20 text-xs font-sans">
@@ -1966,7 +2137,7 @@ export default function App() {
           <div className="space-y-3">
             <span className="font-display font-bold text-sm tracking-wider text-white uppercase">MERIS <span className="text-gold-400">E-SHOP</span></span>
             <p className="text-navy-200 leading-relaxed font-light">
-              We engineer raw Indian woodcraft catalogs into luxury family experiences. Authentic block stencil systems, certified organic beeswax safety parameters.
+              A small family workshop in Kanyakumari making wooden toys, kolam stencils and gifts the slow way — by hand, from real wood, safe for little ones.
             </p>
           </div>
 
@@ -1998,9 +2169,30 @@ export default function App() {
 
         </div>
 
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 pb-8 -mt-2">
+          <span className="text-[10px] font-mono uppercase tracking-[0.2em] text-navy-300">We accept</span>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {['UPI', 'Visa', 'Mastercard', 'RuPay', 'Net Banking', 'Wallets', 'Razorpay Secured'].map((label) => (
+              <span
+                key={label}
+                className={`px-2.5 py-1.5 rounded-lg text-[9px] font-mono font-semibold tracking-wider border ${
+                  label === 'Razorpay Secured'
+                    ? 'bg-gold-400/10 border-gold-400/40 text-gold-300 flex items-center gap-1'
+                    : 'bg-white/5 border-white/10 text-navy-200'
+                }`}
+              >
+                {label === 'Razorpay Secured' && <ShieldCheck className="w-3 h-3" />}
+                {label}
+              </span>
+            ))}
+          </div>
+        </div>
+
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/5 pt-6 mt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-navy-300 text-[10px] font-mono tracking-wider">
-          <span>(c) 2026 MERIS E-SHOP STUDIOS - All Heritage Rights Reserved.</span>
-          <span className="text-gold-500/80">Crafted lovingly under Indian Wooden Toys safety standard rule (ISO 8124)</span>
+          <span>© 2026 MERIS E-SHOP · All rights reserved</span>
+          <span className="flex items-center gap-1.5 text-gold-500/80">
+            Handmade with <Heart className="w-3 h-3 fill-gold-500 text-gold-500" /> in Kanyakumari, India · ISO 8124 toy-safe
+          </span>
         </div>
       </footer>
 

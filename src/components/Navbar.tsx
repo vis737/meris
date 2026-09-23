@@ -265,8 +265,23 @@ export default function Navbar({
     onSetProductsFilter(allProducts);
   };
 
+  // Reading-progress bar: fills as the shopper scrolls the page.
+  const [scrollProgress, setScrollProgress] = useState(0);
+  useEffect(() => {
+    const onScroll = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      setScrollProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
   return (
     <header className="sticky top-0 z-40 bg-[#0F172A] border-b-[3px] border-[#C5A021] text-white font-sans shadow-lg">
+      {/* Gold scroll-progress hairline */}
+      <div className="absolute bottom-[-3px] left-0 h-[3px] bg-gradient-to-r from-gold-500 via-gold-300 to-gold-500 z-50 transition-[width] duration-150 ease-out" style={{ width: `${scrollProgress * 100}%` }} />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20 max-sm:h-16 gap-4 max-sm:gap-2">
           
@@ -349,7 +364,7 @@ export default function Navbar({
               <Search className="absolute left-3.5 top-3.5 w-4 h-4 text-slate-400" />
               <input
                 type="text"
-                placeholder="Search premium toys, gold stencils, gifts..."
+                placeholder="What are you looking for today?"
                 value={searchInput}
                 onFocus={() => setSearchFocused(true)}
                 onChange={(e) => setSearchInput(e.target.value)}
@@ -372,7 +387,7 @@ export default function Navbar({
                   <div className="p-3 bg-slate-800/80 border border-[#C5A021]/20 rounded-xl text-left">
                     <p className="text-[11px] text-slate-400 font-display font-medium tracking-wide uppercase flex items-center gap-1">
                       <Sparkles className="w-3.5 h-3.5 text-[#C5A021]" />
-                      AI Search Assistant
+Thinking with you...
                     </p>
                     <p className="text-xs text-slate-200 font-sans italic mt-1 leading-relaxed">
                       "{aiGreeting}"
