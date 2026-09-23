@@ -134,7 +134,7 @@ var CATEGORIES = [
   { id: "handbags", name: "Handbags & Clutches", description: "Handwoven plastic wire basket bags, jute gift bags & embroidered peacock clutches.", imageUrl: "https://images.unsplash.com/photo-1590874103328-eac38a683ce7?w=800&auto=format&fit=crop&q=80" },
   { id: "learning", name: "Learning Stuff", description: "Wooden alphabet block puzzles, shape sorting trays & Montessori learning boards.", imageUrl: "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&auto=format&fit=crop&q=80" },
   { id: "home", name: "Home Organizers", description: "Stick-figure wall shelves, utility adhesive hooks & phone charging wall holders.", imageUrl: "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80" },
-  { id: "kolam", name: "Kolam Stencils", description: "Round red felt stencils for tracing traditional white geometric & mandala patterns.", imageUrl: "https://images.unsplash.com/photo-1608976451610-ad2ee3c37b0f?w=800&auto=format&fit=crop&q=80" },
+  { id: "kolam", name: "Kolam Stencils", description: "Round red felt stencils for tracing traditional white geometric & mandala patterns.", imageUrl: "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?w=800&auto=format&fit=crop&q=80" },
   { id: "stationeries", name: "Novelty Stationeries", description: "Camera pencil sharpeners, spiro scales, cartoon erasers & ice cream highlighters.", imageUrl: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=800&auto=format&fit=crop&q=80" },
   { id: "entertainment", name: "Entertainment & Novelties", description: "Laser key rings, novelty stethoscope toys, shock chewing gums & car bird decor.", imageUrl: "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80" },
   { id: "bottles", name: "Return Gift Bottles", description: "Pastel rabbit vacuum flasks, penguin bottles & stainless steel jar tumblers.", imageUrl: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop&q=80" }
@@ -185,8 +185,11 @@ var INITIAL_PRODUCTS = [
     rating: 4.8,
     ratingCount: 124,
     images: [
-      "https://images.unsplash.com/photo-1515488042361-404e9250afef?w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/eda48b92-d968-4eb8-a359-1ce9cb729753.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/f8f5f64f-e4a9-40a3-bcf4-fc65b6f0fe7b.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/fd4abb16-680f-47a8-b3b5-435955fc27b7.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/b9701e53-2e78-4eb3-86d7-8954ed69a7c7.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/b60bd554-e513-46d8-b435-8e0617bd0de5.jpg"
     ],
     shortDescription: "Organic wooden rings coated in safe herbal-dyed colors, supporting early sensory development.",
     description: "This elegant Stacking Ring Tower is crafted from native beechwood and finished with food-grade seed oils and natural pigments. Non-toxic, fully hand-rounded, and exceptionally smooth for tender hands. It supports hand-eye coordination, size sorting, and visual acuity.",
@@ -289,7 +292,7 @@ var INITIAL_PRODUCTS = [
     rating: 4.6,
     ratingCount: 35,
     images: [
-      "https://images.unsplash.com/photo-1532372320978-9b4d8a3a0245?w=600&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&auto=format&fit=crop&q=80"
     ],
     shortDescription: "Set of 3 interlocking luxury pine-wood bookshelves with natural oiled varnish finishes.",
     description: "Add depth to your home with these majestic modern honeycomb shelves. Precisely cut pine wood planks locked at precise angles. Lightweight yet durable enough to display small pots, candles, or souvenir clocks.",
@@ -462,7 +465,10 @@ var INITIAL_PRODUCTS = [
     rating: 4.8,
     ratingCount: 115,
     images: [
-      "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?w=600&auto=format&fit=crop"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/78885512-fca2-45dd-8153-6315d80c3ab2.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/3faf1e23-393d-4bf4-9e4f-c84165347ab0.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/57559080-e28d-41dd-908b-55f294a91935.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/c5cff176-3181-4e57-be64-66f3ecb65115.jpeg"
     ],
     shortDescription: "Premium 3mm acrylic grid design stencil panel for swift, clean floral floor rangoli trails.",
     description: "Bring divine luck to your front entrance door with this highly modular laser-etched Kolam stenciler. Simply set the platter on the floor, sprinkle white chalk powder, and lift to reveal highly detailed traditional geometric lotus lines. Highly reusable and easily washed.",
@@ -673,7 +679,7 @@ var INITIAL_PRODUCTS = [
     rating: 4.8,
     ratingCount: 52,
     images: [
-      "https://images.unsplash.com/photo-1515488042361-404e9250afef?w=600&auto=format&fit=crop"
+      "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=800&auto=format&fit=crop&q=80"
     ],
     shortDescription: "High-contrast alphabet block puzzle designed for cognitive spelling and letter shape matching.",
     description: "An educational classic. Fits capital letter blocks securely into recessed slots, helping preschool children learn the alphabet visually and tactilely.",
@@ -703,7 +709,9 @@ var INITIAL_PRODUCTS = [
     rating: 4.9,
     ratingCount: 30,
     images: [
-      "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/dad81941-7452-4058-a9e3-624a65f1aa94.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/e013e03e-2cd3-4c28-a001-8aeb813e58b3.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/3a0eb221-8548-4e34-9ae0-c766698a7131.jpeg"
     ],
     shortDescription: "Premium curved beechwood wobble board supporting posture balance and creative play.",
     description: "Designed to support open-ended movement play. Children can balance on it, use it as a bridge, slide, or rocking cradle. Hand-pressed multilayered beechwood core.",
@@ -796,7 +804,9 @@ var INITIAL_PRODUCTS = [
     rating: 4.9,
     ratingCount: 19,
     images: [
-      "https://images.unsplash.com/photo-1596461404969-9ae70f2830c1?w=600&auto=format&fit=crop"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/61795246-989d-45a3-8e5c-5eb75284b1b5.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/eac9f26a-a3da-4e72-b40d-9abad49fc877.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/1a457957-bed4-4529-ad41-9461e1873ea9.jpg"
     ],
     shortDescription: "Intricate 3D architectural craft kit compiling 250 micro-laser wood puzzle nodes.",
     description: "A beautiful historical replica model. Perfect for teens and hobbyists. Hand-sanded laser edges allow slotting connections without requiring glue.",
@@ -827,7 +837,7 @@ var INITIAL_PRODUCTS = [
     rating: 4.7,
     ratingCount: 29,
     images: [
-      "https://images.unsplash.com/photo-1606166187734-a4cb74079027?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&auto=format&fit=crop&q=80"
     ],
     shortDescription: "Exquisite hand-planed teakwood desktop tray featuring a slotted letter rack and brass pen grooves.",
     description: "Keep your desktop curated. This premium desk organizer is carved from seasoned solid teakwood and polished with direct oil sealants to highlight its stunning natural golden-brown grains. Complete with non-slip velvet protective padding.",
@@ -909,7 +919,7 @@ var INITIAL_PRODUCTS = [
     rating: 4.8,
     ratingCount: 33,
     images: [
-      "https://images.unsplash.com/photo-1540324155974-75226c3ad3a6?w=800&auto=format&fit=crop&q=80"
+      "https://images.unsplash.com/photo-1513519245088-0e12902e5a38?w=800&auto=format&fit=crop&q=80"
     ],
     shortDescription: "Speckled stoneware clay diffuse burner styled with organic carved apertures and copper oil dish.",
     description: "Elevate your sensory experiences. Simply place a wax tea-candle in the lower chamber and add organic oils to the deep top copper basin. The custom speckled clay filters a warm amber glow, diffusing soothing botanical fragrances perfectly.",

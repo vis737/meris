@@ -3,14 +3,13 @@
 -- https://supabase.com/dashboard/project/zzwxnnzzwxsdvggpumze/sql/new
 -- =============================================================================
 
--- Drop legacy template tables if they exist
-DROP TABLE IF EXISTS public.product_images CASCADE;
-DROP TABLE IF EXISTS public.products CASCADE;
+-- This migration is safe to re-run. Do not drop catalog tables here: dropping
+-- them removes every live product before the replacement table is created.
 
 -- ---------------------------------------------------------------------------
 -- 1. PRODUCTS TABLE & COLUMNS
 -- ---------------------------------------------------------------------------
-CREATE TABLE public.products (
+CREATE TABLE IF NOT EXISTS public.products (
   id TEXT PRIMARY KEY,
   sku TEXT,
   name TEXT NOT NULL,
