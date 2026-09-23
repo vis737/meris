@@ -58,7 +58,7 @@ const INSTAGRAM_POSTS: InstagramPost[] = [
 export default function InstagramGallery() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const handleInstagramVisit = () => {
-    window.open('https://instagram.com/meris_boutique', '_blank', 'noopener,noreferrer');
+    window.open('https://www.instagram.com/meriseshop.2025?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==', '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -79,7 +79,7 @@ export default function InstagramGallery() {
           className="py-2.5 px-4 bg-[#0F172A] hover:bg-[#C5A021] text-white hover:text-navy-950 rounded-xl text-xs font-semibold uppercase tracking-wider transition flex items-center gap-2 border border-slate-700/50 cursor-pointer self-start sm:self-auto shadow-sm active:scale-95"
         >
           <Instagram className="w-4 h-4 shrink-0" />
-          <span>@meris_boutique on Instagram</span>
+          <span>@meriseshop.2025 on Instagram</span>
         </button>
       </div>
 
