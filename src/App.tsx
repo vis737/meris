@@ -1372,6 +1372,27 @@ export default function App() {
                 );
               })()}
 
+              {/* Emotional welcome — the Meris promise in three lines */}
+              <Reveal>
+                <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center select-none py-6">
+                  <p className="font-display text-xl sm:text-2xl lg:text-3xl text-slate-800 dark:text-white leading-relaxed font-light">
+                    <span className="text-gold-500 dark:text-gold-400 font-semibold">Gifts that tell a story.</span>{' '}
+                    <span className="text-slate-700 dark:text-navy-100">Toys that spark a childhood.</span>{' '}
+                    <span className="text-gold-500 dark:text-gold-400 font-semibold">Stationery that feels like yours.</span>
+                  </p>
+                  <p className="text-sm sm:text-base text-gray-500 dark:text-navy-200 mt-4 max-w-2xl mx-auto leading-relaxed font-light">
+                    Behind every parcel from Meris is a pair of careful hands, a cup of chai going cold on the workbench,
+                    and the quiet hope that what we made becomes part of your family's little moments.
+                    Welcome to Meris E-Shop — where every detail is crafted for you.
+                  </p>
+                  <div className="flex items-center justify-center gap-3 mt-6">
+                    <span className="w-10 h-px bg-gradient-to-r from-transparent to-gold-400" />
+                    <Sparkles className="w-4 h-4 text-gold-500" />
+                    <span className="w-10 h-px bg-gradient-to-l from-transparent to-gold-400" />
+                  </div>
+                </section>
+              </Reveal>
+
               {/* Founder's note — a personal word from the workshop */}
               <Reveal>
                 <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none">
