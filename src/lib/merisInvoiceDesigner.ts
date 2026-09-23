@@ -1,5 +1,7 @@
 import { jsPDF } from 'jspdf';
 import { Order } from '../types';
+import { invoiceLogoDataUrl } from '../assets/invoiceLogo';
+import { invoiceLogoWaterDataUrl } from '../assets/invoiceLogoWater';
 
 const NAVY: [number, number, number] = [10, 25, 47];
 const NAVY_DEEP: [number, number, number] = [15, 23, 42]; // #0F172A - seal rim (site logo)
@@ -72,152 +74,22 @@ function amountInWords(value: number): string {
 }
 
 /* ------------------------------------------------------------------ */
-/* The MERIS E-SHOP seal, redrawn as pure vector from the site logo    */
-/* (Navbar.tsx SVG): navy radial disc, gold glitter rings, sparkles,   */
-/* gold flakes and the MERIS E-SHOP / EST 2025 typography.             */
+/* The MERIS E-SHOP seal - the real gold-glitter logo photograph,      */
+/* circularly cropped to a transparent PNG by prep_invoice_logo.ts.    */
 /* ------------------------------------------------------------------ */
 
-const SEAL_FLAKES: Array<[number, number, number]> = [
-  [100, 22, 1.5], [145, 30, 1.2], [155, 42, 1.8], [172, 65, 1.0], [178, 85, 1.5],
-  [174, 120, 1.2], [165, 142, 1.6], [142, 165, 1.4], [118, 174, 1.8], [82, 174, 1.3],
-  [58, 165, 1.5], [35, 142, 1.2], [26, 120, 1.6], [22, 85, 1.0], [28, 65, 1.4],
-  [45, 30, 1.8], [55, 22, 1.2],
-];
-
-const SEAL_SPARKLES: Array<[number, number]> = [
-  [100, 13], [100, 187], [190, 100], [10, 100],
-  [164.5, 39.5], [35.5, 39.5], [164.5, 160.5], [35.5, 160.5],
-];
-
-function sparkle(doc: jsPDF, cx: number, cy: number, s: number, color: RGB) {
-  const R = 5 * s;
-  const w = 1.9 * s;
-  const pts: Array<[number, number]> = [
-    [cx, cy - R], [cx + w, cy - w], [cx + R, cy], [cx + w, cy + w],
-    [cx, cy + R], [cx - w, cy + w], [cx - R, cy], [cx - w, cy - w],
-  ];
-  const deltas: Array<[number, number]> = [];
-  for (let i = 1; i < pts.length; i++) deltas.push([pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]]);
-  doc.setFillColor(...color);
-  doc.lines(deltas, pts[0][0], pts[0][1], [1, 1], 'F', true);
-}
-
 /**
- * Draws the website logo. `d` is the seal diameter in mm; all inner metrics
- * derive from the 200x200 viewBox of the site's SVG, so the seal stays
- * pixel-faithful at any size (vector, no rasterisation).
+ * Draws the MERIS seal. `d` is the diameter in mm.
  */
-function drawSeal(doc: jsPDF, cx: number, cy: number, d: number, opts?: { withText?: boolean; tint?: RGB }) {
-  const withText = opts?.withText !== false;
-
-  // At small sizes the glitter dash patterns fall below renderer resolution and
-  // collapse into a muddy blob - use a bold simplified crest instead.
-  if (d < 20) return drawSealSmall(doc, cx, cy, d);
-  const tint = opts?.tint ?? NAVY_DEEP; // colour the seals sits on (for pre-blending)
-  const s = d / 200;
-  const X = (ux: number) => cx + (ux - 100) * s;
-  const Y = (uy: number) => cy + (uy - 100) * s;
-  const mm = (units: number) => units * s;
-  const pt = (units: number) => (units * s) / 0.352778; // svg units -> PDF points
-
-  // Disc: dark rim + lighter core approximating the site's radial gradient.
-  doc.setFillColor(...NAVY_DEEP);
-  doc.circle(cx, cy, mm(96), 'F');
-  doc.setFillColor(...NAVY_CORE);
-  doc.circle(cx, cy, mm(70), 'F');
-
-  // Gold rim.
-  doc.setDrawColor(...blend(GOLD, tint, 0.95));
-  doc.setLineWidth(mm(1.2));
-  doc.circle(cx, cy, mm(96), 'S');
-
-  // Glitter wreath rings (dashes & weights lifted from the site SVG).
-  const ring = (r: number, w: number, dash: number[], color: RGB) => {
-    doc.setDrawColor(...color);
-    doc.setLineWidth(mm(w));
-    doc.setLineDashPattern(dash.map((v) => v * s), 0);
-    doc.circle(cx, cy, mm(r), 'S');
-    doc.setLineDashPattern([], 0);
-  };
-  ring(86, 4.5, [3, 6, 1, 4, 8, 3], blend(GOLD_BRIGHT, NAVY_DEEP, 0.8));
-  ring(89, 2.5, [1, 5, 12, 4], blend([255, 236, 180], NAVY_DEEP, 0.85));
-  ring(82, 1.5, [6, 2, 3, 5, 1, 3], blend(GOLD, NAVY_DEEP, 0.9));
-  ring(92, 1, [1, 8, 2, 12], blend(WHITE, NAVY_DEEP, 0.45));
-
-  // Wreath sparkles + organic flakes.
-  SEAL_SPARKLES.forEach(([ux, uy]) => sparkle(doc, X(ux), Y(uy), s, blend(GOLD_BRIGHT, NAVY_DEEP, 0.95)));
-  doc.setFillColor(...blend(GOLD_BRIGHT, NAVY_DEEP, 0.9));
-  SEAL_FLAKES.forEach(([ux, uy, r]) => doc.circle(X(ux), Y(uy), mm(r), 'F'));
-
-  if (!withText) return;
-
-  // Inner typography (baselines from the site SVG).
-  doc.setFont('times', 'bold');
-  doc.setFontSize(pt(24));
-  doc.setTextColor(...blend(GOLD_BRIGHT, NAVY_CORE, 0.95));
-  doc.text('MERIS', X(100), Y(75), { align: 'center' });
-  doc.text('E-SHOP', X(100), Y(108), { align: 'center' });
-
-  doc.setDrawColor(...blend(GOLD, NAVY_CORE, 0.7));
-  doc.setLineWidth(mm(1));
-  doc.line(X(55), Y(118), X(145), Y(118));
-
-  doc.setFont('courier', 'bold');
-  doc.setFontSize(pt(10));
-  doc.setTextColor(...blend(WHITE, NAVY_CORE, 0.9));
-  doc.text('EST 2025', X(100), Y(134), { align: 'center' });
-
-  if (d >= 50) {
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(pt(7.5));
-    doc.setTextColor(...blend([148, 163, 184], NAVY_CORE, 0.8));
-    doc.text('- Kids Toys - Gifts -', X(100), Y(151), { align: 'center' });
-    doc.text('- Stationeries -', X(100), Y(163), { align: 'center' });
-  }
-}
-
-/** Bold mini crest for tiny renders: solid gold rims + gold M monogram. */
-function drawSealSmall(doc: jsPDF, cx: number, cy: number, d: number) {
-  const r = d / 2;
-  doc.setFillColor(...NAVY_DEEP);
-  doc.circle(cx, cy, r, 'F');
-  doc.setDrawColor(...GOLD);
-  doc.setLineWidth(d * 0.09);
-  doc.circle(cx, cy, r - d * 0.055, 'S');
-  doc.setLineWidth(d * 0.025);
-  doc.circle(cx, cy, r - d * 0.14, 'S');
-  doc.setFont('times', 'bold');
-  doc.setFontSize((d * 0.62) / 0.352778);
-  doc.setTextColor(...GOLD_BRIGHT);
-  doc.text('M', cx, cy + d * 0.21, { align: 'center' });
+function drawSeal(doc: jsPDF, cx: number, cy: number, d: number) {
+  doc.addImage(invoiceLogoDataUrl, 'PNG', cx - d / 2, cy - d / 2, d, d, undefined, 'FAST');
 }
 
 // Very faint centred seal behind the ledger - a premium watermark.
+// Faint full-page seal (pre-faded PNG) behind the ledger - a premium watermark.
 function drawWatermark(doc: jsPDF) {
-  const cx = 105;
-  const cy = 158;
   const d = 112;
-  const s = d / 200;
-  const pale = (c: RGB, a: number) => blend(c, WHITE, a);
-  const ring = (r: number, w: number, dash: number[], color: RGB) => {
-    doc.setDrawColor(...color);
-    doc.setLineWidth(w * s);
-    doc.setLineDashPattern(dash.map((v) => v * s), 0);
-    doc.circle(cx, cy, r * s, 'S');
-    doc.setLineDashPattern([], 0);
-  };
-  ring(96, 1.2, [], pale(GOLD, 0.14));
-  ring(86, 4.5, [3, 6, 1, 4, 8, 3], pale(GOLD_BRIGHT, 0.11));
-  ring(82, 1.5, [6, 2, 3, 5, 1, 3], pale(GOLD, 0.12));
-  ring(92, 1, [1, 8, 2, 12], pale([100, 116, 139], 0.12));
-  SEAL_SPARKLES.forEach(([ux, uy]) => sparkle(doc, cx + (ux - 100) * s, cy + (uy - 100) * s, s, pale(GOLD_BRIGHT, 0.15)));
-  doc.setFillColor(...pale(GOLD, 0.12));
-  SEAL_FLAKES.forEach(([ux, uy, r]) => doc.circle(cx + (ux - 100) * s, cy + (uy - 100) * s, r * s, 'F'));
-  doc.setFont('times', 'bold');
-  doc.setFontSize((24 * s) / 0.352778);
-  doc.setTextColor(...pale(GOLD, 0.14));
-  doc.text('MERIS', cx, cy - (25 * s), { align: 'center' });
-  doc.text('E-SHOP', cx, cy + (8 * s), { align: 'center' });
+  doc.addImage(invoiceLogoWaterDataUrl, 'PNG', 105 - d / 2, 158 - d / 2, d, d, undefined, 'FAST');
 }
 
 function label(doc: jsPDF, value: string, x: number, y: number) {
@@ -251,7 +123,7 @@ export function createMerisInvoiceDocument(order: Order) {
   doc.setFillColor(...GOLD);
   doc.roundedRect(margin, 14, 4, 43, 4, 4, 'F');
 
-  drawSeal(doc, 31.5, 35.5, 26);
+  drawSeal(doc, 31.5, 35.5, 27);
 
   doc.setFont('times', 'bold');
   doc.setFontSize(19);
@@ -470,7 +342,7 @@ export function createMerisInvoiceDocument(order: Order) {
   const footerY = 263;
   doc.setFillColor(...NAVY);
   doc.roundedRect(margin, footerY, width, 19, 3, 3, 'F');
-  drawSeal(doc, 28.5, footerY + 9.5, 15, { withText: false });
+  drawSeal(doc, 28.5, footerY + 9.5, 15);
   doc.setFont('helvetica', 'bold');
   doc.setFontSize(8);
   doc.setTextColor(...WHITE);
