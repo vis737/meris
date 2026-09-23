@@ -1,30 +1,121 @@
 [
   {
-    "id": "stat-3",
-    "sku": "ST-CAL-SET",
-    "name": "Calligraphy Starter Set with Raw Brass Inkwell",
-    "category": "Stationeries",
-    "categorySlug": "stationeries",
-    "price": 1850,
-    "discountPrice": 1599,
-    "stock": 8,
-    "rating": 4.8,
-    "ratingCount": 22,
+    "id": "prod_1784984908064_f9k9whi",
+    "sku": "Home-Rou-Fresh",
+    "name": "Beautiful 12\" Rangoli Designs",
+    "category": "Kolam Stencils",
+    "categorySlug": "kolam",
+    "price": 99,
+    "stock": 15,
+    "rating": 5,
+    "ratingCount": 1,
     "images": [
-      "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=800&auto=format&fit=crop&q=80"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-03/fe757c14-2036-478f-be70-91c9d7eaf41e.jpg"
     ],
-    "shortDescription": "Stunning writing gift kit including a wood-nib stylus, 4 premium steel nib points, and an antique brass ink pot.",
-    "description": "Rekindle the majestic art of hand-written letters. This curation features an ergonomic polished rosewood handle stylus, fine steel drawing nibs, and a heavy brass inkwell containing 30ml of rich pigment organic charcoal black ink.",
+    "shortDescription": "Kolam Stencils - Each",
+    "description": "* Ready to Draw Rangoli Making Kit Magic Stamp kit 12 inches.\n\n* Package contents: Round design Rangoli stencil (12\" Inches), \n\n* A complete magic rangoli kit for making rangoli designs easily and quickly.\n\n* Simply follow the steps as given in images, a beautiful rangoli design will come out within a minute.\n\n* First fill the box with rangoli colour of your choice then fix it with plain/ design stencil and reverse the magic box and rotate the black knob of the box, a beautiful design will come out (as shown in image).",
     "specifications": {
-      "Nibs": "4 high-flex spring steel calligraphy points",
-      "Stylus": "Hand-turned Rosewood stylus",
-      "Inkwell": "Solid machined Brass leakproof screw-cap vessel",
-      "Packaging": "Lined premium cardboard giftbox"
+      "Weight": "0.05 kg",
+      "Dimensions": "12 inches"
     },
+    "weightKg": 0.05,
     "reviews": [],
     "isNew": true,
     "isBestseller": false,
-    "brand": "Meris Script",
+    "brand": "afafafaff",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1789759637291_83755mk",
+    "sku": "HOU-UMBR-QUA",
+    "name": "Bottle Shaped Portable Folding Umbrella",
+    "category": "home",
+    "categorySlug": "home",
+    "price": 225,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/6160c77a-83a0-4517-a38b-bf789f8fe688.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a7de07be-8c63-4179-82e5-708aeb4b362c.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-19/03d92535-7e67-4cae-b320-871515aa4a5a.jpeg"
+    ],
+    "shortDescription": "Bottle Shaped Portable Folding Umbrella with Cylindrical Storage Case Lightweight for Men/Women",
+    "description": "* Bottle Style Storage Case: Compact bottle-shaped case keeps the umbrella neatly stored after use\n\n* Portable & Lightweight: Easy to carry in handbags, backpacks, school bags, luggage, or office bags\n\n* Foldable Design: Opens and folds quickly for convenient everyday use\nUV & Rain Protection: Suitable for sunny days and rainy weather throughout the year\nMultipurpose Use: Suitable for office, school, travel, shopping, commuting, walking, and outdoor activities\nCompact Size: Space-saving design allows for easy storage without occupying much room in your bag or vehicle",
+    "specifications": {
+      "Weight": "0.15 kg",
+      "Material": "Plastic Case",
+      "Dimensions": "10W x 10H Centimeters",
+      "Recommended for": "Rain, Sun"
+    },
+    "weightKg": 0.15,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1789758937501_hfwwahc",
+    "sku": "SSM-BOTT-RETG",
+    "name": "Stainless Steel Water Bottle - Marvel Theme",
+    "category": "bottles",
+    "categorySlug": "bottles",
+    "price": 350,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/e18d057d-527e-4885-afc4-a7486b624361.jpeg"
+    ],
+    "shortDescription": "Stainless Steel Water Bottle | 1000ml Leakproof Reusable Bottle | Pack Of 1",
+    "description": "* Made from stainless steel with a lightweight yet sturdy design for everyday hydration.\n\n* Leakproof and spillproof lid helps prevent spills while carrying in bags or backpacks.\n\n* Designed to help maintain the freshness of your beverages throughout the day.\n\n* Compact, lightweight bottle with a comfortable design for home, office, school, gym, and travel.\n\n* Rust-resistant construction with a reusable design suitable for daily use and easy maintenance.",
+    "specifications": {
+      "Weight": "0.3 kg",
+      "Material": "Stainless Steel",
+      "Dimensions": "8W x 28H Centimeters",
+      "Care Instructions": "Hand Wash Only"
+    },
+    "weightKg": 0.3,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "test-razorpay-10rs",
+    "sku": "Bot-Pre-Gud",
+    "name": "Printed Mini Vacuum Insulated Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 260,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/8fcbaf7e-32c0-46e9-815d-31befd80e231.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/b0f4e024-f602-4f30-8710-18129c317052.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/42e92d85-bb63-4ee5-8c5a-2762f43234f8.jpeg"
+    ],
+    "shortDescription": "Printed Mini Vacuum Insulated Stainless Steel Bottle 300ml Leakproof| Reusable Water Bottle for Office, Gym & Travel (Design will be Sent Randomly)",
+    "description": "✨ Premium Vacuum Insulation – Double-wall vacuum insulated stainless steel construction helps maintain the temperature of beverages for long hours.\n💧 Leakproof & Spill-Resistant – Secure screw-top lid prevents leaks and spills, making it ideal for carrying in backpacks, handbags, and office bags.\n🌿 Food-Grade Stainless Steel – Made from high-quality, BPA-free, rust-resistant stainless steel that is safe, durable, and designed for everyday use.\n🎒 Perfect for Everyday Use – Suitable for the office, school, college, gym, travel, hiking, picnics, sports, and outdoor adventures.\n🎨 Random Printed Design – Stylish printed patterns enhance the bottle's look. Designs are shipped randomly based on stock availability.\n♻️ Reusable & Eco-Friendly – A sustainable alternative to single-use plastic bottles, helping reduce environmental waste while keeping you hydrated.\n🎁 Great Gift Choice – An excellent gift for students, professionals, fitness enthusiasts, friends, and family for birthdays, festivals, and special occasions.",
+    "specifications": {
+      "Weight": "0.3 kg",
+      "Base Dia": "9 Centimeters",
+      "Material": "Stainless Steel",
+      "Components": "Insulated Bottle",
+      "Dimensions": "12W x 28H Centimeters",
+      "Care Instructions": "Hand Wash Only"
+    },
+    "weightKg": 0.3,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -57,37 +148,104 @@
     },
     "weightKg": 0.1,
     "reviews": [],
-    "isNew": false,
+    "isNew": true,
     "isBestseller": false,
     "brand": "Meris E-Shop",
     "availability": "in-stock",
     "vendorId": null
   },
   {
-    "id": "prod_1784984908064_f9k9whi",
-    "sku": "awfwaf",
-    "name": "Beautiful 12\" Rangoli Designs",
-    "category": "kolam",
-    "categorySlug": "luxury-goods",
-    "price": 199,
-    "discountPrice": 99,
-    "stock": 15,
+    "id": "prod_1789753063153_7tcxf5j",
+    "sku": "BG-PREMM-TAN",
+    "name": "Hello Kitty Stainless Steel Thermos",
+    "category": "bottles",
+    "categorySlug": "bottles",
+    "price": 250,
+    "stock": 10,
     "rating": 5,
     "ratingCount": 1,
     "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-03/fe757c14-2036-478f-be70-91c9d7eaf41e.jpg"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/c134cbbf-38a6-4b51-9840-37d3ed2b3f96.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/0eaca639-194d-4123-93e6-88e71c43dcdc.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a4d38c11-01af-44bb-b0ac-d99798ff8a3e.jpeg"
     ],
-    "shortDescription": "Kolam Stencils - Each",
-    "description": "* Ready to Draw Rangoli Making Kit Magic Stamp kit 12 inches.\n\n* Package contents: Round design Rangoli stencil (12\" Inches), \n\n* A complete magic rangoli kit for making rangoli designs easily and quickly.\n\n* Simply follow the steps as given in images, a beautiful rangoli design will come out within a minute.\n\n* First fill the box with rangoli colour of your choice then fix it with plain/ design stencil and reverse the magic box and rotate the black knob of the box, a beautiful design will come out (as shown in image).",
+    "shortDescription": "500ml Unicorn Print Stainless Steel Water Bottle with Flip Top Lid & Direct Sip Spout, Purple Drinking Bottle for School, Girls & Kids",
+    "description": "* Cute Cartoon Design for Kids: Features a fun and playful cartoon print that makes drinking water enjoyable and encourages kids to carry their bottle to school and outings.\n\n* Easy Flip Top with Direct Sip Spout: Designed for quick and convenient drinking with a flip lid and direct sip opening, allowing hassle-free use during school or travel.\n\n* Strong Stainless Steel Construction: Built with durable stainless steel to handle everyday use, making it suitable for active kids and regular school routines.\n\n* Compact & School Bag Friendly Size: 500ml capacity with a space-saving design that fits easily into school bags, lunch bags, and side pockets.\n\n* Suitable for School & Outdoor Use: Practical and stylish water bottle for boys and girls, designed for school, picnics, travel, and daily activities.\n\n* Unicorn Print Design: Features an attractive purple unicorn print that appeals to girls and kids who love colorful and themed accessories.\n\n* Leak-Resistant Flip Lid: Equipped with a secure flip top lid that helps prevent spills and leaks when stored in bags during transport.",
     "specifications": {
-      "Weight": "0.05 kg",
-      "Dimensions": "12 inches"
+      "Color": "Pink",
+      "Weight": "0.25 kg",
+      "Material": "Stainless Steel",
+      "Dimensions": "6.5W x 22.5H Centimeters ",
+      "Care Instructions": "Hand Wash Recommended"
     },
-    "weightKg": 0.05,
+    "weightKg": 0.25,
     "reviews": [],
     "isNew": true,
     "isBestseller": false,
-    "brand": "afafafaff",
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1789754728194_pd39h62",
+    "sku": "ATC-CONT-QTY",
+    "name": "Decorative Airtight Container - 2 nos",
+    "category": "home",
+    "categorySlug": "home",
+    "price": 100,
+    "stock": 80,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/51b6823b-408e-4289-a90f-c8f22e4b591a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a2197e0c-70d9-4097-9241-007568568d18.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/39d13e10-f716-4abd-ba2a-cbeff1ec2916.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a0fc0dd8-ea85-4a62-a60f-ef724120b6b0.jpeg"
+    ],
+    "shortDescription": "Premium Printed Metal Jars for Kitchen Storage & Return Gifts | Tea Coffee Sugar Container | Dry Fruit Box for Kitchen Storage | 6 Inch",
+    "description": "ELEGANT DESIGN: Set of 2 decorative tin canisters featuring intricate Indian-inspired artwork, including a vibrant peacock motif on pink and floral patterns on rich red.\n\nVERSATILE STORAGE: Ideal for storing tea, coffee, spices, dry fruits, or other kitchen essentials while adding a decorative touch to your countertop or shelf.\n\nSECURE LID: Each canister comes with a snug-fitting lid to keep contents fresh and protected from moisture and dust.\n\nBEAUTIFUL GIFT SET: The ornate artwork and premium finish make this set of 2 canisters a thoughtful and attractive gift for festivals, housewarmings, and special occasions.\n\nSET CONTENTS: Includes 2 cylindrical tin canisters — one in bold red with golden floral motifs and one in soft pink with a detailed peacock illustration and gold accents.",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.15 kg",
+      "Material": "Metal",
+      "Dimensions": "7L x 7W x 15H Centimeters ",
+      "Care Instructions": "Avoid Abrasive Scrubbers To Preserve Printed Design, Do Not Microwave, Do Not Soak In Water, Hand Wash Only, Keep Away From Direct Sunlight To Prevent Colour Fading, Store In A Cool And Dry Place, Wipe With A Dry Cloth After Cleaning.",
+      "Recommended Uses For": "Gift Giving, Kitchen Storage"
+    },
+    "weightKg": 0.15,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "stat-3",
+    "sku": "ST-CAL-SET",
+    "name": "Calligraphy Starter Set with Raw Brass Inkwell",
+    "category": "Stationeries",
+    "categorySlug": "stationeries",
+    "price": 1850,
+    "discountPrice": 1599,
+    "stock": 8,
+    "rating": 4.8,
+    "ratingCount": 22,
+    "images": [
+      "https://images.unsplash.com/photo-1513542789411-b6a5d4f31634?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Stunning writing gift kit including a wood-nib stylus, 4 premium steel nib points, and an antique brass ink pot.",
+    "description": "Rekindle the majestic art of hand-written letters. This curation features an ergonomic polished rosewood handle stylus, fine steel drawing nibs, and a heavy brass inkwell containing 30ml of rich pigment organic charcoal black ink.",
+    "specifications": {
+      "Nibs": "4 high-flex spring steel calligraphy points",
+      "Stylus": "Hand-turned Rosewood stylus",
+      "Inkwell": "Solid machined Brass leakproof screw-cap vessel",
+      "Packaging": "Lined premium cardboard giftbox"
+    },
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris Script",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -242,36 +400,6 @@
     "vendorId": null
   },
   {
-    "id": "prod_1789758937501_hfwwahc",
-    "sku": "SSM-BOTT-RETG",
-    "name": "Stainless Steel Water Bottle - Marvel Theme",
-    "category": "bottles",
-    "categorySlug": "bottles",
-    "price": 449,
-    "discountPrice": 350,
-    "stock": 10,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/e18d057d-527e-4885-afc4-a7486b624361.jpeg"
-    ],
-    "shortDescription": "Stainless Steel Water Bottle | 1000ml Leakproof Reusable Bottle | Pack Of 1",
-    "description": "* Made from stainless steel with a lightweight yet sturdy design for everyday hydration.\n\n* Leakproof and spillproof lid helps prevent spills while carrying in bags or backpacks.\n\n* Designed to help maintain the freshness of your beverages throughout the day.\n\n* Compact, lightweight bottle with a comfortable design for home, office, school, gym, and travel.\n\n* Rust-resistant construction with a reusable design suitable for daily use and easy maintenance.",
-    "specifications": {
-      "Weight": "0.2 kg",
-      "Material": "Stainless Steel",
-      "Dimensions": "8W x 28H Centimeters",
-      "Care Instructions": "Hand Wash Only"
-    },
-    "weightKg": 0.2,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
     "id": "toy-8",
     "sku": "TOY-WD-CHESS",
     "name": "Classic Handcrafted Deluxe Wooden Chess Set",
@@ -368,38 +496,6 @@
     "vendorId": null
   },
   {
-    "id": "prod_1789759637291_83755mk",
-    "sku": "HOU-UMBR-QUA",
-    "name": "Bottle Shaped Portable Folding Umbrella",
-    "category": "home",
-    "categorySlug": "home",
-    "price": 399,
-    "discountPrice": 225,
-    "stock": 10,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/6160c77a-83a0-4517-a38b-bf789f8fe688.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a7de07be-8c63-4179-82e5-708aeb4b362c.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-19/03d92535-7e67-4cae-b320-871515aa4a5a.jpeg"
-    ],
-    "shortDescription": "Bottle Shaped Portable Folding Umbrella with Cylindrical Storage Case Lightweight for Men/Women",
-    "description": "* Bottle Style Storage Case: Compact bottle-shaped case keeps the umbrella neatly stored after use\n\n* Portable & Lightweight: Easy to carry in handbags, backpacks, school bags, luggage, or office bags\n\n* Foldable Design: Opens and folds quickly for convenient everyday use\nUV & Rain Protection: Suitable for sunny days and rainy weather throughout the year\nMultipurpose Use: Suitable for office, school, travel, shopping, commuting, walking, and outdoor activities\nCompact Size: Space-saving design allows for easy storage without occupying much room in your bag or vehicle",
-    "specifications": {
-      "Weight": "0.15 kg",
-      "Material": "Plastic Case",
-      "Dimensions": "10W x 10H Centimeters",
-      "Recommended for": "Rain, Sun"
-    },
-    "weightKg": 0.15,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
     "id": "learn-2",
     "sku": "LN-COSMIC-PZL",
     "name": "Teakwood Cosmic Solar System Puzzle",
@@ -434,39 +530,6 @@
     "isNew": false,
     "isBestseller": true,
     "brand": "Meris Kids",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "prod_1789753063153_7tcxf5j",
-    "sku": "BG-PREMM-TAN",
-    "name": "Hello Kitty Stainless Steel Thermos",
-    "category": "bottles",
-    "categorySlug": "bottles",
-    "price": 379,
-    "discountPrice": 245,
-    "stock": 10,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/c134cbbf-38a6-4b51-9840-37d3ed2b3f96.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/0eaca639-194d-4123-93e6-88e71c43dcdc.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a4d38c11-01af-44bb-b0ac-d99798ff8a3e.jpeg"
-    ],
-    "shortDescription": "500ml Unicorn Print Stainless Steel Water Bottle with Flip Top Lid & Direct Sip Spout, Purple Drinking Bottle for School, Girls & Kids",
-    "description": "* Cute Cartoon Design for Kids: Features a fun and playful cartoon print that makes drinking water enjoyable and encourages kids to carry their bottle to school and outings.\n\n* Easy Flip Top with Direct Sip Spout: Designed for quick and convenient drinking with a flip lid and direct sip opening, allowing hassle-free use during school or travel.\n\n* Strong Stainless Steel Construction: Built with durable stainless steel to handle everyday use, making it suitable for active kids and regular school routines.\n\n* Compact & School Bag Friendly Size: 500ml capacity with a space-saving design that fits easily into school bags, lunch bags, and side pockets.\n\n* Suitable for School & Outdoor Use: Practical and stylish water bottle for boys and girls, designed for school, picnics, travel, and daily activities.\n\n* Unicorn Print Design: Features an attractive purple unicorn print that appeals to girls and kids who love colorful and themed accessories.\n\n* Leak-Resistant Flip Lid: Equipped with a secure flip top lid that helps prevent spills and leaks when stored in bags during transport.",
-    "specifications": {
-      "Color": "Pink",
-      "Weight": "0.25 kg",
-      "Material": "Stainless Steel",
-      "Dimensions": "6.5W x 22.5H Centimeters ",
-      "Care Instructions": "Hand Wash Recommended"
-    },
-    "weightKg": 0.25,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -1043,41 +1106,6 @@
     "vendorId": null
   },
   {
-    "id": "prod_1789754728194_pd39h62",
-    "sku": "ATC-CONT-QTY",
-    "name": "Decorative Airtight Container - 2 nos",
-    "category": "home",
-    "categorySlug": "home",
-    "price": 150,
-    "discountPrice": 100,
-    "stock": 80,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/51b6823b-408e-4289-a90f-c8f22e4b591a.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a2197e0c-70d9-4097-9241-007568568d18.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/39d13e10-f716-4abd-ba2a-cbeff1ec2916.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a0fc0dd8-ea85-4a62-a60f-ef724120b6b0.jpeg"
-    ],
-    "shortDescription": "Premium Printed Metal Jars for Kitchen Storage & Return Gifts | Tea Coffee Sugar Container | Dry Fruit Box for Kitchen Storage | 6 Inch",
-    "description": "ELEGANT DESIGN: Set of 2 decorative tin canisters featuring intricate Indian-inspired artwork, including a vibrant peacock motif on pink and floral patterns on rich red.\n\nVERSATILE STORAGE: Ideal for storing tea, coffee, spices, dry fruits, or other kitchen essentials while adding a decorative touch to your countertop or shelf.\n\nSECURE LID: Each canister comes with a snug-fitting lid to keep contents fresh and protected from moisture and dust.\n\nBEAUTIFUL GIFT SET: The ornate artwork and premium finish make this set of 2 canisters a thoughtful and attractive gift for festivals, housewarmings, and special occasions.\n\nSET CONTENTS: Includes 2 cylindrical tin canisters — one in bold red with golden floral motifs and one in soft pink with a detailed peacock illustration and gold accents.",
-    "specifications": {
-      "Colour": "Multicolour",
-      "Weight": "0.15 kg",
-      "Material": "Metal",
-      "Dimensions": "7L x 7W x 15H Centimeters ",
-      "Care Instructions": "Avoid Abrasive Scrubbers To Preserve Printed Design, Do Not Microwave, Do Not Soak In Water, Hand Wash Only, Keep Away From Direct Sunlight To Prevent Colour Fading, Store In A Cool And Dry Place, Wipe With A Dry Cloth After Cleaning.",
-      "Recommended Uses For": "Gift Giving, Kitchen Storage"
-    },
-    "weightKg": 0.15,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
     "id": "btl-2",
     "sku": "BT-FLASK-PASTEL",
     "name": "Pastel Vacuum Insulated Double-Walled Flask",
@@ -1162,40 +1190,6 @@
     "isNew": false,
     "isBestseller": false,
     "brand": "Meris Heritage",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "test-razorpay-10rs",
-    "sku": "TEST-RZP-10",
-    "name": "Printed Mini Vacuum Insulated Bottle",
-    "category": "bottles",
-    "categorySlug": "test",
-    "price": 350,
-    "discountPrice": 260,
-    "stock": 10,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/8fcbaf7e-32c0-46e9-815d-31befd80e231.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/b0f4e024-f602-4f30-8710-18129c317052.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/42e92d85-bb63-4ee5-8c5a-2762f43234f8.jpeg"
-    ],
-    "shortDescription": "Printed Mini Vacuum Insulated Stainless Steel Bottle 300ml Leakproof| Reusable Water Bottle for Office, Gym & Travel (Design will be Sent Randomly)",
-    "description": "✨ Premium Vacuum Insulation – Double-wall vacuum insulated stainless steel construction helps maintain the temperature of beverages for long hours.\n💧 Leakproof & Spill-Resistant – Secure screw-top lid prevents leaks and spills, making it ideal for carrying in backpacks, handbags, and office bags.\n🌿 Food-Grade Stainless Steel – Made from high-quality, BPA-free, rust-resistant stainless steel that is safe, durable, and designed for everyday use.\n🎒 Perfect for Everyday Use – Suitable for the office, school, college, gym, travel, hiking, picnics, sports, and outdoor adventures.\n🎨 Random Printed Design – Stylish printed patterns enhance the bottle's look. Designs are shipped randomly based on stock availability.\n♻️ Reusable & Eco-Friendly – A sustainable alternative to single-use plastic bottles, helping reduce environmental waste while keeping you hydrated.\n🎁 Great Gift Choice – An excellent gift for students, professionals, fitness enthusiasts, friends, and family for birthdays, festivals, and special occasions.",
-    "specifications": {
-      "Weight": "0.5 kg",
-      "Base Dia": "9 Centimeters",
-      "Material": "Stainless Steel",
-      "Components": "Insulated Bottle",
-      "Dimensions": "12W x 28H Centimeters",
-      "Care Instructions": "Hand Wash Only"
-    },
-    "weightKg": 0.5,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
     "availability": "in-stock",
     "vendorId": null
   }

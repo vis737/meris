@@ -1,0 +1,37 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>Sample MERIS invoice</title>
+<style>
+  body { margin: 0; background: #0f172a; display: flex; flex-direction: column; align-items: center; }
+  h1 { color: #fbbf24; font: 600 15px/1.4 system-ui, sans-serif; margin: 12px 0 8px; }
+  canvas { box-shadow: 0 10px 40px rgba(0,0,0,.5); background: #fff; }
+  #err { color: #f87171; font: 13px monospace; padding: 12px; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+  <h1>Sample output — new MERIS invoice (site logo + polish)</h1>
+  <div id="err"></div>
+  <canvas id="cv"></canvas>
+  <script type="module">
+    import * as pdfjsLib from 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.8.69/build/pdf.min.mjs';
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.8.69/build/pdf.worker.min.mjs';
+    try {
+      const res = await fetch('sample-invoice.pdf');
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const data = new Uint8Array(await res.arrayBuffer());
+      const pdf = await pdfjsLib.getDocument({ data }).promise;
+      const page = await pdf.getPage(1);
+      const vp = page.getViewport({ scale: 1.6 });
+      const cv = document.getElementById('cv');
+      cv.width = vp.width; cv.height = vp.height;
+      cv.style.width = Math.min(vp.width, innerWidth - 12) + 'px';
+      await page.render({ canvasContext: cv.getContext('2d'), viewport: vp }).promise;
+      window.__DONE__ = true;
+    } catch (e) {
+      document.getElementById('err').textContent = 'Error: ' + (e && e.message || e);
+    }
+  </script>
+</body>
+</html>

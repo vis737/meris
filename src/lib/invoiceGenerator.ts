@@ -1,7 +1,10 @@
 import { jsPDF } from 'jspdf';
 import { Order } from '../types';
+import { generateMerisInvoicePDF } from './merisInvoiceDesigner';
 
-export function generateInvoicePDF(order: Order) {
+// Retained only as a reference for the previous layout. The application uses
+// the Meris E-Shop branded renderer exported below.
+function generateLegacyInvoicePDF(order: Order) {
   const doc = new jsPDF({
     orientation: 'portrait',
     unit: 'mm',
@@ -240,5 +243,7 @@ export function generateInvoicePDF(order: Order) {
   // Save the PDF
   doc.save(`Invoice-MERIS-INV-${orderSlug}.pdf`);
 }
+
+export const generateInvoicePDF = generateMerisInvoicePDF;
 
 
