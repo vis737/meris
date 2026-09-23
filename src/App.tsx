@@ -1404,12 +1404,15 @@ export default function App() {
                     <div className="relative z-10 space-y-5">
                       <span className="text-[10px] font-mono uppercase tracking-[0.25em] text-gold-600 dark:text-gold-400 font-semibold block">From Our Family To Yours</span>
                       <p className="text-sm sm:text-base text-slate-700 dark:text-navy-100 leading-relaxed font-light">
-                        Namaste! Meris began at our dining table in Kanyakumari — sanding little wooden trains late into the night for my daughter's birthday. Everything we sell is still checked by hand, wrapped by hand, and posted with the same care. If a toy ever reaches you less than perfect, tell us — we'll make it right.
+                        Namaste! What started with a love for finding little things that bring big smiles has grown into a place where every gift is chosen with care. From playful toys to thoughtful gifts, we believe every little surprise should create a happy memory.
+                      </p>
+                      <p className="text-sm sm:text-base text-slate-700 dark:text-navy-100 leading-relaxed font-light">
+                        We carefully select and pack every order so it reaches you ready to make someone smile. Whether it's a birthday, a special celebration, or simply a little "thinking of you" moment, thank you for letting us be part of it.
                       </p>
                       <div className="flex items-center gap-3 pt-1">
                         <div>
                           <p className="font-hand text-2xl text-navy-900 dark:text-gold-200 leading-none">— The Meris Family</p>
-                          <p className="text-[10px] font-mono text-gray-400 dark:text-navy-300 tracking-wider uppercase mt-1.5">Founders, MERIS E-SHOP · Kanyakumari</p>
+                          <p className="text-[10px] font-mono text-gray-400 dark:text-navy-300 tracking-wider uppercase mt-1.5">Founders, MERIS E-SHOP</p>
                         </div>
                       </div>
                     </div>
