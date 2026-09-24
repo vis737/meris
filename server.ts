@@ -1570,6 +1570,59 @@ Generate the recommendations JSON strictly adhering to the schema.`;
   }
 });
 
+// AI Listing Generator Proxy Route
+// Accepts an image URL + product context, returns a generated title, description, and suggested category.
+// Respects admin authentication and rate limits.app.post('/api/ai/listing', rateLimiter(10, 60 * 1000), async (req, res) => {
+  const { imageUrl, prompt, category } = req.body;
+  const ai = getGeminiClient();
+
+  if (!ai || !imageUrl) {
+    return res.json({
+      success: false,
+      error: 'AI listing requires a Gemini API key and an image URL.',
+    });
+  }
+
+  try {
+    // Build the prompt with the image URL as a data source
+    const aiPrompt = `You are a creative product listing assistant for a Indian handmade gift e-commerce store (MERIS E-SHOP). A photo of a product is provided below.
+
+Your task:
+1. Analyze the image and describe what the item appears to be (materials, style, purpose).
+2. Suggest a warm, human-sounding product name (max 6 words, in English).
+3. Suggest a short product description (max 4 sentences) describing the item, its materials, and its use. Keep the tone warm and personal (not robotic).
+4. Suggest the best matching category from this list: Kids Toys, Wood Crafted Gifts, Handbags & Clutches, Learning Stuff, Home Organizers, Kolam Stencils, Novelty Stationeries, Entertainment & Novelties, Return Gift Bottles.
+5. If a category is provided, respect it unless the image clearly belongs elsewhere.
+
+Respond ONLY as a clean JSON object with exactly these keys: {"name": "...", "description": "...", "category": "..."}.
+Do not add any other text, explanations, or markdown formatting.`;
+
+    const response = await ai.models.generateContent({
+      model: 'gemini-3.5-flash',
+      contents: prompt || aiPrompt,
+      config: {
+        responseMimeType: 'application/json',
+      },
+    });
+
+    const text = response.text || '{}';
+    const parsed = JSON.parse(text);
+
+    // Validate the response keys
+    if (!parsed.name || !parsed.description || !parsed.category) {
+      throw new Error('AI response missing required fields (name, description, category).');
+    }
+
+    res.json({ success: true, data: parsed });
+  } catch (error: any) {
+    console.error('AI listing generation error:', error);
+    res.json({
+      success: false,
+      error: error.message || 'Failed to generate AI listing. Please try again.',
+    });
+  }
+});
+
 // Smart Search Assistant
 app.post('/api/gemini/search', rateLimiter(20, 60 * 1000), async (req, res) => {
   const rawQuery = req.body?.query;

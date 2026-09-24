@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Sparkles, ArrowRight, Truck, ShieldCheck, Heart, Award, ArrowUp, Star, Trash2, Eye, Mail, Info, Send, ChevronRight, ChevronLeft, Smartphone, RefreshCw, Layers, X, Key } from 'lucide-react';
+import { Sparkles, ArrowRight, Truck, ShieldCheck, Heart, Award, ArrowUp, Star, Trash2, Eye, Mail, Info, Send, ChevronRight, ChevronLeft, Smartphone, RefreshCw, Layers, X, Key, BadgeCheck } from 'lucide-react';
 
 // Subcomponents import
 import Navbar from './components/Navbar';
@@ -1087,7 +1087,7 @@ export default function App() {
                       {[
                         { icon: <Truck className="w-4 h-4 text-gold-400" />, text: 'Free shipping over Rs.499' },
                         { icon: <ShieldCheck className="w-4 h-4 text-gold-400" />, text: '100% secure Razorpay checkout' },
-                        { icon: <RefreshCw className="w-4 h-4 text-gold-400" />, text: '7-day easy returns' },
+                        { icon: <BadgeCheck className="w-4 h-4 text-gold-400" />, text: '100% genuine, inspected products' },
                         { icon: <Award className="w-4 h-4 text-gold-400" />, text: 'Handmade by Indian artisans' },
                         { icon: <Sparkles className="w-4 h-4 text-gold-400" />, text: 'ISO 8124 certified safe toys' },
                         { icon: <Truck className="w-4 h-4 text-gold-400" />, text: 'ST Courier delivery nationwide' },
@@ -1117,7 +1117,7 @@ export default function App() {
                     <span className="text-xs font-mono text-slate-400">{searchResultsList.length} shown</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     {searchResultsList.map((product) => (
                       <ProductCard
                         key={product.id}
@@ -1211,7 +1211,7 @@ export default function App() {
                   </button>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {bestSellersList.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1244,7 +1244,7 @@ export default function App() {
                   </button>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                   {newArrivalsList.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1297,7 +1297,7 @@ export default function App() {
                           </button>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                           {shelfProducts.map((product) => (
                             <ProductCard
                               key={product.id}
@@ -1333,7 +1333,7 @@ export default function App() {
                       <h4 className="font-display font-bold text-xs uppercase tracking-wider text-navy-900 dark:text-navy-50 flex items-center gap-1.5 border-b border-gray-150 dark:border-navy-850 pb-2">
                         <Sparkles className="w-3.5 h-3.5 text-[#C5A021]" /> {title}
                       </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 animate-fade-in">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fade-in">
                         {list.map(p => (
                           <ProductCard
                             key={p.id}
@@ -2187,9 +2187,9 @@ export default function App() {
           <div className="space-y-3">
             <h4 className="font-display font-semibold text-xs text-gold-300 uppercase tracking-widest leading-none">Indian Headquarters</h4>
             <p className="text-navy-200 leading-relaxed font-light">
-              5/339, Fathima Road,<br />
-              nager, Azhagappapuram, Tamil Nadu 629401<br />
-              Contact Desk: support@meris.com
+              5/339, Fathima Nagar,<br />
+              Azhagappapuram, Tamil Nadu 629401<br />
+              Contact Desk: meriseshop.2025@gmail.com
             </p>
           </div>
 

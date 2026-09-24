@@ -104,10 +104,10 @@ export default function OrderSuccessModal({ order, onClose }: OrderSuccessModalP
           <div className="space-y-2 text-left">
             <div className="flex items-center gap-2 text-[10px] font-mono tracking-wider font-semibold text-gold-600 uppercase">
               <Sparkles className="w-4 h-4 text-gold-500" />
-              Founders Archival Appreciation Note
+              Made With Love
             </div>
             {aiLoading ? (
-              <p className="text-xs text-gray-500 font-mono animate-pulse">AI Concierge is penning your customized thank-you letter...</p>
+              <p className="text-xs text-gray-500 font-mono animate-pulse">Hand-finishing your parcel...</p>
             ) : (
               <p className="text-xs sm:text-sm text-gray-700 font-sans leading-relaxed italic font-light">
                 "{invoiceResponse?.greetingText || `Dear ${order.customerInfo.name}, thank you for supporting India's craftspersons! Our team is preparing your parcel with complete hand-finished checks.`}"

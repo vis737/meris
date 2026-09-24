@@ -1112,11 +1112,11 @@ var DEFAULT_CMS = {
   headline: "Distinctive Heritage Collections For Creative Families",
   subheadline: "Crafted with absolute devotion from luxury gold brass, polished hardwoods, fine linens & combed threads.",
   aboutText: "MERIS E-SHOP grew out of a love for organic tactile treasures that persist across generations. What started in 2025 as a small studio workshop crafting traditional timber Toys has evolved into prime curation hubs for Handbags, learning tools, home accessories, and festive stencils. Every single item traces back to hand-perfected mockups, chemical-free finishing, and ethical rural workforces.",
-  contactEmail: "support@meris.com",
+  contactEmail: "meriseshop.2025@gmail.com",
   contactPhone: "+91 93842 92229",
-  contactAddress: "5/339, Fathima Road, nager, Azhagappapuram, Tamil Nadu 629401",
+  contactAddress: "5/339, Fathima Nagar, Azhagappapuram, Tamil Nadu 629401",
   privacyPolicy: "Your personal data (Name, Email, Address) is transmitted through full-stack secured channels. We use client local persistence for speedy loading times and never sell user profiling sheets to marketing aggregates.",
-  termsConditions: "All prices listed on MERIS E-SHOP are inclusive of standard 5% GST rules. Returns have a 7-day windows and of course must remain spotless inside initial package cases."
+  termsConditions: "All prices listed on MERIS E-SHOP are inclusive of standard 5% GST rules. Returns are handled with care \u2014 please ensure packaging stays spotless inside the initial package cases."
 };
 var INITIAL_CMS = DEFAULT_CMS;
 var INITIAL_LOGS = [

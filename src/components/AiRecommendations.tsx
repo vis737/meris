@@ -73,9 +73,9 @@ export default function AiRecommendations({
       <div className="bg-navy-900 border border-gold-400/20 rounded-2xl p-6 text-white text-center space-y-3 shadow-xl max-w-full">
         <div className="flex items-center justify-center gap-2 text-gold-400">
           <Sparkles className="w-5 h-5 animate-spin" />
-          <span className="font-display font-medium tracking-wide text-xs uppercase">Consulting AI Concierge...</span>
+          <span className="font-display font-medium tracking-wide text-xs uppercase">Picking for you...</span>
         </div>
-        <p className="text-xs text-navy-200 font-mono animate-pulse">Polishing handcrafted shelves...</p>
+        <p className="text-xs text-navy-200 font-mono animate-pulse">Mending your shelf with care...</p>
       </div>
     );
   }
@@ -102,7 +102,7 @@ export default function AiRecommendations({
         <div className="space-y-3 max-w-xl">
           <div className="flex items-center gap-2 text-gold-400 font-display font-medium text-xs tracking-widest uppercase">
             <UserCheck className="w-4 h-4 text-gold-400" />
-            VIRTUAL CONCIERGE RECOMMENDATIONS
+            PICKED FOR YOU
           </div>
           <p className="text-sm font-sans italic text-gold-100/90 leading-relaxed font-light">
             "{recommendations?.conciergeCommentary}"

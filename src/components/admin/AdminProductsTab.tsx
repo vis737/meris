@@ -8,6 +8,7 @@ import {
 } from 'lucide-react';
 import { Category, Product } from '../../types';
 import { getProductWeightKg } from '../../utils/premiumData';
+import { Sparkles, X, Check, FloppyDisk, Image as ImageIcon, Loader2, AlertCircle, Copy, Wand2 } from 'lucide-react';
 
 export interface AdminProductsTabProps {
   products: Product[];
@@ -53,11 +54,18 @@ export default function AdminProductsTab({
   const itemsPerPage = 10;
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);  const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
   
+  // AI listing assistant state
+  const [isAiGenerating, setIsAiGenerating] = useState(false);
+  const [aiGenerated, setAiGenerated] = useState<{ name: string; description: string; category: string } | null>(null);
+  const [isAiModalOpen, setIsAiModalOpen] = useState(false);
+  const [aiError, setAiError] = useState('');
+  const [aiImagePreview, setAiImagePreview] = useState<string | null>(null);
+
   const [bulkPricePercent, setBulkPricePercent] = useState('');
   const [bulkStockAdjust, setBulkStockAdjust] = useState('');
+
 
   // Stats
   const totalProducts = products.length;
@@ -141,6 +149,85 @@ export default function AdminProductsTab({
     onAddProduct(duplicated as Product);
     onLogActivity('Duplicate Product', `Duplicated ${product.name}`);
     addToast('Product duplicated successfully', 'success');
+  };
+
+  // ---- AI Listing Assistant ----
+  const generateAiListing = async (imageUrl: string) => {
+    setIsAiGenerating(true);
+    setAiError('');
+    setAiGenerated(null);
+    setAiImagePreview(imageUrl);
+
+    try {
+      // Build the prompt with the image URL + category hints
+      const prompt = `You are a friendly, creative product listing assistant for a Indian handmade gift e-commerce store (MERIS E-SHOP). A photo of an item is uploaded below. The item likely belongs to one of these categories: Kids Toys, Wood Crafted Gifts, Handbags & Clutches, Learning Stuff, Home Organizers, Kolam Stencils, Novelty Stationeries, Entertainment & Novelties, Return Gift Bottles.
+
+Your job:
+1. Look at the image and describe what the item appears to be.
+2. Suggest a clear, warm, human-sounding product name (max 6 words, in English).
+3. Suggest a short product description (max 4 sentences) describing the item, its materials, and its use. Keep the tone warm and personal (not robotic).
+4. Suggest the best matching category from the list above.
+
+Respond ONLY as a clean JSON object with exactly these keys: { "name": "...", "description": "...", "category": "..." }.
+Do not add any other text, explanations, or markdown formatting.`;
+
+      const res = await fetch('/api/ai/listing', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt, imageUrl })
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || 'AI listing generation failed.');
+      }
+
+      const data = await res.json();
+      if (data.success && data.data) {
+        setAiGenerated(data.data);
+        // Apply the AI suggestions to the new product form
+        if (isModalOpen && editingProduct) {
+          setEditingProduct(prev => ({
+            ...prev,
+            name: data.data.name,
+            description: data.data.description,
+            category: data.data.category || prev?.category || '',
+            shortDescription: data.data.name || prev?.shortDescription || '',
+          }));
+        }
+      } else {
+        throw new Error(data.error || 'AI returned an empty result.');
+      }
+    } catch (err) {
+      console.error('AI listing error:', err);
+      setAiError(err instanceof Error ? err.message : 'Failed to generate AI listing.');
+    } finally {
+      setIsAiGenerating(false);
+    }
+  };
+
+  const handleAiSave = () => {
+    if (aiGenerated) {
+      // Apply AI suggestions to the form if not already applied
+      if (editingProduct && !editingProduct.name) {
+        setEditingProduct(prev => ({
+          ...prev,
+          name: aiGenerated.name,
+          description: aiGenerated.description,
+          category: aiGenerated.category || prev?.category || '',
+          shortDescription: aiGenerated.name || prev?.shortDescription || '',
+        }));
+      }
+      setIsAiModalOpen(false);
+      addToast('AI suggestions added to the form. Review and save.', 'info');
+    }
+  };
+
+  const handleCancelAi = () => {
+    setAiGenerated(null);
+    setAiError('');
+    setAiImagePreview(null);
+    setIsAiModalOpen(false);
   };
 
   const handleDelete = (id: string, name: string) => {
@@ -425,7 +512,8 @@ export default function AdminProductsTab({
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button onClick={() => openEditModal(product)} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="Edit">
+                        <button
+                        onClick={handleCancelAi} onClick={() => openEditModal(product)} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="Edit">
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button onClick={() => handleDuplicate(product)} className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors" title="Duplicate">
@@ -492,9 +580,21 @@ export default function AdminProductsTab({
                   {editingProduct.name ? <Edit2 className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
                   {editingProduct.name ? 'Edit Product' : 'Add New Product'}
                 </h3>
-                <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white transition-colors">
-                  <X className="w-6 h-6" />
-                </button>
+                <div className="flex items-center gap-2">
+                  {!editingProduct?.id && (
+                    <button
+                      onClick={() => setIsAiModalOpen(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-gradient-to-r from-gold-500 to-gold-400 text-navy-950 hover:from-gold-600 hover:to-gold-500 transition-colors border border-gold-500/30"
+                      title="AI generate listing from image"
+                    >
+                      <Wand2 className="w-3.5 h-3.5" />
+                      <span className="hidden sm:inline">AI Listing</span>
+                    </button>
+                  )}
+                  <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white transition-colors">
+                    <X className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
               
               <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
@@ -563,6 +663,88 @@ export default function AdminProductsTab({
                   className="px-6 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold transition-colors"
                 >
                   Save Product
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+
+      {/* AI Listing Assistant Modal */}
+      <AnimatePresence>
+        {isAiModalOpen && aiImagePreview && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
+              onClick={() => setIsAiModalOpen(false)}
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-lg bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-slate-800">
+                <h3 className="text-xl font-bold text-yellow-500 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5" />
+                  AI Listing Assistant
+                </h3>
+                <button onClick={() => setIsAiModalOpen(false)} className="text-slate-400 hover:text-white transition-colors">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                {/* Image Preview */}
+                <div className="rounded-xl border border-slate-700 overflow-hidden">
+                  <img src={aiImagePreview} alt="AI analysis" className="w-full h-auto max-h-64 object-cover" />
+                </div>
+
+                {/* Suggestions */}
+                {aiGenerated ? (
+                  <div className="space-y-4">
+                    <div className="bg-green-500/10 border border-green-500/20 rounded-xl p-4">
+                      <h4 className="text-sm font-semibold text-green-400 mb-2">Generated Listing</h4>
+                      <p className="text-xs text-slate-400 mb-1">Name</p>
+                      <p className="text-sm text-slate-200 font-medium">{aiGenerated.name}</p>
+                      <p className="text-xs text-slate-400 mb-1">Description</p>
+                      <p className="text-sm text-slate-200 leading-relaxed">{aiGenerated.description}</p>
+                      <p className="text-xs text-slate-400 mt-2">Suggested Category: <span className="text-sm font-medium text-yellow-400">{aiGenerated.category}</span></p>
+                    </div>
+                    <div className="flex gap-2">
+                      <button
+                        onClick={handleAiSave}
+                        disabled={isAiGenerating}
+                        className="flex-1 px-4 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-navy-950 font-semibold transition-colors disabled:opacity-50"
+                      >
+                        {isAiGenerating ? 'Processing...' : 'Apply & Save'}
+                      </button>
+                      <button
+                        onClick={handleCancelAi}
+                        className="px-4 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors">
+                        Not Now
+                      </button>
+                    </div>
+                  </div>
+n                ) : (
+                  <div className="space-y-4">
+                    <div className="text-center py-8">
+                      <div className="w-12 h-12 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                      <p className="text-sm text-slate-400">AI is analyzing the image...</p>
+                    </div>
+                    <p className="text-xs text-slate-500 text-center">{aiError}</p>
+                  </div>n                )}
+              </div>
+              
+              <div className="p-6 border-t border-slate-800 bg-slate-900/50 flex justify-end gap-3">
+                <button
+                  onClick={handleCancelAi}
+                  className="px-6 py-2 rounded-lg border border-slate-700 text-slate-300 hover:bg-slate-800 transition-colors"
+                >
+                  Close
                 </button>
               </div>
             </motion.div>
@@ -805,6 +987,16 @@ function ProductForm({ product, categories, onChange, addToast }: {
                 <option value="pre-order">Pre-order</option>
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-slate-400 mb-1">Image URL for AI</label>
+              <input
+                type="url"
+                value={aiImagePreview || ''}
+                onChange={e => setAiImagePreview(e.target.value)}
+                placeholder="https://example.com/product-image.jpg"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-slate-200 focus:outline-none focus:border-yellow-500"
+              />
+            </div>
           </div>
         </div>
 
@@ -812,6 +1004,19 @@ function ProductForm({ product, categories, onChange, addToast }: {
         <div className="space-y-4">
           <h4 className="text-lg font-semibold text-slate-100 border-b border-slate-800 pb-2">Images</h4>
           
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-sm font-medium text-slate-400 mb-1">Image URL for AI</label>
+              <input
+                type="url"
+                value={aiImagePreview || ''}
+                onChange={e => setAiImagePreview(e.target.value)}
+                placeholder="https://example.com/product-image.jpg"
+                className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-slate-200 focus:outline-none focus:border-yellow-500"
+              />
+            </div>
+          </div>
+
           <div className="flex bg-slate-950 rounded-lg p-1 border border-slate-700 mb-4">
             <button
               type="button"
