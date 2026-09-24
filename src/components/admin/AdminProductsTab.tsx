@@ -4,11 +4,11 @@ import {
   Search, Plus, Edit2, Trash2, Copy, AlertTriangle, 
   Package, AlertCircle, XCircle, UploadCloud, 
   Link as LinkIcon, ChevronLeft, ChevronRight, X,
-  Check, CheckCircle
+  Check, CheckCircle, Sparkles, Wand2, Image, Loader2, FloppyDisk
 } from 'lucide-react';
 import { Category, Product } from '../../types';
 import { getProductWeightKg } from '../../utils/premiumData';
-import { Sparkles, X, Check, FloppyDisk, Image as ImageIcon, Loader2, AlertCircle, Copy, Wand2 } from 'lucide-react';
+
 
 export interface AdminProductsTabProps {
   products: Product[];
@@ -513,7 +513,12 @@ Do not add any other text, explanations, or markdown formatting.`;
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                        onClick={handleCancelAi} onClick={() => openEditModal(product)} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="Edit">
+                        onClick={() => openEditModal(product)} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="Edit">
+                          <button
+                        onClick={handleCancelAi}
+                        className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="AI Cancel">
+                          <X className="w-4 h-4" />
+                        </button>
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button onClick={() => handleDuplicate(product)} className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors" title="Duplicate">
@@ -729,14 +734,14 @@ Do not add any other text, explanations, or markdown formatting.`;
                       </button>
                     </div>
                   </div>
-n                ) : (
+                ) : (
                   <div className="space-y-4">
                     <div className="text-center py-8">
                       <div className="w-12 h-12 border-2 border-yellow-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                       <p className="text-sm text-slate-400">AI is analyzing the image...</p>
                     </div>
                     <p className="text-xs text-slate-500 text-center">{aiError}</p>
-                  </div>n                )}
+                  </div>                )}
               </div>
               
               <div className="p-6 border-t border-slate-800 bg-slate-900/50 flex justify-end gap-3">
