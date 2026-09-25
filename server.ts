@@ -996,8 +996,15 @@ app.get('/api/catalog/products', async (req, res) => {
             brand: p.brand || 'Meris Couture',
             availability: p.availability || 'in-stock',
             vendorId: p.vendor_id || null,
-            freeShipping: Boolean(p.free_shipping || localMatch?.freeShipping || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test'),
-            gstExempt: Boolean(p.gst_exempt || localMatch?.gstExempt || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test')
+            // NOTE: the local JSON flag (localMatch) only ever FILLS IN a
+            // missing Supabase value — it can never re-apply a test flag the
+            // admin cleared. Explicit test fixtures always keep exemptions.
+            freeShipping: localMatch
+              ? Boolean((p.free_shipping ?? localMatch.freeShipping) || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test')
+              : Boolean(p.free_shipping || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test'),
+            gstExempt: localMatch
+              ? Boolean((p.gst_exempt ?? localMatch.gstExempt) || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test')
+              : Boolean(p.gst_exempt || p.id === 'test-razorpay-10rs' || p.sku === 'TEST-RZP-10' || p.category_slug === 'test')
           };
         });
 

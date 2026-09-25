@@ -129,7 +129,7 @@ export default function ProductCard({
 
           <h4
             onClick={() => onSelectProduct(product.id)}
-            className="font-display font-medium text-xs sm:text-sm text-navy-900 dark:text-navy-50 group-hover:text-gold-500 transition cursor-pointer line-clamp-2 leading-snug"
+            className="font-display font-medium text-xs sm:text-sm text-navy-900 dark:text-navy-50 group-hover:text-gold-500 transition cursor-pointer line-clamp-2 sm:line-clamp-1 leading-snug"
           >
             {product.name}
           </h4>

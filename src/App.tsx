@@ -12,9 +12,7 @@ import OrderSuccessModal from './components/OrderSuccessModal';
 import AccountPanel from './components/AccountPanel';
 import AdminDashboard from './components/AdminDashboard';
 import WhatsAppChat from './components/WhatsAppChat';
-import AiRecommendations from './components/AiRecommendations';
 import AgeToyFinder from './components/AgeToyFinder';
-import { getAIRecommendations } from './utils/aiRecommender';
 import FlashSaleSection from './components/FlashSaleSection';
 import InstagramGallery from './components/InstagramGallery';
 
@@ -1127,7 +1125,7 @@ export default function App() {
                     <span className="text-xs font-mono text-slate-400">{searchResultsList.length} shown</span>
                   </div>
 
-                  <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                     {searchResultsList.map((product) => (
                       <ProductCard
                         key={product.id}
@@ -1142,16 +1140,6 @@ export default function App() {
                   </div>
                 </section>
               )}
-
-              {/* AI Recommendations Shelf */}
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <AiRecommendations
-                  cartItems={cartItems}
-                  recentlyViewedIds={recentlyViewedIds}
-                  allProducts={products}
-                  onSelectProduct={handleViewProductDetails}
-                />
-              </div>
 
               {/* Urgency-driven promotional Flash Sale Countdown section */}
               <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -1221,7 +1209,7 @@ export default function App() {
                   </button>
                 </Reveal>
 
-                <div className="stagger-grid grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
+                <div className="stagger-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                   {bestSellersList.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1254,7 +1242,7 @@ export default function App() {
                   </button>
                 </Reveal>
 
-                <div className="stagger-grid grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
+                <div className="stagger-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                   {newArrivalsList.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1307,7 +1295,7 @@ export default function App() {
                           </button>
                         </div>
 
-                        <div className="stagger-grid grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
+                        <div className="stagger-grid grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6">
                           {shelfProducts.map((product) => (
                             <ProductCard
                               key={product.id}
@@ -1324,73 +1312,6 @@ export default function App() {
                     );
                   })}
               </section>
-
-              {/* Dynamic AI Recommendation Section */}
-              {(() => {
-                const recs = getAIRecommendations(
-                  products,
-                  cartItems,
-                  wishlistIds,
-                  recentlyViewedIds,
-                  orders,
-                  selectedAgeGroup
-                );
-
-                const renderShelf = (title: string, list: Product[]) => {
-                  if (list.length === 0) return null;
-                  return (
-                    <div className="space-y-4">
-                      <h4 className="font-display font-bold text-xs uppercase tracking-wider text-navy-900 dark:text-navy-50 flex items-center gap-1.5 border-b border-gray-150 dark:border-navy-850 pb-2">
-                        <Sparkles className="w-3.5 h-3.5 text-[#C5A021]" /> {title}
-                      </h4>
-                      <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6 animate-fade-in">
-                        {list.map(p => (
-                          <ProductCard
-                            key={p.id}
-                            product={p}
-                            isWishlisted={wishlistIds.includes(p.id)}
-                            onToggleWishlist={handleToggleProductWishlist}
-                            onAddToCart={(prod) => handleAddProductToCart(prod)}
-                            onQuickView={(prod) => setQuickViewProduct(prod)}
-                            onSelectProduct={handleViewProductDetails}
-                          />
-                        ))}
-                      </div>
-                    </div>
-                  );
-                };
-
-                return (
-                  <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left space-y-8 py-8 border-t border-gray-100 dark:border-navy-800">
-                    <div>
-                      <h3 className="font-sans font-bold text-lg uppercase tracking-wider text-slate-800 dark:text-white flex items-center gap-2">
-                        <Sparkles className="w-5 h-5 text-[#C5A021]" /> Picked For You
-                      </h3>
-                      <p className="text-xs text-gray-400 dark:text-gray-500 font-sans mt-1">
-                        Little suggestions based on what you've been browsing — like a shopkeeper who remembers what you liked.
-                      </p>
-                      <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded"></div>
-                    </div>
-
-                    {renderShelf("Picked For You", recs.recommendedForYou)}
-                    {renderShelf("You May Also Like", recs.youMayAlsoLike)}
-                    {renderShelf("Loved By Shoppers Like You", recs.customersSimilar)}
-                    {renderShelf("Since You Looked At That...", recs.becauseYouViewed)}
-                    {renderShelf("From Your Wishlist", recs.inspiredByWishlist)}
-                    {renderShelf("Trending This Week", recs.recentlyTrending)}
-                    {(() => {
-                      const lists = [recs.recommendedForYou, recs.youMayAlsoLike, recs.customersSimilar, recs.becauseYouViewed, recs.inspiredByWishlist, recs.recentlyTrending];
-                      if (lists.some(l => Array.isArray(l) && l.length > 0)) return null;
-                      return (
-                        <div className="text-center py-10 text-slate-400 font-mono space-y-2">
-                          <p className="text-sm">No AI suggestions are ready yet — the concierge is still sharpening her pens.</p>
-                          <p className="text-xs">Refresh the page or check back in a moment for a little workshop-wise advice.</p>
-                        </div>
-                      );
-                    })()}
-                  </section>
-                );
-              })()}
 
               {/* Emotional welcome — the Meris promise, like a little poem */}
               <Reveal>
@@ -1594,7 +1515,7 @@ export default function App() {
                       variants={staggersContainerVariants}
                       initial="hidden"
                       animate="show"
-                      className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6"
+                      className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-6"
                     >
                       {categoryProductsFiltered.map((p) => (
                         <ProductCard
