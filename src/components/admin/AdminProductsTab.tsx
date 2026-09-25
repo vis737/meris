@@ -1,12 +1,6 @@
 import React, { useState, useMemo, useRef } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { 
-  Search, Plus, Edit2, Trash2, Copy, AlertTriangle, 
-  Package, AlertCircle, XCircle, UploadCloud, 
-  Link as LinkIcon, ChevronLeft, ChevronRight, X,
-  Check, CheckCircle, Sparkles, Wand2, Image, Loader2, FloppyDisk
-} from 'lucide-react';
-import { Category, Product } from '../../types';
+import { Search, Plus, Edit2, Trash2, Copy, AlertTriangle, Package, AlertCircle, XCircle, UploadCloud, Link as LinkIcon, ChevronLeft, ChevronRight, X, Check, CheckCircle, Sparkles, Wand2, Image, Loader2,  } from 'lucide-react';import { Category, Product } from '../../types';
 import { getProductWeightKg } from '../../utils/premiumData';
 
 
@@ -300,7 +294,7 @@ Do not add any other text, explanations, or markdown formatting.`;
       </div>
 
       {/* Stats Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
           { label: 'Total Products', value: totalProducts, icon: Package, color: 'text-blue-400', bg: 'bg-blue-400/10' },
           { label: 'In Stock', value: inStockCount, icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-400/10' },
@@ -512,15 +506,16 @@ Do not add any other text, explanations, or markdown formatting.`;
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                        onClick={() => openEditModal(product)} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="Edit">
+                        <div className="flex items-center gap-1">
                           <button
-                        onClick={handleCancelAi}
-                        className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="AI Cancel">
-                          <X className="w-4 h-4" />
-                        </button>
-                          <Edit2 className="w-4 h-4" />
-                        </button>
+                            onClick={() => openEditModal(product)} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="Edit">
+                            <Edit2 className="w-4 h-4" />
+                          </button>
+                          <button
+                            onClick={handleCancelAi} className="p-1.5 text-slate-400 hover:text-yellow-500 hover:bg-slate-700 rounded transition-colors" title="AI Cancel">
+                            <X className="w-4 h-4" />
+                          </button>
+                        </div>
                         <button onClick={() => handleDuplicate(product)} className="p-1.5 text-slate-400 hover:text-blue-400 hover:bg-slate-700 rounded transition-colors" title="Duplicate">
                           <Copy className="w-4 h-4" />
                         </button>
@@ -938,7 +933,7 @@ function ProductForm({ product, categories, onChange, addToast }: {
         {/* Pricing & Inventory */}
         <div className="space-y-4">
           <h4 className="text-lg font-semibold text-slate-100 border-b border-slate-800 pb-2">Pricing & Inventory</h4>
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-400 mb-1">Price (Rs.) *</label>
               <input
@@ -992,18 +987,8 @@ function ProductForm({ product, categories, onChange, addToast }: {
                 <option value="pre-order">Pre-order</option>
               </select>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-400 mb-1">Image URL for AI</label>
-              <input
-                type="url"
-                value={aiImagePreview || ''}
-                onChange={e => setAiImagePreview(e.target.value)}
-                placeholder="https://example.com/product-image.jpg"
-                className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-slate-200 focus:outline-none focus:border-yellow-500"
-              />
             </div>
           </div>
-        </div>
 
         {/* Images */}
         <div className="space-y-4">
@@ -1011,13 +996,14 @@ function ProductForm({ product, categories, onChange, addToast }: {
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-400 mb-1">Image URL for AI</label>
+              <label className="block text-sm font-medium text-slate-400 mb-1">Image URL (optional)</label>
               <input
                 type="url"
-                value={aiImagePreview || ''}
-                onChange={e => setAiImagePreview(e.target.value)}
+                value={''}
+                onChange={e => {}}
                 placeholder="https://example.com/product-image.jpg"
                 className="w-full bg-slate-950 border border-slate-700 rounded-lg py-2 px-3 text-slate-200 focus:outline-none focus:border-yellow-500"
+                disabled
               />
             </div>
           </div>

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Instagram, Heart, MessageCircle, ExternalLink, Sparkles } from 'lucide-react';
+import { Instagram, Heart, MessageCircle, ExternalLink, Sparkles, Images, AlertCircle } from 'lucide-react';
 
 interface InstagramPost {
   id: string;
@@ -57,19 +57,33 @@ const INSTAGRAM_POSTS: InstagramPost[] = [
 
 export default function InstagramGallery() {
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 300);
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, []);
+
   const handleInstagramVisit = () => {
     window.open('https://www.instagram.com/meriseshop.2025?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw==', '_blank', 'noopener,noreferrer');
   };
 
   return (
-    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none font-sans my-12">
+    <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-left select-none font-sans my-12 relative z-10">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
         <div>
           <span className="text-[10px] font-mono text-gold-500 uppercase tracking-widest font-black block">
-From Our Workshop Floor
+            From Our Workshop Floor
           </span>
           <h3 className="font-display font-black text-slate-800 dark:text-white text-lg uppercase tracking-wider mt-1">
-Life At Meris, In Pictures
+            Life At Meris, In Pictures
           </h3>
           <div className="w-10 h-0.5 bg-[#C5A021] mt-2 rounded"></div>
         </div>
@@ -83,48 +97,63 @@ Life At Meris, In Pictures
         </button>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-        {INSTAGRAM_POSTS.map((post) => (
-          <div
-            key={post.id}
-            onMouseEnter={() => setHoveredId(post.id)}
-            onMouseLeave={() => setHoveredId(null)}
-            onClick={handleInstagramVisit}
-            className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 cursor-zoom-in group select-none shadow-sm hover:shadow-md transition duration-300"
-          >
-            <img
-              src={post.imageUrl}
-              alt={post.caption}
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-            />
-            
-            {/* Dark overlay with likes and comment metrics */}
-            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 text-white p-3 text-center">
-              <div className="flex items-center gap-1 font-mono text-xs font-bold">
-                <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
-                <span>{post.likes}</span>
-              </div>
-              <div className="flex items-center gap-1 font-mono text-xs font-bold">
-                <MessageCircle className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <span>{post.comments}</span>
-              </div>
-
-              {/* Caption snippet overlay */}
-              <div className="absolute bottom-2 left-2 right-2 text-center">
-                <span className="text-[7px] text-gray-300 font-sans block line-clamp-2 leading-tight">
-                  {post.caption}
-                </span>
+      {loading && !error ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {INSTAGRAM_POSTS.map(() => (
+            <div key="skeleton" className="aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 skeleton">
+              <div className="w-full h-full skeleton-child" />
+            </div>
+          ))}
+        </div>
+      ) : error ? (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          <div className="col-span-2 md:col-span-3 lg:col-span-6 aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 flex flex-col items-center justify-center text-slate-400">
+            <AlertCircle className="w-8 h-8 mb-2 opacity-60" />
+            <p className="text-xs font-mono">Couldn't load the gallery right now.</p>
+            <button
+              onClick={handleInstagramVisit}
+              className="mt-3 text-xs font-semibold text-[#C5A021] hover:text-[#C5A021]/80 transition"
+            >
+              Open Instagram →
+            </button>
+          </div>
+        </div>
+      ) : (
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+          {INSTAGRAM_POSTS.map((post) => (
+            <div
+              key={post.id}
+              onMouseEnter={() => setHoveredId(post.id)}
+              onMouseLeave={() => setHoveredId(null)}
+              onClick={handleInstagramVisit}
+              className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 cursor-zoom-in group select-none shadow-sm hover:shadow-md transition duration-300"
+            >
+              <img
+                src={post.imageUrl}
+                alt={post.caption}
+                loading="lazy"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 text-white p-3 text-center">
+                <div className="flex items-center gap-1 font-mono text-xs font-bold">
+                  <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
+                  <span>{post.likes}</span>
+                </div>
+                <div className="flex items-center gap-1 font-mono text-xs font-bold">
+                  <MessageCircle className="w-4 h-4 fill-amber-400 text-amber-400" />
+                  <span>{post.comments}</span>
+                </div>
+                <div className="absolute bottom-2 left-2 right-2 text-center">
+                  <span className="text-[7px] text-gray-300 font-sans block line-clamp-2 leading-tight">
+                    {post.caption}
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-
+          ))}
+        </div>
+      )}
     </section>
   );
 }
-
-

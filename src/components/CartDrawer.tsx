@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { X, Trash2, Plus, Minus, Tag, Check, ArrowRight, ShoppingCart, Sparkles } from 'lucide-react';
 import { CartItem, Coupon } from '../types';
@@ -34,7 +34,23 @@ export default function CartDrawer({
   const [couponInput, setCouponInput] = useState('');
   const [couponError, setCouponError] = useState('');
   const [couponSuccess, setCouponSuccess] = useState('');
+  const [coupons, setCoupons] = useState<Coupon[]>(INITIAL_COUPONS);
   const [particles, setParticles] = useState<{ id: number; x: number; y: number; size: number; color: string; delay: number }[]>([]);
+
+  // Load the LIVE coupon list from the backend database so admin-created or
+  // edited coupons work exactly as the server intends (the old code matched
+  // against a hardcoded mock list, silently applying wrong discount values).
+  useEffect(() => {
+    if (!isOpen) return;
+    let cancelled = false;
+    fetch('/api/catalog/coupons', { cache: 'no-store' })
+      .then(res => (res.ok ? res.json() : null))
+      .then(data => {
+        if (!cancelled && Array.isArray(data) && data.length > 0) setCoupons(data);
+      })
+      .catch(() => { /* keep local fallback list */ });
+    return () => { cancelled = true; };
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -46,6 +62,10 @@ export default function CartDrawer({
   const discountAmount = bundleDiscount + couponDiscount;
   const gstTax = totals.tax;
   const finalTotal = totals.grandTotal;
+  // The calculator gates coupon eligibility on the subtotal AFTER bundle
+  // discounts — validate against the same figure so the drawer never claims a
+  // coupon "applied" that would actually deduct Rs.0 (or vice versa).
+  const adjustedSubtotal = Math.max(0, subtotal - bundleDiscount);
 
   const handleApplyCouponCode = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,8 +74,8 @@ export default function CartDrawer({
     
     if (!couponInput.trim()) return;
 
-    const matchedCoupon = INITIAL_COUPONS.find(
-      c => c.code.toUpperCase() === couponInput.toUpperCase() && c.active
+    const matchedCoupon = coupons.find(
+      c => c.code.toUpperCase() === couponInput.toUpperCase() && c.active !== false
     );
 
     if (!matchedCoupon) {
@@ -64,7 +84,7 @@ export default function CartDrawer({
       return;
     }
 
-    if (subtotal < matchedCoupon.minimumCartValue) {
+    if (adjustedSubtotal < matchedCoupon.minimumCartValue) {
       setCouponError(`Min order value of Rs.${matchedCoupon.minimumCartValue} required for this coupon.`);
       onApplyCoupon(null);
       return;

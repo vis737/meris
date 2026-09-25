@@ -220,21 +220,28 @@ export default function Navbar({
       );
       onSetProductsFilter(matched);
 
-      // Call Express server-side Gemini search intelligence
-      try {
-        const res = await fetch('/api/gemini/search', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ query: searchInput, allCategories: CATEGORIES })
-        });
-        if (res.ok) {
-          const data = await res.json();
-          setSuggestions(data.aiSuggestions || []);
-          setAiGreeting(data.smartQueryResponse || '');
-          setSuggestedSlug(data.suggestedCategorySlug || '');
+      // Call Express server-side Gemini search intelligence.
+      // Skip the AI call for very short/1-2 char queries (typo-in-progress) —
+      // the local filter already covers them and it protects the rate limit.
+      if (searchInput.trim().length >= 3) {
+        try {
+          const res = await fetch('/api/gemini/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query: searchInput, allCategories: CATEGORIES })
+          });
+          if (res.ok) {
+            const data = await res.json();
+            setSuggestions(data.aiSuggestions || []);
+            setAiGreeting(data.smartQueryResponse || '');
+            setSuggestedSlug(data.suggestedCategorySlug || '');
+          } else if (res.status === 429) {
+            // Rate-limited: silently keep local results instead of retry-storming.
+            setSuggestions([]);
+          }
+        } catch (err) {
+          console.error('AI search suggests error:', err);
         }
-      } catch (err) {
-        console.error('AI search suggests error:', err);
       }
     }, 400);
 

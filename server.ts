@@ -283,7 +283,6 @@ async function syncCustomersFromSupabase() {
 async function syncProductsFromSupabase() {
   if (!supabase) return;
   try {
-    const localProds = readLocalJsonDb(PRODUCTS_FILE_PATH, INITIAL_PRODUCTS);
     const { data, error } = await supabase.from('products').select('*');
     if (!error && data && data.length > 0) {
       const mapped = data.map(p => ({
@@ -310,39 +309,13 @@ async function syncProductsFromSupabase() {
         vendorId: p.vendor_id || null
       }));
 
-      // Merge local products so newly listed local items aren't deleted on startup
-      const supabaseIds = new Set(mapped.map(m => m.id));
-      const localOnly = localProds.filter((lp: any) => lp && lp.id && !supabaseIds.has(lp.id));
-      const merged = [...mapped, ...localOnly];
-
-      if (localOnly.length > 0) {
-        const localMapped = localOnly.map((p: any) => ({
-          id: p.id,
-          sku: p.sku || `SKU-${p.id}`,
-          name: p.name || 'Handcrafted Product',
-          category: p.category || 'Handbags',
-          category_slug: p.categorySlug || p.category?.toLowerCase().replace(/\s+/g, '-') || 'handbags',
-          price: p.price,
-          discount_price: p.discountPrice || null,
-          stock: p.stock !== undefined ? p.stock : 10,
-          rating: p.rating || 5,
-          rating_count: p.ratingCount || 1,
-          images: p.images || [],
-          short_description: p.shortDescription || p.name || '',
-          description: p.description || p.name || '',
-          specifications: p.specifications || {},
-          reviews: p.reviews || [],
-          is_new: p.isNew || false,
-          is_bestseller: p.isBestseller || false,
-          brand: p.brand || 'MERIS',
-          availability: p.availability || 'in-stock',
-          vendor_id: p.vendorId || null
-        }));
-        await supabase.from('products').upsert(localMapped);
-      }
-
-      writeLocalJsonDb(PRODUCTS_FILE_PATH, merged);
-      console.log(`◇ Synced ${merged.length} products (Supabase + local) to catalog.`);
+      // Supabase is the single source of truth for the catalog once it is
+      // configured. (The old startup merge re-inserted "local-only" products
+      // into Supabase, which permanently resurrected products the admin had
+      // deleted.) The local JSON is overwritten to mirror Supabase so any
+      // stale deleted rows are purged from it as well.
+      writeLocalJsonDb(PRODUCTS_FILE_PATH, mapped);
+      console.log(`◇ Synced ${mapped.length} products from Supabase to catalog.`);
     }
   } catch (err) {
     console.error('Failed to sync products from Supabase on startup:', err);
@@ -1028,11 +1001,12 @@ app.get('/api/catalog/products', async (req, res) => {
           };
         });
 
-        // Merge any local products from localProds that aren't yet in Supabase
-        const supabaseIds = new Set(mapped.map(m => m.id));
-        const localOnly = Array.isArray(localProds) ? localProds.filter((lp: any) => lp && lp.id && !supabaseIds.has(lp.id)) : [];
-        const merged = [...mapped, ...localOnly];
-        return res.json(merged);
+        // Serve the Supabase catalog as-is — Supabase is the source of truth
+        // once configured. (The old code merged "local-only" products from
+        // products_db.json here, which resurrected products the admin had
+        // deleted: their rows lingered in the local JSON and were re-served
+        // and re-saved on every read.)
+        return res.json(mapped);
       }
       console.warn('Supabase products empty or error, serving full local products catalog:', error);
     }

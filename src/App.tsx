@@ -17,7 +17,6 @@ import AgeToyFinder from './components/AgeToyFinder';
 import { getAIRecommendations } from './utils/aiRecommender';
 import FlashSaleSection from './components/FlashSaleSection';
 import InstagramGallery from './components/InstagramGallery';
-import ExitIntentOffer from './components/ExitIntentOffer';
 
 // Mock Data imports
 import {
@@ -82,10 +81,21 @@ function Reveal({ children, className = '', delay = 0 }: { children: React.React
           observer.disconnect();
         }
       },
-      { threshold: 0.15 }
+      // threshold 0 (any pixel of the element entering the viewport) instead of
+      // 0.15 — tall blocks (e.g. 16-item shelf grids taller than the viewport)
+      // can never reach a fractional ratio, which left them permanently at
+      // opacity 0. With 0, a section appears as soon as its top edge scrolls in.
+      { threshold: 0 }
     );
     observer.observe(node);
-    return () => observer.disconnect();
+    // Failsafe: if the observer never fires (JS throttling, embeds, exotic
+    // browsers), force the content visible shortly after mount so no section
+    // can ever remain a permanent blank gap.
+    const failsafe = window.setTimeout(() => setVisible(true), 2500);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(failsafe);
+    };
   }, []);
   return (
     <div ref={ref} className={`reveal ${visible ? 'is-visible' : ''} ${className}`} style={{ transitionDelay: `${delay}ms` }}>
@@ -1117,7 +1127,7 @@ export default function App() {
                     <span className="text-xs font-mono text-slate-400">{searchResultsList.length} shown</span>
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
                     {searchResultsList.map((product) => (
                       <ProductCard
                         key={product.id}
@@ -1211,7 +1221,7 @@ export default function App() {
                   </button>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="stagger-grid grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
                   {bestSellersList.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1244,7 +1254,7 @@ export default function App() {
                   </button>
                 </Reveal>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="stagger-grid grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
                   {newArrivalsList.map((product) => (
                     <ProductCard
                       key={product.id}
@@ -1297,7 +1307,7 @@ export default function App() {
                           </button>
                         </div>
 
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div className="stagger-grid grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6">
                           {shelfProducts.map((product) => (
                             <ProductCard
                               key={product.id}
@@ -1333,7 +1343,7 @@ export default function App() {
                       <h4 className="font-display font-bold text-xs uppercase tracking-wider text-navy-900 dark:text-navy-50 flex items-center gap-1.5 border-b border-gray-150 dark:border-navy-850 pb-2">
                         <Sparkles className="w-3.5 h-3.5 text-[#C5A021]" /> {title}
                       </h4>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 animate-fade-in">
+                      <div className="grid grid-cols-2 sm:grid-cols-2 gap-3 sm:gap-6 animate-fade-in">
                         {list.map(p => (
                           <ProductCard
                             key={p.id}
@@ -1368,6 +1378,16 @@ export default function App() {
                     {renderShelf("Since You Looked At That...", recs.becauseYouViewed)}
                     {renderShelf("From Your Wishlist", recs.inspiredByWishlist)}
                     {renderShelf("Trending This Week", recs.recentlyTrending)}
+                    {(() => {
+                      const lists = [recs.recommendedForYou, recs.youMayAlsoLike, recs.customersSimilar, recs.becauseYouViewed, recs.inspiredByWishlist, recs.recentlyTrending];
+                      if (lists.some(l => Array.isArray(l) && l.length > 0)) return null;
+                      return (
+                        <div className="text-center py-10 text-slate-400 font-mono space-y-2">
+                          <p className="text-sm">No AI suggestions are ready yet — the concierge is still sharpening her pens.</p>
+                          <p className="text-xs">Refresh the page or check back in a moment for a little workshop-wise advice.</p>
+                        </div>
+                      );
+                    })()}
                   </section>
                 );
               })()}
@@ -1574,7 +1594,7 @@ export default function App() {
                       variants={staggersContainerVariants}
                       initial="hidden"
                       animate="show"
-                      className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+                      className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-6"
                     >
                       {categoryProductsFiltered.map((p) => (
                         <ProductCard
@@ -1593,6 +1613,7 @@ export default function App() {
                 </div>
 
               </div>
+
             </motion.div>
           )}
 
@@ -2134,9 +2155,6 @@ export default function App() {
 
       {/* Floating WhatsApp chat assis widget */}
       <WhatsAppChat />
-
-      {/* Exit Intent Offer Popup */}
-      <ExitIntentOffer onApplyCoupon={setActiveCoupon} />
 
       {/* Back-to-top — appears after scrolling past the hero */}
       <AnimatePresence>

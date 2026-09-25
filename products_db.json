@@ -1,19 +1,230 @@
 [
   {
+    "id": "prod_1790336317666_i3lej07",
+    "sku": "WUD-TOY-TRD",
+    "name": "Handcrafted Wooden Miniature Mini Instrument Set Showpiece",
+    "category": "Wood Crafted Gifts",
+    "categorySlug": "wood-gifts",
+    "price": 350,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/d2c8332b-c713-4a9e-a1fd-cd9e6480a66e.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/64426ead-eda1-479e-b26f-6a5aa35ff512.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/0cca49aa-fb42-4a54-9c4f-0182ac3c1824.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/10fd0221-ab01-495e-9200-676dcf66c82d.jpeg"
+    ],
+    "shortDescription": "Home Decor Item with Showpiece for Living Room, Office & Gift for Music Lovers",
+    "description": "Premium Wooden Material – Strong, durable, long-lasting\nHandcrafted Design – Traditional Indian art style\nSmooth & Polished Finish – Attractive glossy look\nCompact Size – Easy to place anywhere\nFixed on Wooden Base – Stable and neat display\nGift for Music Lovers",
+    "specifications": {
+      "Weight": "0.3 kg",
+      "Material": "Wood",
+      "Dimensions": "12L x 12W x 15H",
+      "Finish Types": "Polished",
+      "Specific Use for": "Home Decor"
+    },
+    "weightKg": 0.3,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790332032997_xqnurdp",
+    "sku": "FLY-BID-DEC",
+    "name": "Simulation Flying Bird Motorcycle Car Creative Decoration ",
+    "category": "Entertainment & Novelties",
+    "categorySlug": "entertainment",
+    "price": 130,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/cad98300-ba8e-46e5-b05e-9f2bcfd5410d.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/95496eb2-2951-45f0-8a3c-81caae763e9e.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/228aa241-1a84-49ab-b600-c876e5f3243f.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/4d06ef81-86bc-4a9f-8f60-7c592d11c887.jpeg"
+    ],
+    "shortDescription": "Fun Flying Bird Wing Fly on the E-bike with durable Adhesive Based, Stable & Weatherproof use for Travel ",
+    "description": "Wind-Powered Motion: Features flapping wings that move naturally with wind whilst driving, creating a dynamic and eye-catching decorative effect on your vehicle\nVibrant Design: Colourful bird ornament with gradient wings in blue, yellow, and pink shades adds a playful and creative touch to your car or motorcycle\nVersatile Mounting: Can be installed on car dashboard, side mirror, bonnet, scooter, or motorcycle handlebars with included suction cup base for secure attachment\nAvailable Sizes: Comes in multiple size options - large bird (14.5cm wingspan x 8cm length x 5.5cm height), medium (5cm), and small (3cm) to suit different placement preferences\nWeatherproof Construction: Durable material withstands outdoor conditions including rain and sun exposure, making it suitable for long-term exterior vehicle decoration",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.05 kg",
+      "Material": "Acrylonitrile Butadiene Styrene",
+      "Age Group": "Adult",
+      "Character": "Flying Bird",
+      "Dimensions": "8L x 8W x 8H centimeters",
+      "Finishing TypeMetalic": ""
+    },
+    "weightKg": 0.05,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "MERIS",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1789754728194_pd39h62",
+    "sku": "ATC-CONT-QTY",
+    "name": "Decorative Airtight Container - 2 nos",
+    "category": "home",
+    "categorySlug": "home",
+    "price": 155,
+    "stock": 80,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/51b6823b-408e-4289-a90f-c8f22e4b591a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a2197e0c-70d9-4097-9241-007568568d18.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/39d13e10-f716-4abd-ba2a-cbeff1ec2916.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a0fc0dd8-ea85-4a62-a60f-ef724120b6b0.jpeg"
+    ],
+    "shortDescription": "Premium Printed Metal Jars for Kitchen Storage & Return Gifts | Tea Coffee Sugar Container | Dry Fruit Box for Kitchen Storage | 6 Inch",
+    "description": "ELEGANT DESIGN: Set of 2 decorative tin canisters featuring intricate Indian-inspired artwork, including a vibrant peacock motif on pink and floral patterns on rich red.\n\nVERSATILE STORAGE: Ideal for storing tea, coffee, spices, dry fruits, or other kitchen essentials while adding a decorative touch to your countertop or shelf.\n\nSECURE LID: Each canister comes with a snug-fitting lid to keep contents fresh and protected from moisture and dust.\n\nBEAUTIFUL GIFT SET: The ornate artwork and premium finish make this set of 2 canisters a thoughtful and attractive gift for festivals, housewarmings, and special occasions.\n\nSET CONTENTS: Includes 2 cylindrical tin canisters — one in bold red with golden floral motifs and one in soft pink with a detailed peacock illustration and gold accents.",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.15 kg",
+      "Material": "Metal",
+      "Dimensions": "7L x 7W x 15H Centimeters ",
+      "Care Instructions": "Avoid Abrasive Scrubbers To Preserve Printed Design, Do Not Microwave, Do Not Soak In Water, Hand Wash Only, Keep Away From Direct Sunlight To Prevent Colour Fading, Store In A Cool And Dry Place, Wipe With A Dry Cloth After Cleaning.",
+      "Recommended Uses For": "Gift Giving, Kitchen Storage"
+    },
+    "weightKg": 0.15,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790283375697_rn99fcj",
+    "sku": "EDU-LAN-KID",
+    "name": "Rechargeable Educational Phone",
+    "category": "Learning Stuff",
+    "categorySlug": "learning",
+    "price": 340,
+    "stock": 25,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/91725ea1-9121-4bc5-a3b1-f073f8ab4cc6.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/b14a31c6-ceea-41a0-9fe4-b9d064cec257.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/d4fe61b9-19ca-45dc-a781-90517184c8e0.jpeg"
+    ],
+    "shortDescription": "Realistic toy phone for Kids - 2 to 12 years",
+    "description": "📱 Interactive Kids Phone with 24 Learning Modes: This realistic toy phone for kids is packed with 24 engaging functions such as music, stories, animals, fruits, body parts, colors, numbers, transport, nature sounds, and more. Designed to look and feel like a real smartphone, it’s ideal for encouraging roleplay and boosting cognitive development in children ages 2 to 12.\n🔋 Rechargeable Dummy Phone – Eco-Friendly & Hassle-Free: This dummy phone features a built-in 150mAh rechargeable battery with Type-C USB charging. Fully charges in just 30 minutes and delivers 3 to 4 hours of continuous fun. No need for disposable batteries—this kids phone is eco-conscious, safe, and travel-friendly.\n🎮 All-in-One Kids Mobile Phone Toy with Camera & Music: More than just a play phone, this kids mobile phone toy includes dual pretend cameras, interactive flash card games, musical tones, voice prompts, and fun lighting features. Kids can explore, imitate, and learn while building habits and language skills in a playful way.\n🎁 Perfect Gift for Kids – Birthday, Holiday & Return Gift: Whether it’s for a birthday surprise, Christmas gift, or party return gift, this toy phone delights boys and girls alike. It offers both entertainment and education, giving parents peace of mind while keeping real phones safe from curious hands.\n✅ Safe, Durable & Easy to Use for Toddlers: Made from non-toxic, child-safe ABS plastic with rounded edges for safety. Includes volume control, lock/unlock modes, and parental care instructions. Do not use while charging and avoid overcharging for longer life. A perfect blend of learning and fun in one compact toy phone for kids.",
+    "specifications": {
+      "Weight": "0.1 kg",
+      "Material": "Plastic",
+      "Age Group": "2 - 12 years",
+      "Dimensions": "7W x 14L centimeters",
+      "Battery Required": "Lithium-Ion"
+    },
+    "weightKg": 0.1,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790283820162_ozmc9u5",
+    "sku": "BOT-GLS-GFT",
+    "name": "Cute Rabbit Glass Water Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 110,
+    "stock": 50,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/830d42a6-e3bd-4a18-b680-e8ece7b8890e.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/e7e58cfa-04b3-4925-b040-b699c463b1a5.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/4ad0db0e-152a-4246-a6f3-4186fb5a593e.jpg"
+    ],
+    "shortDescription": "Reusable Drinking Bottle - 330 ml",
+    "description": "CUTE RABBIT PRINT DESIGN: Features an adorable rabbit print that makes it fun and appealing for kids and toddlers to use daily.\nSAFE FOOD GRADE SILICONE: Made with BPA free materials and food grade silicone, ensuring safe and healthy hydration for your little ones.\nLEAK PROOF CONSTRUCTION: Designed to be fully leak proof, keeping bags, backpacks, and surfaces dry throughout the day.\nCOMPACT 330ML CAPACITY: With a 330ml capacity, this bottle is perfectly sized for kids and toddlers to hold and carry with ease.\nEASY TO CARRY: The lightweight green coloured bottle comes in a pack of 1 and is designed for convenient portability for children on the go.",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.15 kg",
+      "Material": "Glass/Plastic",
+      "Dimensions": "12W x 14H",
+      "Care Instructions": "Hand Wash Only"
+    },
+    "weightKg": 0.15,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790244578872_3euwjms",
+    "sku": "ANI-RTG-BOT",
+    "name": "Animal Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 120,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/f058bf73-2b55-4f7b-a402-5cb06d937824.jpeg"
+    ],
+    "shortDescription": "Cute Animal Glass Water Bottle, Assorted Colour & Design, pack of 1",
+    "description": "🐾 Adorable Animal Designs: Charming cat, bear, dinosaur, and duck figures in the cap and on the bottle. Adds a fun, playful touch to hydration, making it appealing for all ages.\n💧 BPA-Free Material: Made from safe, non-toxic, and healthy materials. Ensures peace of mind and safe drinking for you and your loved ones.\n👃 Odourless: No unpleasant smells, maintaining the purity of your beverage. Guarantees a fresh and enjoyable drinking experience every time.\n✅ Leak-Proof Design: Features a smooth cap and strong sealing mechanism. Prevents spills and messes, keeping your bags dry and your belongings safe during travel or daily use.\n📏 Compact & Travel-Friendly: Measures 14.5cm H x 7.7cm W. Easily fits into backpacks, lunch bags, and car cup holders, making it convenient for on-the-go hydration.\n✨ Smooth Bottle Mouth: Sleek design for comfortable drinking and easy cleaning. Enhances the user experience and simplifies maintenance.\n💪 Excellent Durability: Built with high-quality materials for long-lasting use. Provides a reliable and sustainable hydration solution, reducing the need for frequent replacements.",
+    "specifications": {
+      "Colour": "Assorted",
+      "Weight": "0.12 kg",
+      "Capacity": "150 ml",
+      "Material": "Glass, Plastic",
+      "Dimensions W x H": "7.5W x 14H centimeters ",
+      "Care Instructions": "Hand wash only"
+    },
+    "weightKg": 0.12,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
     "id": "prod_1784984908064_f9k9whi",
     "sku": "Home-Rou-Fresh",
     "name": "Beautiful 12\" Rangoli Designs",
     "category": "Kolam Stencils",
     "categorySlug": "kolam",
-    "price": 99,
+    "price": 130,
     "stock": 15,
     "rating": 5,
     "ratingCount": 1,
     "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-03/fe757c14-2036-478f-be70-91c9d7eaf41e.jpg"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/a66fe7dd-eb72-4c3e-bc6b-10d02637386e.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/5ff8f66f-f4a6-4176-ab0c-0f1d7c2a8286.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/28237f86-447d-4ed6-b3cc-6cb98808eddf.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/3cd28b11-7b1a-44e2-9d42-8abd72c7dc63.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/566cdc85-270d-4598-9560-391e618b89bf.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/fbf0af1d-72c5-4594-9f4e-6991d6231016.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/82c8e912-2aea-4f14-96d7-1dbb1ea16fd7.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/ec70fda4-1990-4281-8fbc-7c8891578b50.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/70fe2e72-25ba-415d-96c6-38e56d40264f.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/53bd66e7-151a-4bae-a973-db57d38e5e45.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/fdc6f8c4-949f-496e-a441-739c1a3bcf20.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/9a392676-996d-45a8-bc17-aeaf530630fd.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/75022524-b558-4b44-ab95-c6ad59b231f1.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/6a0b27e8-f152-4a75-9ef5-2bb3d4267207.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/77d1e9f6-1492-47fa-97f4-579f92ac9cbe.jpeg"
     ],
-    "shortDescription": "Kolam Stencils - Each",
-    "description": "* Ready to Draw Rangoli Making Kit Magic Stamp kit 12 inches.\n\n* Package contents: Round design Rangoli stencil (12\" Inches), \n\n* A complete magic rangoli kit for making rangoli designs easily and quickly.\n\n* Simply follow the steps as given in images, a beautiful rangoli design will come out within a minute.\n\n* First fill the box with rangoli colour of your choice then fix it with plain/ design stencil and reverse the magic box and rotate the black knob of the box, a beautiful design will come out (as shown in image).",
+    "shortDescription": "Kolam Stencils - Random design",
+    "description": "* Ready to Draw Rangoli Making Kit Magic Stamp kit 12 inches.\n\n* Package contents: Random round design Rangoli stencil (12\" Inches), \n\n* A complete magic rangoli kit for making rangoli designs easily and quickly.\n\n* Simply follow the steps as given in images, a beautiful rangoli design will come out within a minute.\n\n* First fill the box with rangoli colour of your choice then fix it with plain/ design stencil and reverse the magic box and rotate the black knob of the box, a beautiful design will come out (as shown in image).",
     "specifications": {
       "Weight": "0.05 kg",
       "Dimensions": "12 inches"
@@ -27,12 +238,78 @@
     "vendorId": null
   },
   {
+    "id": "prod_1790281239180_iz1n7iu",
+    "sku": "TOY-KID-LAN",
+    "name": "Dancing Cactus Toy for Kids",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 300,
+    "stock": 25,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/44d747ca-2de9-4f27-8e78-5402ce0ad06d.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/408f9861-2995-40c8-b15f-0a6145ced87f.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/5f1e3069-2c16-4339-bbdb-5c31fc8f21ce.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/a8dfe8ac-94c3-401f-a1eb-f25eb4d25547.jpg"
+    ],
+    "shortDescription": "Rechargeable Dancing Cactus - Singing, Repeat, Wriggle ",
+    "description": "Perfect gift for your kids or friends. This funny toy will definitely make people who receive it laught! It can record what you say and keep playing.;Dancing Cactus Plush Toys, Toys for Babies Toddlers Kids 3 Months and up, It can slso as a room decoration.\nCheerful music and dancing are very suitable for creating a pleasant atmosphere and for hosting parties.;Gifts for 1, 2, 3 Year-Old girls and boys. It is also a nice adults stress relief toy and educational toy for kids.\nWith the singing and humorous dancing, children's attention will be aroused and joyness will be brought to them.;Made of soft and comfortable plush fabric, colorless and tasteless, it is skin‑friendly and is safe and hygienic.\nFun and lovely cactus plush toys, can dance, sing, move. It's good for early education.;Cheerful music and dancing are great for creating a pleasant ambience and for parties.; Great gift, cactus plush toys are the best holiday and birthday gifts for children. Adults can also decompress.\nIt can sing 20-120 cheery songs, bring your child a happy time in a lifetime, help you take care of your children and give you more time to do other things.\nColor Name: Multicolor; Item Type Name: Kids Dancing Cactus Toy; Unit Count Type: Count.",
+    "specifications": {
+      "Weight": "0.4 kg",
+      "Material": "Plastic",
+      "Age Group": "6 months to 6 years",
+      "Dimensions": "10 x 5 x 8 centimeters",
+      "Battery Type": "Rechargeable "
+    },
+    "weightKg": 0.4,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "MERIS",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790278924809_916cj3p",
+    "sku": "TOY-WUD-KIT",
+    "name": "Modern Kitchen Set Made from Wood ",
+    "category": "Wood Crafted Gifts",
+    "categorySlug": "wood-gifts",
+    "price": 360,
+    "stock": 8,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/048feae9-9f21-46a9-9907-d2214ed8d4ea.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/9dffcb8e-3e66-4e95-8084-2d35b8d3c162.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/28d02d31-1f80-4db2-8727-3aade78a182d.jpeg"
+    ],
+    "shortDescription": "Complete Pretend Kitchen Set (25 Pieces): Includes miniature stove, utensils, containers, bowls, mortar and pestle and more—perfectly sized for little hands and endless role-play fun.",
+    "description": "Authentic Handmade Wooden Toy: 100% handcrafted by skilled artisans. Made using traditional lac-turning techniques with GI-tag heritage craftsmanship.\n\nSafe and Non-Toxic Materials: Crafted from natural wood and painted with vegetable-based, food-safe colours. Plastic-free, BPA-free, and child-safe.\n\nEncourages Learning Through Play: Improves hand-eye coordination, fine motor skills, imagination, social interaction, and confidence through open-ended pretend cooking activities.\n\nSuitable Gift for Kids (3+ Years): Suitable for birthdays, return gifts, festivals like Diwali and Christmas, preschool learning, Montessori play, and cultural gifting for boys and girls.\n\nSupports Indian Heritage and Artisans: By choosing this handcrafted toy, you support local Indian artisans and help preserve the timeless handicraft tradition recognized with Geographical Indication.",
+    "specifications": {
+      "Theme": "Kitchen",
+      "Colour": "Multicolour",
+      "Weight": "0.6 kg",
+      "Material": "Wood",
+      "Age Group": "3+ years",
+      "Dimensions D x W x H": "17D x 13W x 11H centimeters "
+    },
+    "weightKg": 0.6,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "MerisEShop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
     "id": "prod_1789759637291_83755mk",
     "sku": "HOU-UMBR-QUA",
     "name": "Bottle Shaped Portable Folding Umbrella",
     "category": "home",
     "categorySlug": "home",
-    "price": 225,
+    "price": 300,
     "stock": 10,
     "rating": 5,
     "ratingCount": 1,
@@ -58,31 +335,303 @@
     "vendorId": null
   },
   {
-    "id": "prod_1789758937501_hfwwahc",
-    "sku": "SSM-BOTT-RETG",
-    "name": "Stainless Steel Water Bottle - Marvel Theme",
-    "category": "bottles",
+    "id": "prod_1790335897578_ygojkt4",
+    "sku": "WUD-TOY-KID",
+    "name": "Traditional Wood Kitchen Set for Kids Multi Colour Choppu Saman Set",
+    "category": "Wood Crafted Gifts",
+    "categorySlug": "wood-gifts",
+    "price": 310,
+    "stock": 6,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/b8a740cb-e862-4bd3-b054-ac56afc7f8b9.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/8400d926-56a5-4d83-8c05-b8aed2c6a374.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/ef8db21e-2cf4-44c5-91c0-2e0d46fe5766.jpeg"
+    ],
+    "shortDescription": "Indoor games and increase children's imagination and creativity",
+    "description": "Handcrafted wooden cooking set for kids 100% eco-friendly and reusable\nThis wooden cooking set for kids Extremely safe toys for kids\nWooden toys kitchen set can be used as showcase decorates\nChildren wood toys very perfect gift for your daughter to see her doing errands, cooking, serving, eating, communicating, coordinating and happy together in her own imaginary world",
+    "specifications": {
+      "Theme": "Kitchen",
+      "Colour": "Multicolour",
+      "Weight": "0.6 kg",
+      "Material": "Wood",
+      "Dimensions": "10 x 12 x 10 centimeters"
+    },
+    "weightKg": 0.6,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "toy-3",
+    "sku": "TOY-WD-ELEPHANT",
+    "name": "Herbal-Dyed Wooden Push-Along Elephant Toy",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 950,
+    "discountPrice": 799,
+    "stock": 15,
+    "rating": 4.8,
+    "ratingCount": 43,
+    "images": [
+      "https://images.unsplash.com/photo-1532330393533-443990a51d10?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Charming organic push-along toy elephant with smooth rolling wheels and non-toxic herbal coatings.",
+    "description": "A beautiful heirloom toy designed to stimulate early motor precision and toddlers first steps. Hand-carved from sustainable timber and dyed using natural vegetable extracts, this elephant features gentle curves and solid axle performance.",
+    "specifications": {
+      "Finish": "Herbal-dyed natural beeswax coating",
+      "Material": "Solid Beechwood",
+      "Dimensions": "14 x 12 x 7 cm",
+      "Age Recommendation": "10+ months"
+    },
+    "reviews": [
+      {
+        "id": "r-t3-1",
+        "date": "2026-06-20",
+        "author": "Siddharth M.",
+        "rating": 5,
+        "comment": "Very sturdy, looks amazing on the shelf when not in use!",
+        "approved": true
+      }
+    ],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris Kids",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790335294693_frqprgt",
+    "sku": "BOT-RET-GFT",
+    "name": "VACUMM Flask Bottle Stainless Steel HOT & COLD 1000ML",
+    "category": "Return Gift Bottles",
     "categorySlug": "bottles",
-    "price": 350,
+    "price": 399,
     "stock": 10,
     "rating": 5,
     "ratingCount": 1,
     "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/e18d057d-527e-4885-afc4-a7486b624361.jpeg"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/84f949e3-ba5d-464c-8128-d8427dd89c95.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/0ea8a877-ba98-431a-b072-101dd3ec39cc.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/313d2b24-164e-44f0-b9aa-b427b3ccd299.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/3f3d4338-6596-4647-8d88-4b85e55f62bb.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/5824348d-8e90-4162-ad8d-1b17f5746bd7.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/62202cb3-aaa9-4407-9b56-834d4be241a9.jpeg"
     ],
-    "shortDescription": "Stainless Steel Water Bottle | 1000ml Leakproof Reusable Bottle | Pack Of 1",
-    "description": "* Made from stainless steel with a lightweight yet sturdy design for everyday hydration.\n\n* Leakproof and spillproof lid helps prevent spills while carrying in bags or backpacks.\n\n* Designed to help maintain the freshness of your beverages throughout the day.\n\n* Compact, lightweight bottle with a comfortable design for home, office, school, gym, and travel.\n\n* Rust-resistant construction with a reusable design suitable for daily use and easy maintenance.",
+    "shortDescription": "Vacuum Insulated, Rose Gold Lid, Leather Carry Strap, Fashionable Design, Hot & Cold Drinks - 800 ml",
+    "description": "PREMIUM MATERIAL: Crafted from high-grade SUS 316 stainless steel, this sports bottle ensures safe, clean, and long-lasting performance.\nSTYLISH DESIGN: Features a fashionable matte green finish with an elegant rose gold lid, making it a trendy accessory for everyday use.\nCONVENIENT CARRY STRAP: Comes with a durable leather carry strap attached to the side, allowing for easy and comfortable portability on the go.\nDOUBLE-WALL INSULATION: Vacuum-insulated construction keeps beverages hot or cold for extended periods, ideal for sports, travel, and outdoor activities.\nSECURE LID: The screw-top rose gold lid provides a tight, leak-resistant seal, ensuring your drinks stay safely inside without any spills.",
     "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.35 kg",
+      "Capacity": "800 ml",
+      "Material": "Leather Strap, Rose Gold Plated Lid, SUS 316 Stainless Steel",
+      "Dimensions": "7W x 29H centimeters",
+      "Base Diameter": "6.5 centimeters "
+    },
+    "weightKg": 0.35,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790243193675_liddzni",
+    "sku": "DEC-HOM-WOD",
+    "name": "Handcrafted Veena",
+    "category": "Wood Crafted Gifts",
+    "categorySlug": "wood-gifts",
+    "price": 170,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/10a1f8d8-51b8-4ddb-ad1b-c5fc883f794c.webp",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/67f01c48-8789-4d38-9f30-c68be50f661b.jpeg"
+    ],
+    "shortDescription": "Showpiece Veena for Homes - 1 piece",
+    "description": "Beautiful Design: Made from Eucalyptus wood, this handcrafted Veena showpiece adds a traditional Indian touch to your home decor.\n\nVersatile Decoration: Perfect for decorating your living room, bedroom, or pooja room with its natural brown colour and detailed design.\n\nEco-Friendly: Made from sustainable Eucalyptus wood, it is safe and non-toxic, making it a great choice for an eco-friendly home.\n\nGreat Gift: Ideal for housewarming, weddings, or special occasions, this Veena showpiece makes a unique and thoughtful gift.\n\nEasy to Maintain: The polished finish and sturdy material make it easy to clean and keep looking beautiful in your home.\n\nHigh-Quality Craftsmanship: Featuring intricate design and traditional artistry, this Veena showcases high-quality craftsmanship.\n\nSafe and Non-Toxic: Made from non-toxic materials, this showpiece is safe for any environment, including homes with children.",
+    "specifications": {
+      "Theme": "Home decor",
+      "Colour": "Brown",
+      "Weight": "0.05 kg",
+      "Material": "Wood",
+      "Dimensions L x W x H": "14L x 4W x 2H"
+    },
+    "weightKg": 0.05,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "MERIS",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "bag-2",
+    "sku": "BG-EMB-CLUTCH",
+    "name": "Royal Heritage Golden-Zardozi Evening Clutch",
+    "category": "Handbags",
+    "categorySlug": "handbags",
+    "price": 1999,
+    "discountPrice": 1699,
+    "stock": 0,
+    "rating": 4.9,
+    "ratingCount": 41,
+    "images": [
+      "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop"
+    ],
+    "shortDescription": "Velvety dark clutch bag with handwoven metallic bullion thread vine pattern and chain strap.",
+    "description": "An outstanding luxury clutch ideal for festive weddings and elegant dinners. Intricately embellished with golden beads and coiled wire work known as Zardozi. Emits a stellar glistening reflect under dim evening lights.",
+    "specifications": {
+      "Closure": "Secure golden magnetic lock",
+      "Embroidery": "Artisan Handloom bullion metallic gold thread",
+      "Base Fabric": "Silk Blend Deep Navy Velvet",
+      "Chain Strap": "Removable vintage gold-link chain (110cm)"
+    },
+    "reviews": [
+      {
+        "id": "r-6",
+        "date": "2026-05-18",
+        "author": "Sonal C.",
+        "rating": 5,
+        "comment": "Pure luxury! Took this to a family wedding and got continuous praise.",
+        "approved": true
+      }
+    ],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris Heritage",
+    "availability": "out-of-stock",
+    "vendorId": null
+  },
+  {
+    "id": "toy-7",
+    "sku": "TOY-WD-GEARS",
+    "name": "3D Mechanical Gear Assembly Constructor",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 2499,
+    "discountPrice": 2199,
+    "stock": 12,
+    "rating": 4.7,
+    "ratingCount": 22,
+    "images": [
+      "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Interlocking wooden gear puzzle introducing kinetic energy transmission and physical mechanics.",
+    "description": "A STEM constructor puzzle set. Contains precision laser-cut plywood sheets. Kids can assemble standard gear configurations that move when hand-cranked.",
+    "specifications": {
+      "Material": "Laser-cut Birch Plywood",
+      "Skill level": "Intermediate",
+      "Time to build": "3-4 hours"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Tech",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790331424107_2xqyear",
+    "sku": "FUN-KID-TOY",
+    "name": "Kids Projection Flashlight Torch Toy",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 120,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/1b557552-293e-43b8-b0e2-d969f170f770.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/7445d43c-74d6-4677-ae10-cd95524c1db8.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/83c61761-fb4c-41cc-945d-3d65824737f7.jpeg"
+    ],
+    "shortDescription": "Mini Educational Projector Torch for Toddlers and Young Children",
+    "description": "Safe and high-quality materials: It is made of high-quality ABS environmentally friendly materials, and the smooth edges will not harm children's small hands. Easy to use. The slide rail can be replaced by simply sliding the plastic cover. Then insert the selected disc and rotate or adjust the disc to observe the projected image. Light and convenient. Can be used as a flashlight to make your child feel safe at night\nThe best sleep companion for children: The children's slide projector is composed of multiple modes and is easy to use. You only need to pull the plastic cover to replace the slide, then insert the selected disc and rotate or adjust the disc to observe the projected image. It is recommended to use a darkroom with a projection distance of 50-150 cm to create clear and accurate images, suitable for children to grasp, easy to carry, and give children a sense of security at night!\nChildren's slide projector: Unlike most projectors on the market, our projectors have more pictures and more vivid colors. Different pictures and groups of themes (randomly matched with different themed videos are shipped), just turn the lens head to focus, let your child enter the magical animal world and plant perception!\nEarly education of toys and sleep stories: Let children understand common sense of optics. The projected images at different distances will look different, which is amazing! Multi-mode play, play and learn, stimulate children's curiosity and imagination. The best parent-child interaction puzzle early education light-emitting sleep story boy and girl toys; NOTE: Random colors with random slides will be sent as per availability.\nUnit Count Type: Pack; Item Type Name: Torch Projector; Age Range Description: Baby; Unit Count: 1",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.1 kg",
+      "Material": "Plastic",
+      "Dimensions": "30D x 30W x 100H Millimeters",
+      "Battery Required": "AAA batteries "
+    },
+    "weightKg": 0.1,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "toy-6",
+    "sku": "TOY-WD-BALANCE",
+    "name": "Artisanal Curved Wooden Balance Wobble Board",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 3299,
+    "discountPrice": 2899,
+    "stock": 6,
+    "rating": 4.9,
+    "ratingCount": 30,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/dad81941-7452-4058-a9e3-624a65f1aa94.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/e013e03e-2cd3-4c28-a001-8aeb813e58b3.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/3a0eb221-8548-4e34-9ae0-c766698a7131.jpeg"
+    ],
+    "shortDescription": "Premium curved beechwood wobble board supporting posture balance and creative play.",
+    "description": "Designed to support open-ended movement play. Children can balance on it, use it as a bridge, slide, or rocking cradle. Hand-pressed multilayered beechwood core.",
+    "specifications": {
+      "Coating": "Natural oil protectant",
+      "Material": "Multilayered Pressed Beechwood",
+      "Weight Capacity": "120 kg"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Active",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790243661866_pntegv1",
+    "sku": "MU-HOM-WOD",
+    "name": "Handcrafted Miniature Musical Instrument Set",
+    "category": "Wood Crafted Gifts",
+    "categorySlug": "wood-gifts",
+    "price": 300,
+    "stock": 6,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/abdac787-eea4-4a7d-b076-f3716276a972.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/cd2771cb-668f-48a9-aa06-68c4ece20aaf.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/5bd29dfc-f792-44fe-816a-dfd79607de1a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/caba5a65-2838-4062-a5a0-ae717d1734f2.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/bbfcd860-6293-4079-a884-ea28cfb26577.jpeg"
+    ],
+    "shortDescription": "Miniature String Instrument (Veena / Sitar style decorative instrument)",
+    "description": "Beautifully handcrafted miniature musical instrument set made with smooth wooden finishing and detailed artisan craftsmanship for an elegant decorative look.\n\nIdeal for living room decoration, home showcase decoration, desk decor items, shelf decoration item displays, office decoration accessories, and table decor accessories. Creates a premium home accent with timeless musical theme decor.\n\nlist of items : Miniature String Instrument (Veena / Sitar style decorative instrument) Mini Wooden Drums – 3 Pieces Mini Decorative Percussion Instrument (center piece) Wooden Display Stand / Base.\n\nA thoughtful music lover gift and unique gifting item for festivals, housewarming gift occasions, return gifts, office gifting, and special celebrations. This decorative collectible and handcrafted home accessory makes an elegant Indian traditional gift.\n\nCelebrate Indian culture decor and Indian classical music decor through this decorative musical set.\n \nDesigned as a cultural showpiece and heritage decor item that enhances ethnic home decor and traditional decor themes.",
+    "specifications": {
+      "Colour": "Brown",
       "Weight": "0.3 kg",
-      "Material": "Stainless Steel",
-      "Dimensions": "8W x 28H Centimeters",
-      "Care Instructions": "Hand Wash Only"
+      "Pattern": "Traditional ",
+      "Material": "Wood",
+      "Finish Type": "Polished",
+      "Specific Use": "Home decor",
+      "Dimensions L x W x H": "12L x 12W x 15H"
     },
     "weightKg": 0.3,
     "reviews": [],
     "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
+    "isBestseller": true,
+    "brand": "MERIS",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -116,123 +665,32 @@
     "vendorId": null
   },
   {
-    "id": "toy-1",
-    "sku": "TOY-WD-STACK",
-    "name": "Handcrafted Wooden Stacking Ring Tower",
-    "category": "Kids Toys",
-    "categorySlug": "toys",
-    "price": 899,
-    "discountPrice": 749,
-    "stock": 25,
-    "rating": 4.8,
-    "ratingCount": 124,
+    "id": "prod_1790330604007_0ohk2dx",
+    "sku": "FUN-ENT-LAN",
+    "name": "Realistic Medical Play Fully Functional Stethoscope",
+    "category": "Entertainment & Novelties",
+    "categorySlug": "entertainment",
+    "price": 125,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
     "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/eda48b92-d968-4eb8-a359-1ce9cb729753.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/f8f5f64f-e4a9-40a3-bcf4-fc65b6f0fe7b.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/fd4abb16-680f-47a8-b3b5-435955fc27b7.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/b9701e53-2e78-4eb3-86d7-8954ed69a7c7.jpg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/b60bd554-e513-46d8-b435-8e0617bd0de5.jpg"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/6f090d22-562d-4041-86e2-d8a88b8e8284.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/77cff866-1468-4d14-97ef-ba9bd9446d21.jpg"
     ],
-    "shortDescription": "Organic wooden rings coated in safe herbal-dyed colors, supporting early sensory development.",
-    "description": "This elegant Stacking Ring Tower is crafted from native beechwood and finished with food-grade seed oils and natural pigments. Non-toxic, fully hand-rounded, and exceptionally smooth for tender hands. It supports hand-eye coordination, size sorting, and visual acuity.",
+    "shortDescription": "Perfect for Pretend Play, Role Play as Doctor or Nurse",
+    "description": "Realistic Medical Play: A fully functional stethoscope designed for kids to explore and enjoy pretend doctor or nurse role play. Kids can hear Heartbeat sounds.\nEducational & Fun: Perfect for introducing children to basic medical concepts, encouraging STEM learning, and sparking curiosity.\nVersatile Use: Ideal for pretend play, role-playing activities, fancy dress competitions, and school projects.\nPremium Quality: Made with safe, durable materials for long-lasting fun and imaginative play.\nGreat Gift Idea: A wonderful addition to any doctor playset or medical kit, perfect gift for your little one.\nInspire creativity and empathy through role playing. Perfect Choice for Little Doctor or Nurse - Add it to your cart for hours of creative play.",
     "specifications": {
-      "Weight": "0.32 kg",
-      "Coating": "Natural plant-extract pigments",
-      "Material": "Sustainably sourced Beechwood",
-      "Dimensions": "18 x 9 x 9 cm",
-      "Age Recommendation": "12+ months"
+      "Colour": "Black and White",
+      "Weight": "0.1 kg",
+      "Material": "Rubber & Stainless Steel",
+      "Age Group": "2 - 7 years"
     },
-    "weightKg": 0.32,
-    "reviews": [
-      {
-        "id": "r-1",
-        "date": "2026-05-12",
-        "author": "Anita S.",
-        "rating": 5,
-        "comment": "Simply gorgeous! The wood is so smooth and there is no paint smell at all.",
-        "approved": true
-      },
-      {
-        "id": "r-2",
-        "date": "2026-06-02",
-        "author": "Dev K.",
-        "rating": 4,
-        "comment": "Excellent organic toy. My 1-year-old is fully obsessed with the golden cap ring.",
-        "approved": true
-      }
-    ],
-    "isNew": false,
-    "isBestseller": true,
-    "brand": "Meris Kids",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "toy-4",
-    "sku": "TOY-WD-BLOCKS",
-    "name": "Natural Premium Forest Wooden Blocks Set",
-    "category": "Kids Toys",
-    "categorySlug": "toys",
-    "price": 1499,
-    "discountPrice": 1299,
-    "stock": 18,
-    "rating": 4.9,
-    "ratingCount": 88,
-    "images": [
-      "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&auto=format&fit=crop&q=80"
-    ],
-    "shortDescription": "50-piece solid pine wood block set featuring smooth geometries and natural grain textures.",
-    "description": "Perfect for building, sorting, and early geometry. This block set contains cylinders, arches, blocks, and triangles made from solid premium pine wood. Supports spatial awareness and motor skills.",
-    "specifications": {
-      "Box": "Eco-friendly canvas storage bag",
-      "Pieces": "50 blocks",
-      "Material": "Solid Pinewood"
-    },
+    "weightKg": 0.1,
     "reviews": [],
     "isNew": false,
     "isBestseller": false,
-    "brand": "Meris Kids",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "kolam-1",
-    "sku": "KL-ST-LOTUS",
-    "name": "Bespoke Golden Lotus Border Acrylic Kolam Stencil",
-    "category": "Kolam Stencils",
-    "categorySlug": "kolam",
-    "price": 499,
-    "discountPrice": 399,
-    "stock": 22,
-    "rating": 4.8,
-    "ratingCount": 115,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/78885512-fca2-45dd-8153-6315d80c3ab2.jpg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/3faf1e23-393d-4bf4-9e4f-c84165347ab0.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/57559080-e28d-41dd-908b-55f294a91935.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/c5cff176-3181-4e57-be64-66f3ecb65115.jpeg"
-    ],
-    "shortDescription": "Premium 3mm acrylic grid design stencil panel for swift, clean floral floor rangoli trails.",
-    "description": "Bring divine luck to your front entrance door with this highly modular laser-etched Kolam stenciler. Simply set the platter on the floor, sprinkle white chalk powder, and lift to reveal highly detailed traditional geometric lotus lines. Highly reusable and easily washed.",
-    "specifications": {
-      "Material": "Military-Grade Shatterproof Acrylic",
-      "Thickness": "3.0 mm",
-      "Dimensions": "30 x 30 cm circular plate",
-      "Stencil Design": "Sacred Golden Mandala Lotus grid"
-    },
-    "reviews": [
-      {
-        "id": "r-8",
-        "date": "2026-06-11",
-        "author": "Meenakshi N.",
-        "rating": 5,
-        "comment": "So quick and flawless. Making morning entryway rangolis takes under 2 minutes now! Gold acrylic looks beautiful.",
-        "approved": true
-      }
-    ],
-    "isNew": false,
-    "isBestseller": true,
-    "brand": "Meris festive",
+    "brand": "Meris",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -262,34 +720,6 @@
     "isNew": true,
     "isBestseller": false,
     "brand": "Meris Ceramics",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "toy-8",
-    "sku": "TOY-WD-CHESS",
-    "name": "Classic Handcrafted Deluxe Wooden Chess Set",
-    "category": "Kids Toys",
-    "categorySlug": "toys",
-    "price": 2999,
-    "discountPrice": 2499,
-    "stock": 8,
-    "rating": 5,
-    "ratingCount": 14,
-    "images": [
-      "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80"
-    ],
-    "shortDescription": "Exquisite inlaid rosewood chess board with weighted hand-carved chess pieces.",
-    "description": "Premium chess set featuring storage slots for each individual piece. Finished in a semi-gloss natural lacquer, highlighting the rich grains of solid Indian rosewood.",
-    "specifications": {
-      "Wood Type": "Sheesham & Maple",
-      "King Height": "6.5 cm",
-      "Board Dimensions": "30 x 30 cm"
-    },
-    "reviews": [],
-    "isNew": false,
-    "isBestseller": false,
-    "brand": "Meris Games",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -432,6 +862,39 @@
     "vendorId": null
   },
   {
+    "id": "prod_1790282666437_osm21ts",
+    "sku": "BOT-GLS-GFT",
+    "name": "Penguin Glass Water Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 155,
+    "stock": 5,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/85c39893-3b32-4ccc-9d3e-66e552258184.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/04874c50-4bf1-4122-9cce-506bf4b0e615.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/bae13f10-48da-409d-b6ba-66f7c66473ec.jpeg"
+    ],
+    "shortDescription": "Leakproof Bottle keep your beverages Hot/Cold - 400 ml",
+    "description": "Attractive Penguin Print Features a playful penguin design that adds a stylish touch to everyday hydration.\nDouble-Layer Design Inner glass bottle with a protective outer plastic cover for better grip and added durability.\n380 ml Compact Capacity Convenient size for carrying water, juice, or other cold beverages during daily activities.\nLeak-Resistant Screw Cap Securely fitted lid helps reduce the risk of spills during travel or storage.\nReusable & Easy to Maintain Designed for regular use. Smooth surface allows easy hand cleaning.",
+    "specifications": {
+      "Weight": "0.2 kg",
+      "Pattern": "Penguin Bottles",
+      "Capacity": "400 ml",
+      "Material": "Glass/Plastic",
+      "Dimensions": "6W x 18H Centimeters",
+      "Care Instructions": "Hand wash only"
+    },
+    "weightKg": 0.2,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
     "id": "stat-1",
     "sku": "ST-JRN-LINEN",
     "name": "Gold-Foil Archival Linen-Bound Journal",
@@ -501,6 +964,166 @@
     "vendorId": null
   },
   {
+    "id": "prod_1790280271993_1auxmry",
+    "sku": "GLS-GFT-BOT",
+    "name": "Nice Premium Glass Water Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 75,
+    "stock": 100,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/fe98dd85-3bce-403a-bc7b-2e3e8bd5fc28.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/38ed0768-0d23-45a2-ba90-8dc8e8b4c1d4.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/0066b5c6-f7b2-4d51-98e1-14600300e390.jpeg"
+    ],
+    "shortDescription": "Hot & Cold Leak Proof Drinking Bottle - 400 ml",
+    "description": "Premium Glass Design: Made from durable and eco-friendly glass for safe beverage storage.\nCompact 400ml Capacity: Ideal for carrying water, tea, coffee, or juice for daily hydration.\nLeakproof & Spill-Free: Secure lid with a creative design to prevent leaks and spills.\nLightweight & Portable: Easy to carry in bags for school, office, or travel.\nMulticolor Options: Stylish and vibrant colors to suit any personality or preference.\nEasy to Clean: Simple design for hassle-free maintenance and cleaning.",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.2 kg",
+      "Material": "Premium Food Grade Glass + BPA free Leakproof Plastic",
+      "Care Instructions": "Wash with water"
+    },
+    "weightKg": 0.2,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "btl-1",
+    "sku": "BT-COPPER-INF",
+    "name": "Sovereign Ayurvedic Pure Hammered Copper Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 1399,
+    "discountPrice": 1199,
+    "stock": 20,
+    "rating": 4.7,
+    "ratingCount": 55,
+    "images": [
+      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Sleek 950ml leakproof copper canister styled with micro-hammered indent decorations.",
+    "description": "Encourage holistic hydration with this stunning copper water storage flask, designed to naturally detoxify and alkaline water. Hand-beaten detailing creates a premium golden sparkle and outstanding tactile grip. Wrapped in eco-friendly protective packaging.",
+    "specifications": {
+      "Cap": "Threaded air-tight brass cap with silicone gasket",
+      "Design": "Traditional hand-hammered finish",
+      "Volume": "950 ml",
+      "Material": "99.9% Pure Food-Grade Copper"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Wellness",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790245181920_3wvfmd7",
+    "sku": "MIN-VAC-BOT",
+    "name": "Mini Plain Vacuum Flask",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 310,
+    "stock": 9,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/0aa6229b-b43a-4956-ad95-7950cff40f43.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/9e54e641-50ad-4d29-b3dc-9d3ce256bacd.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/64c5c670-e82b-460c-b77a-7d67fea31e1c.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/cc85a1ad-e28b-462c-a2ad-b84e3206801a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/985de26f-752f-4f72-93e6-7ef827af8639.jpeg"
+    ],
+    "shortDescription": "Double-wall vacuum insulation helps maintain the temperature of hot and cold beverages",
+    "description": "Advanced Temperature Retention Double-wall vacuum insulation helps maintain the temperature of hot and cold beverages for extended periods, allowing you to enjoy tea, coffee, water, or juice at the ideal temperature.\nCompact & Travel-Friendly Design The 300ml capacity and lightweight construction make it easy to carry in handbags, backpacks, lunch bags, and car cup holders, making it perfect for travel and daily use.\nLeakproof & Spill-Resistant Lid Designed with a secure, tightly sealed lid that helps prevent accidental leaks and spills, ensuring worry-free carrying during commuting, office use, or outdoor activities.\nPremium Stainless Steel Construction Made from durable, rust-resistant stainless steel that helps preserve beverage freshness, resists odors, and provides long-lasting performance for everyday hydration needs.\nEasy to Use & Clean Simply fill the tumbler with your preferred hot or cold beverage, securely close the lid, and carry it wherever you go. The smooth interior allows quick and convenient cleaning after use.\nStylish Color Options Available in attractive colors to match your style: Black, Orange, Red, Green, Aqua Blue, and Rust. Ideal for personal use, gifting, office desks, school bags, and travel essentials.",
+    "specifications": {
+      "Colour": "Multi colour",
+      "Weight": "0.35 kg",
+      "Capacity": "300 ml",
+      "Material": "Stainless Steel",
+      "Dimensions W x H": "15W x 7H centimeters ",
+      "Product Features": "Leak Proof, Light weight",
+      "Care Instructions": "Hand wash only"
+    },
+    "weightKg": 0.35,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "MERISESHOP",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "test-razorpay-10rs",
+    "sku": "Bot-Pre-Gud",
+    "name": "Printed Mini Vacuum Insulated Bottle",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 340,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/8fcbaf7e-32c0-46e9-815d-31befd80e231.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/b0f4e024-f602-4f30-8710-18129c317052.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/42e92d85-bb63-4ee5-8c5a-2762f43234f8.jpeg"
+    ],
+    "shortDescription": "Printed Mini Vacuum Insulated Stainless Steel Bottle 300ml Leakproof| Reusable Water Bottle for Office, Gym & Travel (Design will be Sent Randomly)",
+    "description": "✨ Premium Vacuum Insulation – Double-wall vacuum insulated stainless steel construction helps maintain the temperature of beverages for long hours.\n💧 Leakproof & Spill-Resistant – Secure screw-top lid prevents leaks and spills, making it ideal for carrying in backpacks, handbags, and office bags.\n🌿 Food-Grade Stainless Steel – Made from high-quality, BPA-free, rust-resistant stainless steel that is safe, durable, and designed for everyday use.\n🎒 Perfect for Everyday Use – Suitable for the office, school, college, gym, travel, hiking, picnics, sports, and outdoor adventures.\n🎨 Random Printed Design – Stylish printed patterns enhance the bottle's look. Designs are shipped randomly based on stock availability.\n♻️ Reusable & Eco-Friendly – A sustainable alternative to single-use plastic bottles, helping reduce environmental waste while keeping you hydrated.\n🎁 Great Gift Choice – An excellent gift for students, professionals, fitness enthusiasts, friends, and family for birthdays, festivals, and special occasions.",
+    "specifications": {
+      "Weight": "0.5 kg",
+      "Base Dia": "9 Centimeters",
+      "Material": "Stainless Steel",
+      "Components": "Insulated Bottle",
+      "Dimensions": "12W x 28H Centimeters",
+      "Care Instructions": "Hand Wash Only"
+    },
+    "weightKg": 0.5,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790246727398_3c8hela",
+    "sku": "MOB-HOL-SEC",
+    "name": "Universal Mobile Phone Holder",
+    "category": "Home Organizers",
+    "categorySlug": "home",
+    "price": 130,
+    "stock": 25,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/d41a5bd8-d034-4f15-916a-a1c73ca8ca67.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/4760afca-b743-4dd0-85cd-661742da58b8.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/6c892d26-03cd-47eb-9751-33e02348743c.jpeg"
+    ],
+    "shortDescription": "Pack of 4 wall mount self-adhesive",
+    "description": "Wall Phone Holder: Universal mobile phone holder for most of smart phone models, offering a safer charging stand for your phones. Note: The total thickness of devices should be less than 30mm.\n\nPLASTIC BODY: This mount is made up of fresh ABS material. Size: 10 x 3 x 9.5cm\n\nHOW TO USE: Do please make sure the wall you stick is dry and clean and with smooth surface after stick this product to your wall, please wait for sometime before using to make sure it sticks firmly.\n\nFEATURES: Easy installation, convenience to put the devices when charging. This wall phone holder is designed to attached to the wall.\n\nCONVENIENT TO USE: Wall mount phone holder can give your phone a safe dock while charging.\n\nHOW TO USE: Do make sure the wall you stick is dry and clean and with smooth surface after stick this product to your wall, please wait for 24 hours before using to make sure it sticks firmly.\n\nIMPORTANT NOTES: The plugs and cables just for show not included, intended only for use on smooth, non-textured surfaces",
+    "specifications": {
+      "Weight": "0.2 kg",
+      "Material": "Plastic",
+      "Quantity": "4 pieces",
+      "Dimensions LxWxH": "13 x 9 x 9 centimeters "
+    },
+    "weightKg": 0.2,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris E Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
     "id": "toy-5",
     "sku": "TOY-WD-PUZZLE",
     "name": "Montessori Wooden Alphabet Matching Tray",
@@ -524,6 +1147,461 @@
     "isNew": true,
     "isBestseller": false,
     "brand": "Meris Learn",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "ent-2",
+    "sku": "EN-SL-BOARD",
+    "name": "Luxury Walnut Wood Solitaire Board with Glass Marbles",
+    "category": "Entertainment Products",
+    "categorySlug": "entertainment",
+    "price": 3800,
+    "discountPrice": 3299,
+    "stock": 6,
+    "rating": 4.7,
+    "ratingCount": 15,
+    "images": [
+      "https://images.unsplash.com/photo-1611195974226-a6a9be9dd763?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Hand-turned walnut wood circular solitaire board styled with 33 hand-swirled custom glass spheres.",
+    "description": "An object of outstanding intellectual engagement. This single-player strategic tabletop game is carved from dark American walnut and features a grooved perimeter track to secure captured glass marbles.",
+    "specifications": {
+      "Finish": "Polished silk-varnish coating",
+      "Marbles": "33 hand-crafted swirled decorative glass spheres",
+      "Diameter": "30 cm circular console",
+      "Platter Wood": "Natural high-grade American Walnut"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Heritage",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "toy-4",
+    "sku": "TOY-WD-BLOCKS",
+    "name": "Natural Premium Forest Wooden Blocks Set",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 1499,
+    "discountPrice": 1299,
+    "stock": 18,
+    "rating": 4.9,
+    "ratingCount": 88,
+    "images": [
+      "https://images.unsplash.com/photo-1587654780291-39c9404d746b?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "50-piece solid pine wood block set featuring smooth geometries and natural grain textures.",
+    "description": "Perfect for building, sorting, and early geometry. This block set contains cylinders, arches, blocks, and triangles made from solid premium pine wood. Supports spatial awareness and motor skills.",
+    "specifications": {
+      "Box": "Eco-friendly canvas storage bag",
+      "Pieces": "50 blocks",
+      "Material": "Solid Pinewood"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Kids",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790333030786_2mu9qiy",
+    "sku": "LAN-KID-WUD",
+    "name": "Wooden Learning Educational ABCD Board for Kids",
+    "category": "Learning Stuff",
+    "categorySlug": "learning",
+    "price": 120,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/c076c688-7562-4550-853b-a596f0927c5e.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/840a8d01-006c-4fec-963d-4b817d845017.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/cc7eb2c5-9c2f-4aee-bad7-8ff23caafb24.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/60dfe1aa-6c47-4393-80e6-239b6810a31a.jpeg"
+    ],
+    "shortDescription": "Activity Toys for Toddlers & Preschoolers - ABCD Set for 2 Years Old Boys & Girls",
+    "description": "Alphanumeric Graphics Cognitive: This engaging set includes 26 English alphabet puzzles. Made from durable natural wood with bright colors, it helps cultivate a child's cognitive and memory skills. Perfect kids toys for 2 - 5 years boy and an ideal choice for toys for 2+ year old boy to enhance learning through play.\nAssociative & Logical Thinking: This wooden toy set is designed to enhance fine motor skills, hand-eye coordination, associative thinking, and logical reasoning. It also helps develop children's patience and concentration. A great choice for toys for 2-year-old girl and an excellent option for educational toys for 3-year-old to support early learning and development.\nA fantastic learning tool for preschoolers, this set helps children develop essential life skills in a fun and engaging way while enhancing their practical abilities. Perfect for ABCD toys for kids, 2 years kids activity toys, and baby toys for 0 to 2 years boy. An ideal gift for Christmas, Diwali, birthdays, or celebrating small achievements!\nspecially designed with thicker wood and larger pieces for easy gripping, helping kids stay focused while playing. Perfect alphabet puzzles for kids, made from high-quality wooden toys, and an excellent choice for toys for 3-year-old girl baby to enhance learning and fun!\nThese wooden toys are crafted from high-quality, sturdy, and durable eco-friendly wood, ensuring long-lasting play. They are rigorously tested to meet all Indian safety standards and stained with non-toxic, water-based paint. A perfect choice for kids learning toys for 2 - 5 years and ideal toddler toys 2-3 years, promoting safe and educational playtime.",
+    "specifications": {
+      "Weight": "0.1 kg",
+      "Material": "Wood",
+      "Age Group": "2 - 5 years",
+      "Dimensions": "17L x 17W"
+    },
+    "weightKg": 0.1,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "home-2",
+    "sku": "HM-MUG-CERAMIC",
+    "name": "Artisanal Studio Speckled Ripple Mug",
+    "category": "Home Gifts",
+    "categorySlug": "home",
+    "price": 549,
+    "discountPrice": 449,
+    "stock": 30,
+    "rating": 4.5,
+    "ratingCount": 142,
+    "images": [
+      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop"
+    ],
+    "shortDescription": "Stony clay ceramic Mug finished with a double-glazed speckled oatmeal and gold-rim effect.",
+    "description": "Each mug is single-thrown by hand on a potters wheel, rendering a completely unique swirling pattern and raw feel. Holds up to 350ml of your favorite fresh coffee filter brews. Double-fired to support heavy microwave use safely.",
+    "specifications": {
+      "Safety": "Dishwasher and Microwave certified safe",
+      "Production": "Hand-thrown studio stoneware clay",
+      "Glazing Coating": "Lead-free food-compliant silica glaze",
+      "Volume Capacity": "350 ml"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Ceramics",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790280694802_dpgeuhr",
+    "sku": "BUK-LAN-KID",
+    "name": "Intelligence Book for Kids",
+    "category": "Learning Stuff",
+    "categorySlug": "learning",
+    "price": 325,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/5b31e367-bd3c-4cbf-8386-057817bdfd66.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/87ba53b4-e274-4bf3-ab32-ce47412bb06a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/ee73842c-641f-4a37-bc2c-aceff977681a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/9b07c163-309b-40fe-96f8-e8d0c469607c.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/4f1ad19d-3fdd-4e2f-8f89-75eb27c09ad1.jpeg"
+    ],
+    "shortDescription": "Musical Early Learning Book for Boys and Girls",
+    "description": "Interactive Learning Tool: Intelligence Book features phonetic learning with sound module that helps children learn English alphabet, common fruits, vehicles, nursery rhymes, numbers, animals, and funny stories through audio engagement\nParent-Child Interaction: Designed to encourage quality bonding time between parents and children whilst promoting hands-on learning ability, observation skills, and thinking ability development\nEducational Content: Includes wisdom-based learning modules covering pronunciation learning, classic literary rhymes, simple numbers, animal zoo, cartoon titles, and funny stories to enhance children's interest in learning\nSound-Activated Features: Equipped with interactive sound buttons that produce audio responses when pressed, improving children's hands-on thinking and hearing ability whilst making learning fun and engaging\nComprehensive Learning Aid: Serves as a great companion for children in their early learning journey, helping to develop pronunciation skills, cognitive abilities, and foundational knowledge across multiple subjects",
+    "specifications": {
+      "Theme": "Alphabet, Animal, Music, Number",
+      "Colour": "Multicolour",
+      "Weight": "0.25 kg",
+      "Material": "Plastic",
+      "Age Group": "2 - 7 years",
+      "Dimensions": "23W x 26L x 0.1H Centimeters",
+      "Battery Required": "AAA battery "
+    },
+    "weightKg": 0.25,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "MERISESHOP",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "wood-3",
+    "sku": "WD-DESK-ORG",
+    "name": "Royal Teakwood Desk Organizer & Letter Rack",
+    "category": "Wood Crafted Gifts",
+    "categorySlug": "wood-gifts",
+    "price": 1650,
+    "discountPrice": 1399,
+    "stock": 10,
+    "rating": 4.7,
+    "ratingCount": 29,
+    "images": [
+      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Exquisite hand-planed teakwood desktop tray featuring a slotted letter rack and brass pen grooves.",
+    "description": "Keep your desktop curated. This premium desk organizer is carved from seasoned solid teakwood and polished with direct oil sealants to highlight its stunning natural golden-brown grains. Complete with non-slip velvet protective padding.",
+    "specifications": {
+      "Polish": "Matte Linseed Oil hand-rubbed finish",
+      "Dimensions": "24 x 15 x 12 cm",
+      "Timber Type": "Premium seasoned Teakwood",
+      "Compartments": "3 vertical letter slots, 2 pen cradles"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris Artisanal",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "kolam-2",
+    "sku": "KL-ST-PEACOCK",
+    "name": "Royal Peacock Mandala Rangoli Brass Template",
+    "category": "Kolam Stencils",
+    "categorySlug": "kolam",
+    "price": 799,
+    "discountPrice": 649,
+    "stock": 14,
+    "rating": 4.9,
+    "ratingCount": 46,
+    "images": [
+      "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Magnificent circular brass template displaying detailed laser-cut peacock and feather mandalas.",
+    "description": "A luxurious heirloom template for Indian festivals. Crafted from high-gloss solid brass plate, this mandala stenciler yields immaculate geometric lines of peacock feather motifs. Simply sprinkle traditional colored powders or rice flour.",
+    "specifications": {
+      "Pattern": "Bespoke Peacock Mandala",
+      "Diameter": "28 cm circular plate",
+      "Material": "High-gloss Rust-resistant Brass Alloy",
+      "Cleanliness": "Warm water rinse & towel dry"
+    },
+    "reviews": [
+      {
+        "id": "r-k2-1",
+        "date": "2026-06-22",
+        "author": "Lakshmi S.",
+        "rating": 5,
+        "comment": "Spectacular quality! Brass is heavy and stays firmly in place during drawing.",
+        "approved": true
+      }
+    ],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "Meris festive",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "home-1",
+    "sku": "HM-CANDLE-SOY",
+    "name": "Symphony Organic Lavender Scented Soy Candle",
+    "category": "Home Gifts",
+    "categorySlug": "home",
+    "price": 699,
+    "discountPrice": 599,
+    "stock": 45,
+    "rating": 4.8,
+    "ratingCount": 210,
+    "images": [
+      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?w=600&auto=format&fit=crop"
+    ],
+    "shortDescription": "Pure hand-poured soy wax core mixed with organic French lavender oils, inside a ceramic jar.",
+    "description": "Bring absolute serenity to your relaxation spaces. The Symphony Candle uses 100% natural hydrogenated soy bean wax, burning cleanly for over 45 hours without leaving any smoke residue. Formulated with premium plant extracts to induce calm sleep.",
+    "specifications": {
+      "Wax": "100% Eco-friendly Organic Soy Wax",
+      "Wick": "Crackling wooden wick plate",
+      "Container": "Terracotta ceramic reuseable tumled jar",
+      "Burn Lifetime": "45+ clean burning hours"
+    },
+    "reviews": [
+      {
+        "id": "r-7",
+        "date": "2026-06-05",
+        "author": "Ritu V.",
+        "rating": 5,
+        "comment": "Best lavender candle ever! The crackle sound from the wooden wick is incredibly calming.",
+        "approved": true
+      }
+    ],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris Botanics",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790284764559_l7bpfjh",
+    "sku": "KID-FUN-TOY",
+    "name": "Shinchan Crawling Toy",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 170,
+    "stock": 6,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/efb66813-f34b-4c57-9c50-9c121865519a.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/fe0c4eef-4838-44de-9e65-7de328ec9b19.jpeg"
+    ],
+    "shortDescription": "Key Operated Shinchan Toy",
+    "description": "CRAWLING SHINCHAN TOY : Watch the Crawling Shinchan Toy move across the floor after a simple wind-up. The fun crawling action keeps children entertained while encouraging active play.\nSHINCHAN MOVING TOY : This Shinchan Moving Toy features a manual clockwork mechanism. Wind it, release it and enjoy continuous movement without batteries.\nMOVING SHINCHAN TOY : The Moving Shinchan Toy creates an exciting Toy Moving on Floor experience, making every play session more interactive and enjoyable.\nINTERACTIVE TOY : Designed as an Interactive Toy, this Crawling Toy encourages imagination and screen-free fun for children.\nSHINCHAN TOY : A fun Kids Toy and a great addition to any collection of Shinchan Toys. Perfect for birthdays, return gifts and everyday play.",
+    "specifications": {
+      "Weight": "0.2 kg",
+      "Material": "Soft PVC",
+      "Age Group": "1 to 4 years",
+      "Dimensions": "8L x 8W x 15H",
+      "Operation Mode": "Key"
+    },
+    "weightKg": 0.2,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris E-Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790282238233_r6y8y7s",
+    "sku": "LAN-KID-STA",
+    "name": "Everlasting Writing Pencils ",
+    "category": "Novelty Stationeries",
+    "categorySlug": "stationeries",
+    "price": 40,
+    "stock": 200,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/085e04c8-7ac1-4a15-9a8b-4eda7f9e2023.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/ba489ded-b4b6-41a5-95c9-a29490b70e17.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/11b3ba28-9a9e-4482-bf78-e740bb4dadcd.jpeg"
+    ],
+    "shortDescription": "Inkless Eternal Pencil for Kids - 2 pieces",
+    "description": "✍️Eternal Pencil Set: You will get 2 inkless eternal pencils with 2 erasers to meet your needs and replacements. Sufficient in quantity and bright in color, it can be used with friends and can also enhance your relationship.\n✍️High-quality Material: Inkless pencil is made of high-quality plastic, which is strong and not easy to break, and has a long service life. The pen tip is wear-resistant, firmly fixed on the pen holder, not easy to loosen, bringing you a perfect using experience.\n✍️Inkless Pencil: The tip of the inkless pencil is made of high-quality graphite for smooth writing. The writing process does not produce graphite dust to dirty hands. The replaceable nib is 159 times that of ordinary wooden pencils; Eco-friendly. Drawings will not be damaged, always maintain a beautiful nib.\n✍️Compact and Portable: Inkless pencil is small in size and light in weight, suitable for carrying out. Meet your outdoor sketching and creation needs and will not make your hands tired when using it.\n✍️Perfect Gift: Inkless pencil writes smoothly, suitable for drawing, writing, marking, creative design, architect composition design. Great for students, teachers, designers, etc. and makes a great gift idea for the holidays.",
+    "specifications": {
+      "Colour": "Multicolour",
+      "Weight": "0.02 kg",
+      "Material": "Plastic",
+      "Age Group": "4 to 10",
+      "Dimensions": "14 centimeters"
+    },
+    "weightKg": 0.02,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "MERIS",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790245606024_c6de7i8",
+    "sku": "FUN-KEY-FCK",
+    "name": "Face Changing Keychain",
+    "category": "Entertainment & Novelties",
+    "categorySlug": "entertainment",
+    "price": 135,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/c70db072-ea65-4850-8e16-cca584619895.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/19db0c67-c251-454d-8bd7-a07a4766145f.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/aeb813f8-5ef3-46bc-8056-300e8f33b98a.jpg"
+    ],
+    "shortDescription": "Adorable Cartoon Figure Keychain - 2 nos",
+    "description": "Bag Decoration‘: This Adorable Cartoon Figure Keychain Is Not Only A Fun Accessory For Your Keys But Also Serves As A Stylish Decoration For Your Car Or Bag\nCartoon Design‘: The Bag Keychain Features A Popular Cartoon Character In A Cute And Charming, Which People Of All Ages Widely Love\nExpressions Faces‘: The Face Changing Doll Comes With Three Different Expressions That Can Be Easily Switched By Pressing The Button, Adding An Of Surprise And Fun To This Unique Accessory\nMaterial‘: Made From Premium Material, The Bag Charm Smooth And Rounded\nGift‘: The Cute Keychain Is An Ideal Gift Option For Friends Or Family Members Who Love Unique Accessories Or Cartoon Characters",
+    "specifications": {
+      "Weight": "0.1 kg",
+      "Age Group": "4 to 10",
+      "Dimensions": "50 x 100 x 50 millimeters"
+    },
+    "weightKg": 0.1,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "kolam-1",
+    "sku": "KL-ST-LOTUS",
+    "name": "Bespoke Golden Lotus Border Acrylic Kolam Stencil",
+    "category": "Kolam Stencils",
+    "categorySlug": "kolam",
+    "price": 499,
+    "discountPrice": 399,
+    "stock": 22,
+    "rating": 4.8,
+    "ratingCount": 115,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/78885512-fca2-45dd-8153-6315d80c3ab2.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/3faf1e23-393d-4bf4-9e4f-c84165347ab0.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/57559080-e28d-41dd-908b-55f294a91935.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-04/c5cff176-3181-4e57-be64-66f3ecb65115.jpeg"
+    ],
+    "shortDescription": "Premium 3mm acrylic grid design stencil panel for swift, clean floral floor rangoli trails.",
+    "description": "Bring divine luck to your front entrance door with this highly modular laser-etched Kolam stenciler. Simply set the platter on the floor, sprinkle white chalk powder, and lift to reveal highly detailed traditional geometric lotus lines. Highly reusable and easily washed.",
+    "specifications": {
+      "Material": "Military-Grade Shatterproof Acrylic",
+      "Thickness": "3.0 mm",
+      "Dimensions": "30 x 30 cm circular plate",
+      "Stencil Design": "Sacred Golden Mandala Lotus grid"
+    },
+    "reviews": [
+      {
+        "id": "r-8",
+        "date": "2026-06-11",
+        "author": "Meenakshi N.",
+        "rating": 5,
+        "comment": "So quick and flawless. Making morning entryway rangolis takes under 2 minutes now! Gold acrylic looks beautiful.",
+        "approved": true
+      }
+    ],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris festive",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "toy-8",
+    "sku": "TOY-WD-CHESS",
+    "name": "Classic Handcrafted Deluxe Wooden Chess Set",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 2999,
+    "discountPrice": 2499,
+    "stock": 8,
+    "rating": 5,
+    "ratingCount": 14,
+    "images": [
+      "https://images.unsplash.com/photo-1582139329536-e7284fece509?w=800&auto=format&fit=crop&q=80"
+    ],
+    "shortDescription": "Exquisite inlaid rosewood chess board with weighted hand-carved chess pieces.",
+    "description": "Premium chess set featuring storage slots for each individual piece. Finished in a semi-gloss natural lacquer, highlighting the rich grains of solid Indian rosewood.",
+    "specifications": {
+      "Wood Type": "Sheesham & Maple",
+      "King Height": "6.5 cm",
+      "Board Dimensions": "30 x 30 cm"
+    },
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris Games",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790279675464_wnv3y09",
+    "sku": "HOM-ORG-STO",
+    "name": "Self-Adhesive Boy wall shelf",
+    "category": "Home Organizers",
+    "categorySlug": "home",
+    "price": 280,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/2a52307f-4d62-43b3-bee5-b242beafdd39.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/452d4fde-9196-4ce0-b010-294956195984.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/3421885f-e903-4f10-9605-1d5d27dde980.jpeg"
+    ],
+    "shortDescription": "Wall mounted storage organizer - 2 set",
+    "description": "🛠️ NO DRILL INSTALLATION – Self-adhesive Boy wall shelf is easy to install without nails or screws. Powerful adhesive pads provide strong grip on tiles, glass, steel, and smooth surfaces.\n🧼 MULTIPURPOSE STORAGE ORGANIZER – Ideal for storing toiletries, shampoo bottles, soap, kitchen spices, dish wash bottles, and small home essentials. Perfect for bathroom, kitchen, wash basin, balcony & utility area.\n💧 WATERPROOF & STRONG LOAD BEARING – Made with durable, waterproof, rust-free PP plastic that holds up to 2.5 kg. Draining holes keep the shelf dry and clean for long-lasting use.\n🐘 ELEGANT BOY DESIGN – Unique boy shape adds a cute, modern touch to your home decor. Suitable for all interior styles — from modern to minimal.\n🧩 SPACE SAVING & EASY TO CLEAN – Wall mounted floating rack saves valuable counter space. Easy to detach, clean and reinstall. Perfect for bathrooms, kitchens, dorms, offices & small apartments.",
+    "specifications": {
+      "Shape": "Rectangular",
+      "Weight": "0.5 kg",
+      "Material": "PP Plastic",
+      "Max weight capacity": "2.5 kg",
+      "Dimensions D x W x H": "11D x 24W x 8H"
+    },
+    "weightKg": 0.5,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "MerisEShop",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -635,271 +1713,246 @@
     "vendorId": null
   },
   {
-    "id": "btl-1",
-    "sku": "BT-COPPER-INF",
-    "name": "Sovereign Ayurvedic Pure Hammered Copper Bottle",
+    "id": "prod_1790242749123_i9a6ijf",
+    "sku": "SNI-STA-ERA",
+    "name": "Chocolate Bar Eraser",
+    "category": "Novelty Stationeries",
+    "categorySlug": "stationeries",
+    "price": 20,
+    "stock": 50,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/ba7006df-e9f4-496d-816d-c6fa04f4b367.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/0f48aaad-8284-4348-a60d-0977236539d8.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/88c71eea-c9f9-41c1-9311-5568b2f46498.jpeg"
+    ],
+    "shortDescription": "Snicker Chocolate Type Eraser",
+    "description": "PACK OF 1 Realistic chocolate bar shaped erasers that make learning fun and engaging for children, perfect for school supplies\nMATERIAL: High-quality rubber material ensures clean and effective erasing without smudging or leaving residue behind\nNOVELTY FACTOR: Unique chocolate bar appearance adds excitement to everyday school supplies, making erasing enjoyable for students\nPRACTICAL USE: Suitable for everyday writing and drawing activities, effectively removes pencil marks from paper\nSTUDENT-FRIENDLY: Compact size fits perfectly in pencil cases and school bags, ideal for students of all ages",
+    "specifications": {
+      "Colour": "Brown",
+      "Weight": "0.1 kg",
+      "Material": "Rubber",
+      "Age Group": "3 to 10",
+      "Dimensions": "9L x 3W Centimeters",
+      "Special Features ": "Non Toxic"
+    },
+    "weightKg": 0.1,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "MERIS",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790333689208_59kroti",
+    "sku": "GLA-JAR-GFT",
+    "name": "Glass Tumbler",
     "category": "Return Gift Bottles",
     "categorySlug": "bottles",
-    "price": 1399,
-    "discountPrice": 1199,
-    "stock": 20,
-    "rating": 4.7,
-    "ratingCount": 55,
-    "images": [
-      "https://images.unsplash.com/photo-1602143407151-7111542de6e8?w=800&auto=format&fit=crop&q=80"
-    ],
-    "shortDescription": "Sleek 950ml leakproof copper canister styled with micro-hammered indent decorations.",
-    "description": "Encourage holistic hydration with this stunning copper water storage flask, designed to naturally detoxify and alkaline water. Hand-beaten detailing creates a premium golden sparkle and outstanding tactile grip. Wrapped in eco-friendly protective packaging.",
-    "specifications": {
-      "Cap": "Threaded air-tight brass cap with silicone gasket",
-      "Design": "Traditional hand-hammered finish",
-      "Volume": "950 ml",
-      "Material": "99.9% Pure Food-Grade Copper"
-    },
-    "reviews": [],
-    "isNew": false,
-    "isBestseller": false,
-    "brand": "Meris Wellness",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "home-2",
-    "sku": "HM-MUG-CERAMIC",
-    "name": "Artisanal Studio Speckled Ripple Mug",
-    "category": "Home Gifts",
-    "categorySlug": "home",
-    "price": 549,
-    "discountPrice": 449,
-    "stock": 30,
-    "rating": 4.5,
-    "ratingCount": 142,
-    "images": [
-      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1576092768241-dec231879fc3?w=600&auto=format&fit=crop"
-    ],
-    "shortDescription": "Stony clay ceramic Mug finished with a double-glazed speckled oatmeal and gold-rim effect.",
-    "description": "Each mug is single-thrown by hand on a potters wheel, rendering a completely unique swirling pattern and raw feel. Holds up to 350ml of your favorite fresh coffee filter brews. Double-fired to support heavy microwave use safely.",
-    "specifications": {
-      "Safety": "Dishwasher and Microwave certified safe",
-      "Production": "Hand-thrown studio stoneware clay",
-      "Glazing Coating": "Lead-free food-compliant silica glaze",
-      "Volume Capacity": "350 ml"
-    },
-    "reviews": [],
-    "isNew": false,
-    "isBestseller": false,
-    "brand": "Meris Ceramics",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "toy-3",
-    "sku": "TOY-WD-ELEPHANT",
-    "name": "Herbal-Dyed Wooden Push-Along Elephant Toy",
-    "category": "Kids Toys",
-    "categorySlug": "toys",
-    "price": 950,
-    "discountPrice": 799,
-    "stock": 15,
-    "rating": 4.8,
-    "ratingCount": 43,
-    "images": [
-      "https://images.unsplash.com/photo-1532330393533-443990a51d10?w=800&auto=format&fit=crop&q=80"
-    ],
-    "shortDescription": "Charming organic push-along toy elephant with smooth rolling wheels and non-toxic herbal coatings.",
-    "description": "A beautiful heirloom toy designed to stimulate early motor precision and toddlers first steps. Hand-carved from sustainable timber and dyed using natural vegetable extracts, this elephant features gentle curves and solid axle performance.",
-    "specifications": {
-      "Finish": "Herbal-dyed natural beeswax coating",
-      "Material": "Solid Beechwood",
-      "Dimensions": "14 x 12 x 7 cm",
-      "Age Recommendation": "10+ months"
-    },
-    "reviews": [
-      {
-        "id": "r-t3-1",
-        "date": "2026-06-20",
-        "author": "Siddharth M.",
-        "rating": 5,
-        "comment": "Very sturdy, looks amazing on the shelf when not in use!",
-        "approved": true
-      }
-    ],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris Kids",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "wood-3",
-    "sku": "WD-DESK-ORG",
-    "name": "Royal Teakwood Desk Organizer & Letter Rack",
-    "category": "Wood Crafted Gifts",
-    "categorySlug": "wood-gifts",
-    "price": 1650,
-    "discountPrice": 1399,
+    "price": 140,
     "stock": 10,
-    "rating": 4.7,
-    "ratingCount": 29,
+    "rating": 5,
+    "ratingCount": 1,
     "images": [
-      "https://images.unsplash.com/photo-1612196808214-b8e1d6145a8c?w=800&auto=format&fit=crop&q=80"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/a39b9043-ae0a-4011-b2fd-88de29459a3b.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/e27a86bb-107f-4e4a-800f-8308176c81d9.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/5da6bda1-321c-4b92-aaa8-76ab905c09c9.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/227f9356-fb13-4ea2-b1f6-0ad2dd87de52.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-25/531479c0-c1d8-47a1-a368-e5b704de0b27.jpeg"
     ],
-    "shortDescription": "Exquisite hand-planed teakwood desktop tray featuring a slotted letter rack and brass pen grooves.",
-    "description": "Keep your desktop curated. This premium desk organizer is carved from seasoned solid teakwood and polished with direct oil sealants to highlight its stunning natural golden-brown grains. Complete with non-slip velvet protective padding.",
+    "shortDescription": "Juice Bottles - Smoothie Drinking Tumbler 400 ml",
+    "description": "CAPACITY: 400ml glass tumbler perfect for coffee, smoothies, iced tea, milk, and water with a convenient reusable straw design\nPREMIUM CONSTRUCTION: Durable glass construction with protective plastic for comfortable grip and temperature insulation\nLEAK-PROOF DESIGN: Secure lid prevents spills and splashes during use, ideal for daily beverages\nVERSATILE USE: Suitable for both hot and cold drinks, featuring an amber-tinted glass body and coordinating straw.",
     "specifications": {
-      "Polish": "Matte Linseed Oil hand-rubbed finish",
-      "Dimensions": "24 x 15 x 12 cm",
-      "Timber Type": "Premium seasoned Teakwood",
-      "Compartments": "3 vertical letter slots, 2 pen cradles"
+      "Weight": "0.25 kg",
+      "Capacity": "400 ml",
+      "Material": "Glass and Plastic",
+      "Care Instructions": "Hand Wash Only"
     },
+    "weightKg": 0.25,
     "reviews": [],
     "isNew": false,
     "isBestseller": true,
-    "brand": "Meris Artisanal",
+    "brand": "Meris",
     "availability": "in-stock",
     "vendorId": null
   },
   {
-    "id": "kolam-2",
-    "sku": "KL-ST-PEACOCK",
-    "name": "Royal Peacock Mandala Rangoli Brass Template",
-    "category": "Kolam Stencils",
-    "categorySlug": "kolam",
-    "price": 799,
-    "discountPrice": 649,
-    "stock": 14,
-    "rating": 4.9,
-    "ratingCount": 46,
+    "id": "prod_1790284408643_0l1vymt",
+    "sku": "KID-FUN-LYT",
+    "name": "Stylish Camera Keychain",
+    "category": "Entertainment & Novelties",
+    "categorySlug": "entertainment",
+    "price": 135,
+    "stock": 25,
+    "rating": 5,
+    "ratingCount": 1,
     "images": [
-      "https://images.unsplash.com/photo-1605001011156-cbf0b0f67a51?w=800&auto=format&fit=crop&q=80"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/5bf2d4fb-0842-49c7-9024-2e551f02ed52.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/81b94973-a261-4572-a0ae-3820a535085f.jpg"
     ],
-    "shortDescription": "Magnificent circular brass template displaying detailed laser-cut peacock and feather mandalas.",
-    "description": "A luxurious heirloom template for Indian festivals. Crafted from high-gloss solid brass plate, this mandala stenciler yields immaculate geometric lines of peacock feather motifs. Simply sprinkle traditional colored powders or rice flour.",
+    "shortDescription": "Cartoon Projection Camera Keychain - 2 nos",
+    "description": "Adorable Design: Cute cartoon camera-shaped keychain with kawaii styling, perfect for girls and kids who love fun and playful accessories\nProjection Feature: Mini camera keychain includes a built-in projection function that displays charming images, adding an interactive element to this delightful accessory\nBell Attachment: Comes with a small bell that creates a pleasant jingling sound, making it easy to locate your keys whilst adding a cheerful touch\nVersatile Use: Ideal key ring accessory for attaching to bags, backpacks, car keys, school bags, or home keys, combining functionality with style\nPerfect Gift Option: Makes an excellent birthday present or return gift for children and young girls, offering a charming and affordable kawaii-themed accessory",
     "specifications": {
-      "Pattern": "Bespoke Peacock Mandala",
-      "Diameter": "28 cm circular plate",
-      "Material": "High-gloss Rust-resistant Brass Alloy",
-      "Cleanliness": "Warm water rinse & towel dry"
+      "Colour": "Multicolour",
+      "Weight": "0.15 kg",
+      "Material": "Plastic",
+      "Age Group": "4+years",
+      "Dimensions": "50 x 50 x 50 millimeter "
     },
-    "reviews": [
-      {
-        "id": "r-k2-1",
-        "date": "2026-06-22",
-        "author": "Lakshmi S.",
-        "rating": 5,
-        "comment": "Spectacular quality! Brass is heavy and stays firmly in place during drawing.",
-        "approved": true
-      }
+    "weightKg": 0.15,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "MERIS",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1789753063153_7tcxf5j",
+    "sku": "BG-PREMM-TAN",
+    "name": "Hello Kitty Stainless Steel Thermos",
+    "category": "bottles",
+    "categorySlug": "bottles",
+    "price": 330,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/c134cbbf-38a6-4b51-9840-37d3ed2b3f96.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/0eaca639-194d-4123-93e6-88e71c43dcdc.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a4d38c11-01af-44bb-b0ac-d99798ff8a3e.jpeg"
     ],
+    "shortDescription": "500ml Unicorn Print Stainless Steel Water Bottle with Flip Top Lid & Direct Sip Spout, Purple Drinking Bottle for School, Girls & Kids",
+    "description": "* Cute Cartoon Design for Kids: Features a fun and playful cartoon print that makes drinking water enjoyable and encourages kids to carry their bottle to school and outings.\n\n* Easy Flip Top with Direct Sip Spout: Designed for quick and convenient drinking with a flip lid and direct sip opening, allowing hassle-free use during school or travel.\n\n* Strong Stainless Steel Construction: Built with durable stainless steel to handle everyday use, making it suitable for active kids and regular school routines.\n\n* Compact & School Bag Friendly Size: 500ml capacity with a space-saving design that fits easily into school bags, lunch bags, and side pockets.\n\n* Suitable for School & Outdoor Use: Practical and stylish water bottle for boys and girls, designed for school, picnics, travel, and daily activities.\n\n* Unicorn Print Design: Features an attractive purple unicorn print that appeals to girls and kids who love colorful and themed accessories.\n\n* Leak-Resistant Flip Lid: Equipped with a secure flip top lid that helps prevent spills and leaks when stored in bags during transport.",
+    "specifications": {
+      "Color": "Pink",
+      "Weight": "0.25 kg",
+      "Material": "Stainless Steel",
+      "Dimensions": "6.5W x 22.5H Centimeters ",
+      "Care Instructions": "Hand Wash Recommended"
+    },
+    "weightKg": 0.25,
+    "reviews": [],
     "isNew": true,
     "isBestseller": false,
-    "brand": "Meris festive",
+    "brand": "Meris E-Shop",
     "availability": "in-stock",
     "vendorId": null
   },
   {
-    "id": "home-1",
-    "sku": "HM-CANDLE-SOY",
-    "name": "Symphony Organic Lavender Scented Soy Candle",
-    "category": "Home Gifts",
-    "categorySlug": "home",
-    "price": 699,
-    "discountPrice": 599,
-    "stock": 45,
-    "rating": 4.8,
-    "ratingCount": 210,
+    "id": "prod_1790281751673_niuwvir",
+    "sku": "LAN-BOD-KID",
+    "name": "Puzzle and Alphabet Board",
+    "category": "Learning Stuff",
+    "categorySlug": "learning",
+    "price": 190,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
     "images": [
-      "https://images.unsplash.com/photo-1603006905003-be475563bc59?w=600&auto=format&fit=crop",
-      "https://images.unsplash.com/photo-1508746829417-e6f548d8d6ed?w=600&auto=format&fit=crop"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/7bbf2089-c373-49af-bb14-1f87c94b147b.jpeg"
     ],
-    "shortDescription": "Pure hand-poured soy wax core mixed with organic French lavender oils, inside a ceramic jar.",
-    "description": "Bring absolute serenity to your relaxation spaces. The Symphony Candle uses 100% natural hydrogenated soy bean wax, burning cleanly for over 45 hours without leaving any smoke residue. Formulated with premium plant extracts to induce calm sleep.",
+    "shortDescription": "Educational ABCD Board with Puzzles ",
+    "description": "Package Contains: The package contains a set of 3 board puzzle toys i.e., a Capital ABC Board with 26 wooden letters, a Number Board featuring numbers 1-20 and 5 mathematical symbols, and a Shapes Board with 16 Shapes ensuring a learning experience for preschoolers. The Shapes, Letters, and Alphabets come in vibrant colors adding a sense of playfulness to the toy.\nbp 3- Early Education Toy: Beyond play, this set serves as an early education tool, introducing preschoolers to the world of letters, numbers, geometric shapes, and basic mathematical concepts in a playful manner. The set encourages learning through play, ensuring that children absorb essential skills like hand-eye coordination, color and shape recognition, analytical thinking, and problem-solving.\nbp 4- Ideal for Toddlers: Designed for preschool-aged kids, this learning set is designed to meet the developmental needs of young learners, making it an ideal addition to their educational journey. Not just a toy, but a thoughtful gift that combines fun and education, making it an ideal choice for birthdays, special occasions, or simply to celebrate your child's curiosity and growth.\nbp 5- Target Gender: Unisex",
     "specifications": {
-      "Wax": "100% Eco-friendly Organic Soy Wax",
-      "Wick": "Crackling wooden wick plate",
-      "Container": "Terracotta ceramic reuseable tumled jar",
-      "Burn Lifetime": "45+ clean burning hours"
+      "Theme": "Alphabet and shape",
+      "Colour": "Multicolour",
+      "Weight": "0.15 kg",
+      "Material": "Wood",
+      "Age Group": "1 - 6 years",
+      "Dimensions": "19L x 18W"
     },
-    "reviews": [
-      {
-        "id": "r-7",
-        "date": "2026-06-05",
-        "author": "Ritu V.",
-        "rating": 5,
-        "comment": "Best lavender candle ever! The crackle sound from the wooden wick is incredibly calming.",
-        "approved": true
-      }
-    ],
+    "weightKg": 0.15,
+    "reviews": [],
     "isNew": false,
     "isBestseller": true,
-    "brand": "Meris Botanics",
+    "brand": "MERIS",
     "availability": "in-stock",
     "vendorId": null
   },
   {
-    "id": "bag-2",
-    "sku": "BG-EMB-CLUTCH",
-    "name": "Royal Heritage Golden-Zardozi Evening Clutch",
-    "category": "Handbags",
-    "categorySlug": "handbags",
-    "price": 1999,
-    "discountPrice": 1699,
-    "stock": 0,
-    "rating": 4.9,
-    "ratingCount": 41,
-    "images": [
-      "https://images.unsplash.com/photo-1544816155-12df9643f363?w=600&auto=format&fit=crop"
-    ],
-    "shortDescription": "Velvety dark clutch bag with handwoven metallic bullion thread vine pattern and chain strap.",
-    "description": "An outstanding luxury clutch ideal for festive weddings and elegant dinners. Intricately embellished with golden beads and coiled wire work known as Zardozi. Emits a stellar glistening reflect under dim evening lights.",
-    "specifications": {
-      "Closure": "Secure golden magnetic lock",
-      "Embroidery": "Artisan Handloom bullion metallic gold thread",
-      "Base Fabric": "Silk Blend Deep Navy Velvet",
-      "Chain Strap": "Removable vintage gold-link chain (110cm)"
-    },
-    "reviews": [
-      {
-        "id": "r-6",
-        "date": "2026-05-18",
-        "author": "Sonal C.",
-        "rating": 5,
-        "comment": "Pure luxury! Took this to a family wedding and got continuous praise.",
-        "approved": true
-      }
-    ],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris Heritage",
-    "availability": "out-of-stock",
-    "vendorId": null
-  },
-  {
-    "id": "toy-7",
-    "sku": "TOY-WD-GEARS",
-    "name": "3D Mechanical Gear Assembly Constructor",
+    "id": "prod_1790245945822_3wdlohh",
+    "sku": "DAN-OCT-GFT",
+    "name": "Dancing Octopus ",
     "category": "Kids Toys",
     "categorySlug": "toys",
-    "price": 2499,
-    "discountPrice": 2199,
-    "stock": 12,
-    "rating": 4.7,
-    "ratingCount": 22,
+    "price": 260,
+    "stock": 7,
+    "rating": 5,
+    "ratingCount": 1,
     "images": [
-      "https://images.unsplash.com/photo-1593085512500-5d55148d6f0d?w=800&auto=format&fit=crop&q=80"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/3405839c-a7c8-455c-8fa1-25102aefd17e.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/63a69c99-ef17-4df0-87ff-d560ff35913c.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/07edce16-b06b-49b7-9229-e5142f972b32.jpeg"
     ],
-    "shortDescription": "Interlocking wooden gear puzzle introducing kinetic energy transmission and physical mechanics.",
-    "description": "A STEM constructor puzzle set. Contains precision laser-cut plywood sheets. Kids can assemble standard gear configurations that move when hand-cranked.",
+    "shortDescription": "Key Operated Octopus Toy for kids",
+    "description": "360 DEGREE TURN AUTOMATIC REBOUND: Dancing Octopus wind-up toy features automatic 360-degree rotation and rebound mechanism that allows it to jump standing for 8-10 seconds and walk even when lying down without fear.\n\nWIND-UP MECHANISM: No batteries required - simply wind up the toy and watch it walk, glide, and crawl across floors with its jellyfish-inspired dancing movements.\n\nCOLOURFUL DESIGN: Available in three vibrant colours - pink, orange, and green - each octopus features large expressive eyes and flowing tentacle legs for engaging playtime.\n\nCOMPACT SIZE: Measures approximately 10.3 cm in height, 6.7 cm in width, and comes in a colourful box packaging of 11.2 cm x 6.8 cm x 6.3 cm, perfect for small hands.\n\nCHILDREN'S TOY: Made from durable plastic material, this twisting jellyfish crawling toy provides entertaining active play for children whilst developing motor skills and coordination.",
     "specifications": {
-      "Material": "Laser-cut Birch Plywood",
-      "Skill level": "Intermediate",
-      "Time to build": "3-4 hours"
+      "Colour": "Multi Colour",
+      "Weight": "0.15 kg",
+      "Material": "Plastic",
+      "Age Group": "6 months to 3 years",
+      "Dimensions ": "10 x 7 x 7 Centimetes"
     },
+    "weightKg": 0.15,
     "reviews": [],
-    "isNew": false,
+    "isNew": true,
     "isBestseller": false,
-    "brand": "Meris Tech",
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "toy-1",
+    "sku": "TOY-WD-STACK",
+    "name": "Handcrafted Wooden Stacking Ring Tower",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 899,
+    "discountPrice": 749,
+    "stock": 25,
+    "rating": 4.8,
+    "ratingCount": 124,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/eda48b92-d968-4eb8-a359-1ce9cb729753.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/f8f5f64f-e4a9-40a3-bcf4-fc65b6f0fe7b.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/fd4abb16-680f-47a8-b3b5-435955fc27b7.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/b9701e53-2e78-4eb3-86d7-8954ed69a7c7.jpg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-07-29/b60bd554-e513-46d8-b435-8e0617bd0de5.jpg"
+    ],
+    "shortDescription": "Organic wooden rings coated in safe herbal-dyed colors, supporting early sensory development.",
+    "description": "This elegant Stacking Ring Tower is crafted from native beechwood and finished with food-grade seed oils and natural pigments. Non-toxic, fully hand-rounded, and exceptionally smooth for tender hands. It supports hand-eye coordination, size sorting, and visual acuity.",
+    "specifications": {
+      "Weight": "0.32 kg",
+      "Coating": "Natural plant-extract pigments",
+      "Material": "Sustainably sourced Beechwood",
+      "Dimensions": "18 x 9 x 9 cm",
+      "Age Recommendation": "12+ months"
+    },
+    "weightKg": 0.32,
+    "reviews": [
+      {
+        "id": "r-1",
+        "date": "2026-05-12",
+        "author": "Anita S.",
+        "rating": 5,
+        "comment": "Simply gorgeous! The wood is so smooth and there is no paint smell at all.",
+        "approved": true
+      },
+      {
+        "id": "r-2",
+        "date": "2026-06-02",
+        "author": "Dev K.",
+        "rating": 4,
+        "comment": "Excellent organic toy. My 1-year-old is fully obsessed with the golden cap ring.",
+        "approved": true
+      }
+    ],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris Kids",
     "availability": "in-stock",
     "vendorId": null
   },
@@ -1001,87 +2054,85 @@
     "vendorId": null
   },
   {
-    "id": "toy-6",
-    "sku": "TOY-WD-BALANCE",
-    "name": "Artisanal Curved Wooden Balance Wobble Board",
+    "id": "prod_1790246358615_civ1wi0",
+    "sku": "PAN-FUN-TOY",
+    "name": "Cute Panda Action Toy Set ",
     "category": "Kids Toys",
     "categorySlug": "toys",
-    "price": 3299,
-    "discountPrice": 2899,
-    "stock": 6,
-    "rating": 4.9,
-    "ratingCount": 30,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/dad81941-7452-4058-a9e3-624a65f1aa94.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/e013e03e-2cd3-4c28-a001-8aeb813e58b3.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-08-02/3a0eb221-8548-4e34-9ae0-c766698a7131.jpeg"
-    ],
-    "shortDescription": "Premium curved beechwood wobble board supporting posture balance and creative play.",
-    "description": "Designed to support open-ended movement play. Children can balance on it, use it as a bridge, slide, or rocking cradle. Hand-pressed multilayered beechwood core.",
-    "specifications": {
-      "Coating": "Natural oil protectant",
-      "Material": "Multilayered Pressed Beechwood",
-      "Weight Capacity": "120 kg"
-    },
-    "reviews": [],
-    "isNew": false,
-    "isBestseller": false,
-    "brand": "Meris Active",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "ent-2",
-    "sku": "EN-SL-BOARD",
-    "name": "Luxury Walnut Wood Solitaire Board with Glass Marbles",
-    "category": "Entertainment Products",
-    "categorySlug": "entertainment",
-    "price": 3800,
-    "discountPrice": 3299,
-    "stock": 6,
-    "rating": 4.7,
-    "ratingCount": 15,
-    "images": [
-      "https://images.unsplash.com/photo-1611195974226-a6a9be9dd763?w=800&auto=format&fit=crop&q=80"
-    ],
-    "shortDescription": "Hand-turned walnut wood circular solitaire board styled with 33 hand-swirled custom glass spheres.",
-    "description": "An object of outstanding intellectual engagement. This single-player strategic tabletop game is carved from dark American walnut and features a grooved perimeter track to secure captured glass marbles.",
-    "specifications": {
-      "Finish": "Polished silk-varnish coating",
-      "Marbles": "33 hand-crafted swirled decorative glass spheres",
-      "Diameter": "30 cm circular console",
-      "Platter Wood": "Natural high-grade American Walnut"
-    },
-    "reviews": [],
-    "isNew": false,
-    "isBestseller": false,
-    "brand": "Meris Heritage",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "test-razorpay-10rs",
-    "sku": "Bot-Pre-Gud",
-    "name": "Printed Mini Vacuum Insulated Bottle",
-    "category": "Return Gift Bottles",
-    "categorySlug": "bottles",
-    "price": 260,
-    "stock": 10,
+    "price": 550,
+    "stock": 3,
     "rating": 5,
     "ratingCount": 1,
     "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/8fcbaf7e-32c0-46e9-815d-31befd80e231.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/b0f4e024-f602-4f30-8710-18129c317052.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/42e92d85-bb63-4ee5-8c5a-2762f43234f8.jpeg"
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/a0fd8821-6722-4df8-a16c-acffb41bede5.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/e872412d-bf2a-4b1e-a45f-33dee10095e3.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/d057db8c-b160-4ee1-be7e-b646e8c0e7ca.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/b621058b-1b08-4831-8602-9067cbbcc128.jpeg"
     ],
-    "shortDescription": "Printed Mini Vacuum Insulated Stainless Steel Bottle 300ml Leakproof| Reusable Water Bottle for Office, Gym & Travel (Design will be Sent Randomly)",
-    "description": "✨ Premium Vacuum Insulation – Double-wall vacuum insulated stainless steel construction helps maintain the temperature of beverages for long hours.\n💧 Leakproof & Spill-Resistant – Secure screw-top lid prevents leaks and spills, making it ideal for carrying in backpacks, handbags, and office bags.\n🌿 Food-Grade Stainless Steel – Made from high-quality, BPA-free, rust-resistant stainless steel that is safe, durable, and designed for everyday use.\n🎒 Perfect for Everyday Use – Suitable for the office, school, college, gym, travel, hiking, picnics, sports, and outdoor adventures.\n🎨 Random Printed Design – Stylish printed patterns enhance the bottle's look. Designs are shipped randomly based on stock availability.\n♻️ Reusable & Eco-Friendly – A sustainable alternative to single-use plastic bottles, helping reduce environmental waste while keeping you hydrated.\n🎁 Great Gift Choice – An excellent gift for students, professionals, fitness enthusiasts, friends, and family for birthdays, festivals, and special occasions.",
+    "shortDescription": "Panda Action Toy Set - 3 pcs",
+    "description": "3-in-1 Fun Play Modes : 🐼 Cute Panda Action Toy Set featuring three exciting play styles – skateboard panda, dancing panda toy, and hula hoop panda. This moving panda toy keeps kids entertained for hours with engaging movements, making it one of the most exciting panda toys for kids and a perfect addition to any toy collection.\nAdorable & Interactive Panda Design: Designed as a cute panda toy with bright colors, expressive eyes, and smooth rounded edges, this panda action toy instantly attracts children's attention. The charming cute panda design makes it a delightful companion for playtime, learning, and imaginative adventures.\nEncourages Active Play & Development: This moving toy helps improve hand-eye coordination, motor skills, and sensory development while keeping children engaged away from screens. The entertaining movement of this moving panda creates endless fun, making it one of the most loved fun toys for toddlers and young children.\nPerfect Gift for Panda Lovers: Looking for unique panda gifts? This adorable panda gift is ideal for birthdays, return gifts, holidays, and special occasions. Suitable for boys and girls, this panda for kids toy brings smiles and excitement to every celebration.\nGreat for Playrooms, Desks & Collections: Whether used as panda desk toys, educational play toys, or decorative collectibles, these panda toys add fun wherever they go. Inspired by popular pandabox toys and interactive toy trends, this moving panda toy is a wonderful choice for children who love cute and engaging animal-themed toys.\npanda toy panda action toy panda toys moving toys moving toy panda toys for kids panda hammer toy cute panda action toy set cute panda panda doll pandabox toys dancing panda toy fun toys moving panda toy panda gifts panda for kids cute panda toy dancing panda panda gift giggles panda toys panda desk toys moving panda",
+    "specifications": {
+      "Weight": "0.2 kg",
+      "Material": "Plastic",
+      "Age Group": "6 months to 3 years",
+      "Dimensions L x W x H": "20L x 10W x 5H"
+    },
+    "weightKg": 0.2,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "Meris E Shop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790244421385_e8tmc8h",
+    "sku": "GFT-VACM-BOT",
+    "name": "Vacuum Flask Set",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 299,
+    "stock": 20,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/a271dcad-af54-425f-b7c4-9c3fc4653362.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/715d0a21-7316-4139-9484-d0acb09184d7.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/49c2835f-cc81-4393-a353-9d8d7a75548e.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/9f60e036-103d-424c-bccf-a2eb4ce97f55.webp"
+    ],
+    "shortDescription": "Vacuum Flask Set",
+    "description": "Vacuum Flask Set",
+    "specifications": {
+      "Weight": "0.5 kg"
+    },
+    "weightKg": 0.5,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": false,
+    "brand": "Meris",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1789758937501_hfwwahc",
+    "sku": "SSM-BOTT-RETG",
+    "name": "Stainless Steel Water Bottle - Marvel Theme",
+    "category": "bottles",
+    "categorySlug": "bottles",
+    "price": 465,
+    "stock": 5,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/e18d057d-527e-4885-afc4-a7486b624361.jpeg"
+    ],
+    "shortDescription": "Stainless Steel Water Bottle | 1000ml Leakproof Reusable Bottle | Pack Of 1",
+    "description": "* Made from stainless steel with a lightweight yet sturdy design for everyday hydration.\n\n* Leakproof and spillproof lid helps prevent spills while carrying in bags or backpacks.\n\n* Designed to help maintain the freshness of your beverages throughout the day.\n\n* Compact, lightweight bottle with a comfortable design for home, office, school, gym, and travel.\n\n* Rust-resistant construction with a reusable design suitable for daily use and easy maintenance.",
     "specifications": {
       "Weight": "0.3 kg",
-      "Base Dia": "9 Centimeters",
       "Material": "Stainless Steel",
-      "Components": "Insulated Bottle",
-      "Dimensions": "12W x 28H Centimeters",
+      "Dimensions": "8W x 28H Centimeters",
       "Care Instructions": "Hand Wash Only"
     },
     "weightKg": 0.3,
@@ -1093,12 +2144,114 @@
     "vendorId": null
   },
   {
+    "id": "prod_1790242303067_di48p7l",
+    "sku": "PRA-SHK-ADT",
+    "name": "HARMLESS SHOCK GADGET ",
+    "category": "Entertainment & Novelties",
+    "categorySlug": "entertainment",
+    "price": 120,
+    "stock": 5,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/fab41cbb-3679-4094-aefb-c92d798d967c.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/869f74cb-e4ef-4f83-91f3-9a20c42d410b.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/69f7ee84-f2fc-4e35-a705-354d30335ae1.jpeg"
+    ],
+    "shortDescription": "Realistic gum design delivers a safe, harmless electric shock - 1 piece",
+    "description": "HARMLESS SHOCK PRANK: Realistic gum design delivers a safe, harmless electric shock when clicked, perfect for April Fool jokes, magic tricks, and hilarious party entertainment.\n\nIDEAL NOVELTY GIFT: Perfect gag gift for friends, colleagues, siblings, and prank enthusiasts for birthdays, office fun, parties, and surprise moments that create memorable laughs.\n\nREALISTIC APPEARANCE: Stylish metal-look body with authentic pen design makes the prank more convincing and exciting, ensuring maximum surprise effect.\n\nCOMPACT & PORTABLE: Measures 14.5 cm in length and weighs only 20 grammes, making it easy to carry in your pocket, school bag, or desk drawer for pranks anytime.\n\nVERSATILE PARTY TOY: Great for magic trick collections, party props, Halloween celebrations, April Fool festivities, and entertaining kids and adults alike.",
+    "specifications": {
+      "Weight": "0.05 kg",
+      "Material": "Rubber",
+      "Dimensions": "10x3.5x2.5 Centimeters"
+    },
+    "weightKg": 0.05,
+    "reviews": [],
+    "isNew": false,
+    "isBestseller": true,
+    "brand": "MERISESHOP",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790240630854_puox3vl",
+    "sku": "SS-One-WB",
+    "name": "Stainless Steel Water Bottle 1000ml",
+    "category": "Return Gift Bottles",
+    "categorySlug": "bottles",
+    "price": 270,
+    "stock": 10,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/489808f5-b252-4712-a629-fb31c971f872.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/9cfc356e-a761-44ce-92f5-d96f17a903f0.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/12248600-b1d1-4e0e-8ac1-d37ffc858156.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/0c1b7f3b-e16e-45c3-9ec9-312db473f345.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/7a5e5097-70d5-4807-a446-7c96a20bca55.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/2012110b-3406-4bae-877e-2492c71b3ec9.jpeg"
+    ],
+    "shortDescription": "304-Grade Stainless Steel Water Bottle 1000ml | 100% Leakproof, BPA-Free | Wide Mouth, Easy to Clean | for Gym, Office, School & Travel | Rust-Free Steel Bottle (Silver, Pack of 1)",
+    "description": "100% LEAKPROOF GUARANTEED — Engineered with a precision-sealed lid that won't leak even when turned upside down in your bag. Carry it confidently to the gym, metro, or office — zero spills, zero regrets.\n\nFOOD-SAFE 304-GRADE STEEL, BPA-FREE — Made from premium food-grade 304 stainless steel with zero plastic contact with water. No metallic taste, no harmful chemicals, no compromise on your family's health.\n\nWIDE MOUTH FOR ICE, EASY CLEANING — The generously wide mouth opening fits ice cubes perfectly and lets your hand or a bottle brush reach every corner. Hygienically clean in 30 seconds.\n\n1000ML — ALL-DAY HYDRATION — One fill lasts your entire gym session or workday. At 1 litre, it meets your daily hydration target without constant refilling. Lightweight enough to carry everywhere.\n\nRUST-FREE FOR LIFE — Unlike cheap imported bottles that rust within months, our 304-grade stainless steel stays spotless year after year. Works perfectly as a fridge bottle, office bottle, or school bottle.",
+    "specifications": {
+      "Colour": "Silver",
+      "Weight": "0.2 kg",
+      "Capacity": "1 L",
+      "Material": "304 Stainless Steel",
+      "Dimensions": "8W x 28H Centimeters",
+      "Care Instructions": "Clean by hand or a bottle brush "
+    },
+    "weightKg": 0.2,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "MerisEShop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
+    "id": "prod_1790241828196_6reysm8",
+    "sku": "WD-KIDS-TOY",
+    "name": "Wooden Angle Geometric Stacker Shape Sorter Blocks",
+    "category": "Kids Toys",
+    "categorySlug": "toys",
+    "price": 299,
+    "stock": 9,
+    "rating": 5,
+    "ratingCount": 1,
+    "images": [
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/b653bc71-b5b7-4ab7-9800-016654c77d5d.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/7e9d8736-a154-40fe-b13d-9ae297c557cb.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/1e82811c-92a6-4132-972b-36c511f32c7c.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/03ee9bc5-9176-41e9-be1f-9d7851322227.jpeg",
+      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-24/2f032dc9-6303-4eb1-8b88-393364e3f9d3.jpeg"
+    ],
+    "shortDescription": "Educational Intelligence Early Learning Column Puzzle Stacking Toy Set for Todder Kids Boys & Girls (Pack of 1, Multicolour)",
+    "description": "🧩 Shape Sorter Toy: This is the most direct and crucial search term, capturing the core function and type of toy.\n\n🧠 Educational Learning Toy: A strong phrase that appeals to parents looking for developmental benefits and highlights its value beyond just play.\n\n🪵 Wooden Stacking Toys: Specifies the material and activity, which is a popular, natural, and highly searched category for baby and toddler toys.\n\n🌈 Color Recognition Toy: Directly targets the key learning aspect of colors, often searched by parents focused on early childhood development.\n\n👶 Toddler Fine Motor Skills: Focuses on a key benefit and a major driver for purchases in this age group, often searched as \"motor skills toy\" or \"hand-eye coordination.",
+    "specifications": {
+      "Theme": "Educational",
+      "Colour": "Multi Colour",
+      "Weight": "0.4 kg",
+      "Material": "Wood",
+      "Age Group": "1 to 3 years",
+      "Dimensions": "30 x 5 x 7 Centimeters",
+      "Additional Features": "Non Toxic"
+    },
+    "weightKg": 0.4,
+    "reviews": [],
+    "isNew": true,
+    "isBestseller": false,
+    "brand": "MerisEShop",
+    "availability": "in-stock",
+    "vendorId": null
+  },
+  {
     "id": "prod_1789847769385_cs9zlzc",
     "sku": "TOY-SPIN-KIDS",
     "name": "360 Degree Rotating Gyroscopic Spinner Toy for Kids & Adults",
     "category": "toys",
     "categorySlug": "toys",
-    "price": 150,
+    "price": 200,
     "stock": 10,
     "rating": 5,
     "ratingCount": 1,
@@ -1114,78 +2267,13 @@
     "specifications": {
       "Colour": "Multicolor ",
       "Weight": "0.1 kg",
+      "Best for": "Entertainment, Stress, Autism & Anxiety Relief",
       "Material": "Acrylonitrile Butadiene Styrene(ABS), Metal, Plastic",
-      "Age Group": "3 months to 3 years",
+      "Age Group": "3 months to 18 years",
       "Dimensions": "6 x 6 x 4.5 Centimeters",
       "Country of Origin": "India"
     },
     "weightKg": 0.1,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "prod_1789753063153_7tcxf5j",
-    "sku": "BG-PREMM-TAN",
-    "name": "Hello Kitty Stainless Steel Thermos",
-    "category": "bottles",
-    "categorySlug": "bottles",
-    "price": 250,
-    "stock": 10,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/c134cbbf-38a6-4b51-9840-37d3ed2b3f96.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/0eaca639-194d-4123-93e6-88e71c43dcdc.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a4d38c11-01af-44bb-b0ac-d99798ff8a3e.jpeg"
-    ],
-    "shortDescription": "500ml Unicorn Print Stainless Steel Water Bottle with Flip Top Lid & Direct Sip Spout, Purple Drinking Bottle for School, Girls & Kids",
-    "description": "* Cute Cartoon Design for Kids: Features a fun and playful cartoon print that makes drinking water enjoyable and encourages kids to carry their bottle to school and outings.\n\n* Easy Flip Top with Direct Sip Spout: Designed for quick and convenient drinking with a flip lid and direct sip opening, allowing hassle-free use during school or travel.\n\n* Strong Stainless Steel Construction: Built with durable stainless steel to handle everyday use, making it suitable for active kids and regular school routines.\n\n* Compact & School Bag Friendly Size: 500ml capacity with a space-saving design that fits easily into school bags, lunch bags, and side pockets.\n\n* Suitable for School & Outdoor Use: Practical and stylish water bottle for boys and girls, designed for school, picnics, travel, and daily activities.\n\n* Unicorn Print Design: Features an attractive purple unicorn print that appeals to girls and kids who love colorful and themed accessories.\n\n* Leak-Resistant Flip Lid: Equipped with a secure flip top lid that helps prevent spills and leaks when stored in bags during transport.",
-    "specifications": {
-      "Color": "Pink",
-      "Weight": "0.25 kg",
-      "Material": "Stainless Steel",
-      "Dimensions": "6.5W x 22.5H Centimeters ",
-      "Care Instructions": "Hand Wash Recommended"
-    },
-    "weightKg": 0.25,
-    "reviews": [],
-    "isNew": true,
-    "isBestseller": false,
-    "brand": "Meris E-Shop",
-    "availability": "in-stock",
-    "vendorId": null
-  },
-  {
-    "id": "prod_1789754728194_pd39h62",
-    "sku": "ATC-CONT-QTY",
-    "name": "Decorative Airtight Container - 2 nos",
-    "category": "home",
-    "categorySlug": "home",
-    "price": 100,
-    "stock": 80,
-    "rating": 5,
-    "ratingCount": 1,
-    "images": [
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/51b6823b-408e-4289-a90f-c8f22e4b591a.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a2197e0c-70d9-4097-9241-007568568d18.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/39d13e10-f716-4abd-ba2a-cbeff1ec2916.jpeg",
-      "https://zzwxnnzzwxsdvggpumze.supabase.co/storage/v1/object/public/product-images/products/2026-09-18/a0fc0dd8-ea85-4a62-a60f-ef724120b6b0.jpeg"
-    ],
-    "shortDescription": "Premium Printed Metal Jars for Kitchen Storage & Return Gifts | Tea Coffee Sugar Container | Dry Fruit Box for Kitchen Storage | 6 Inch",
-    "description": "ELEGANT DESIGN: Set of 2 decorative tin canisters featuring intricate Indian-inspired artwork, including a vibrant peacock motif on pink and floral patterns on rich red.\n\nVERSATILE STORAGE: Ideal for storing tea, coffee, spices, dry fruits, or other kitchen essentials while adding a decorative touch to your countertop or shelf.\n\nSECURE LID: Each canister comes with a snug-fitting lid to keep contents fresh and protected from moisture and dust.\n\nBEAUTIFUL GIFT SET: The ornate artwork and premium finish make this set of 2 canisters a thoughtful and attractive gift for festivals, housewarmings, and special occasions.\n\nSET CONTENTS: Includes 2 cylindrical tin canisters — one in bold red with golden floral motifs and one in soft pink with a detailed peacock illustration and gold accents.",
-    "specifications": {
-      "Colour": "Multicolour",
-      "Weight": "0.15 kg",
-      "Material": "Metal",
-      "Dimensions": "7L x 7W x 15H Centimeters ",
-      "Care Instructions": "Avoid Abrasive Scrubbers To Preserve Printed Design, Do Not Microwave, Do Not Soak In Water, Hand Wash Only, Keep Away From Direct Sunlight To Prevent Colour Fading, Store In A Cool And Dry Place, Wipe With A Dry Cloth After Cleaning.",
-      "Recommended Uses For": "Gift Giving, Kitchen Storage"
-    },
-    "weightKg": 0.15,
     "reviews": [],
     "isNew": true,
     "isBestseller": false,

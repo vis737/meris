@@ -1349,7 +1349,6 @@ async function syncCustomersFromSupabase() {
 async function syncProductsFromSupabase() {
   if (!supabase) return;
   try {
-    const localProds = readLocalJsonDb(PRODUCTS_FILE_PATH, INITIAL_PRODUCTS);
     const { data, error } = await supabase.from("products").select("*");
     if (!error && data && data.length > 0) {
       const mapped = data.map((p) => ({
@@ -1375,36 +1374,8 @@ async function syncProductsFromSupabase() {
         availability: p.availability || "in-stock",
         vendorId: p.vendor_id || null
       }));
-      const supabaseIds = new Set(mapped.map((m) => m.id));
-      const localOnly = localProds.filter((lp) => lp && lp.id && !supabaseIds.has(lp.id));
-      const merged = [...mapped, ...localOnly];
-      if (localOnly.length > 0) {
-        const localMapped = localOnly.map((p) => ({
-          id: p.id,
-          sku: p.sku || `SKU-${p.id}`,
-          name: p.name || "Handcrafted Product",
-          category: p.category || "Handbags",
-          category_slug: p.categorySlug || p.category?.toLowerCase().replace(/\s+/g, "-") || "handbags",
-          price: p.price,
-          discount_price: p.discountPrice || null,
-          stock: p.stock !== void 0 ? p.stock : 10,
-          rating: p.rating || 5,
-          rating_count: p.ratingCount || 1,
-          images: p.images || [],
-          short_description: p.shortDescription || p.name || "",
-          description: p.description || p.name || "",
-          specifications: p.specifications || {},
-          reviews: p.reviews || [],
-          is_new: p.isNew || false,
-          is_bestseller: p.isBestseller || false,
-          brand: p.brand || "MERIS",
-          availability: p.availability || "in-stock",
-          vendor_id: p.vendorId || null
-        }));
-        await supabase.from("products").upsert(localMapped);
-      }
-      writeLocalJsonDb(PRODUCTS_FILE_PATH, merged);
-      console.log(`\u25C7 Synced ${merged.length} products (Supabase + local) to catalog.`);
+      writeLocalJsonDb(PRODUCTS_FILE_PATH, mapped);
+      console.log(`\u25C7 Synced ${mapped.length} products from Supabase to catalog.`);
     }
   } catch (err) {
     console.error("Failed to sync products from Supabase on startup:", err);
@@ -1922,10 +1893,7 @@ app.get("/api/catalog/products", async (req, res) => {
             gstExempt: Boolean(p.gst_exempt || localMatch?.gstExempt || p.id === "test-razorpay-10rs" || p.sku === "TEST-RZP-10" || p.category_slug === "test")
           };
         });
-        const supabaseIds = new Set(mapped.map((m) => m.id));
-        const localOnly = Array.isArray(localProds) ? localProds.filter((lp) => lp && lp.id && !supabaseIds.has(lp.id)) : [];
-        const merged = [...mapped, ...localOnly];
-        return res.json(merged);
+        return res.json(mapped);
       }
       console.warn("Supabase products empty or error, serving full local products catalog:", error);
     }
@@ -2390,6 +2358,48 @@ Generate the recommendations JSON strictly adhering to the schema.`;
       recommendedProductIds: ["stat-1", "kolam-1", "wood-1"]
     };
     res.json(fallbackData);
+  }
+});
+app.post("/api/ai/listing", rateLimiter(10, 60 * 1e3), async (req, res) => {
+  const { imageUrl, prompt, category } = req.body;
+  const ai = getGeminiClient();
+  if (!ai || !imageUrl) {
+    return res.json({
+      success: false,
+      error: "AI listing requires a Gemini API key and an image URL."
+    });
+  }
+  try {
+    const aiPrompt = `You are a creative product listing assistant for a Indian handmade gift e-commerce store (MERIS E-SHOP). A photo of a product is provided below.
+
+Your task:
+1. Analyze the image and describe what the item appears to be (materials, style, purpose).
+2. Suggest a warm, human-sounding product name (max 6 words, in English).
+3. Suggest a short product description (max 4 sentences) describing the item, its materials, and its use. Keep the tone warm and personal (not robotic).
+4. Suggest the best matching category from this list: Kids Toys, Wood Crafted Gifts, Handbags & Clutches, Learning Stuff, Home Organizers, Kolam Stencils, Novelty Stationeries, Entertainment & Novelties, Return Gift Bottles.
+5. If a category is provided, respect it unless the image clearly belongs elsewhere.
+
+Respond ONLY as a clean JSON object with exactly these keys: {"name": "...", "description": "...", "category": "..."}.
+Do not add any other text, explanations, or markdown formatting.`;
+    const response = await ai.models.generateContent({
+      model: "gemini-3.5-flash",
+      contents: prompt || aiPrompt,
+      config: {
+        responseMimeType: "application/json"
+      }
+    });
+    const text = response.text || "{}";
+    const parsed = JSON.parse(text);
+    if (!parsed.name || !parsed.description || !parsed.category) {
+      throw new Error("AI response missing required fields (name, description, category).");
+    }
+    res.json({ success: true, data: parsed });
+  } catch (error) {
+    console.error("AI listing generation error:", error);
+    res.json({
+      success: false,
+      error: error.message || "Failed to generate AI listing. Please try again."
+    });
   }
 });
 app.post("/api/gemini/search", rateLimiter(20, 60 * 1e3), async (req, res) => {
