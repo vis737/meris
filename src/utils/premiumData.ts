@@ -127,7 +127,7 @@ export const SEASONAL_LANDINGS: Record<string, SeasonalDeal> = {
   childrens: {
     title: 'Curious Minds Childrens Day Joy',
     subtitle: 'Nurture motor precision with non-toxic herbal wooden stackers.',
-    bannerImage: 'https://images.unsplash.com/photo-1515488042361-404e9250afef?w=1200&auto=format&fit=crop&q=80',
+    bannerImage: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1200&auto=format&fit=crop&q=80',
     themeColor: 'from-blue-600 via-cyan-500 to-teal-400',
     glowColor: 'rgba(6, 182, 212, 0.4)',
     badge: 'Nurture & Play Special',

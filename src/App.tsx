@@ -155,7 +155,7 @@ export default function App() {
 
   // Helper to safely resolve a product image with fallbacks
   const getProductHeroImage = (p?: Product) => {
-    if (!p) return 'https://images.unsplash.com/photo-1515488042361-404e9250afef?w=800&auto=format&fit=crop&q=80';
+    if (!p) return 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=800&auto=format&fit=crop&q=80';
     if (p.images && p.images.length > 0 && p.images[0] && p.images[0].trim() !== '' && !p.images[0].includes('placeholder')) {
       return p.images[0];
     }
@@ -992,7 +992,7 @@ export default function App() {
                         className="absolute inset-0 w-full h-full object-cover saturate-110"
                         onError={(e) => {
                           const target = e.target as HTMLImageElement;
-                          target.src = 'https://images.unsplash.com/photo-1515488042361-404e9250afef?w=1600&auto=format&fit=crop&q=80';
+                          target.src = 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=1600&auto=format&fit=crop&q=80';
                         }}
                       />
 

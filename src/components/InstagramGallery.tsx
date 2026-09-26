@@ -1,6 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Instagram, Heart, MessageCircle, ExternalLink, Sparkles, Images, AlertCircle } from 'lucide-react';
+import { Instagram, Heart, MessageCircle, ExternalLink, Sparkles, Images, AlertCircle, ImageOff } from 'lucide-react';
+
+// Warm fallback shown when a gallery photo cannot be fetched (dead link,
+// rate-limit, offline) so a tile never renders as a blank box.
+const GALLERY_FALLBACK = 'https://images.unsplash.com/photo-1590486803833-1c5dc8ddd4c8?w=500&auto=format&fit=crop&q=80';
+
+/** Gallery tile image: shimmer while loading, fade-in when ready, graceful
+ *  fallback on error. Never renders as a permanent blank box. */
+function GalleryImage({ src, alt }: { src: string; alt: string }) {
+  const [state, setState] = useState<'loading' | 'loaded' | 'error'>('loading');
+  const [currentSrc, setCurrentSrc] = useState(src);
+
+  return (
+    <>
+      {state === 'loading' && (
+        <div className="absolute inset-0 skeleton">
+          <div className="w-full h-full skeleton-child" />
+        </div>
+      )}
+      {state === 'error' ? (
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-slate-500 bg-navy-900/60">
+          <ImageOff className="w-6 h-6 opacity-70" />
+          <span className="text-[9px] font-mono uppercase tracking-wider">Photo unavailable</span>
+        </div>
+      ) : (
+        <img
+          src={currentSrc}
+          alt={alt}
+          referrerPolicy="no-referrer"
+          onLoad={() => setState('loaded')}
+          onError={() => {
+            if (currentSrc !== GALLERY_FALLBACK) {
+              setCurrentSrc(GALLERY_FALLBACK); // retry once with the fallback photo
+            } else {
+              setState('error');
+            }
+          }}
+          className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-105 ${
+            state === 'loaded' ? 'opacity-100 blur-0' : 'opacity-0 blur-md'
+          }`}
+        />
+      )}
+    </>
+  );
+}
 
 interface InstagramPost {
   id: string;
@@ -48,7 +92,7 @@ const INSTAGRAM_POSTS: InstagramPost[] = [
   },
   {
     id: 'post-6',
-    imageUrl: 'https://images.unsplash.com/photo-1515488042361-404e9250afef?w=500&auto=format&fit=crop&q=80',
+    imageUrl: 'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=500&auto=format&fit=crop&q=80',
     likes: 412,
     comments: 34,
     caption: 'Generational stacks of organic timber abacus nodes ready for global classrooms. #heritagelearning #supportweavers'
@@ -99,8 +143,8 @@ export default function InstagramGallery() {
 
       {loading && !error ? (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-          {INSTAGRAM_POSTS.map(() => (
-            <div key="skeleton" className="aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 skeleton">
+          {INSTAGRAM_POSTS.map((_, idx) => (
+            <div key={`skeleton-${idx}`} className="aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 skeleton">
               <div className="w-full h-full skeleton-child" />
             </div>
           ))}
@@ -128,13 +172,8 @@ export default function InstagramGallery() {
               onClick={handleInstagramVisit}
               className="group relative aspect-square rounded-2xl overflow-hidden bg-slate-900 border border-gray-100 dark:border-navy-900 cursor-zoom-in group select-none shadow-sm hover:shadow-md transition duration-300"
             >
-              <img
-                src={post.imageUrl}
-                alt={post.caption}
-                loading="lazy"
-                referrerPolicy="no-referrer"
-                className="w-full h-full object-cover transition duration-500 group-hover:scale-105"
-              />
+              {/* Sticky hover overlay stays below the image state layers */}
+              <GalleryImage src={post.imageUrl} alt={post.caption} />
               <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4 text-white p-3 text-center">
                 <div className="flex items-center gap-1 font-mono text-xs font-bold">
                   <Heart className="w-4 h-4 fill-rose-500 text-rose-500" />
