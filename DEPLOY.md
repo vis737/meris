@@ -55,6 +55,7 @@ Go to your service → **Environment** tab → Add the following:
 | `SMTP_PASS` | `xxxx xxxx xxxx xxxx` | Gmail App Password (16 chars) |
 | `SMTP_FROM_NAME` | `Meris E-Shop` | |
 | `SMTP_FROM_EMAIL` | `your@gmail.com` | Same as SMTP_USER |
+| `ADMIN_NOTIFICATION_EMAIL` | `meriseshop.2025@gmail.com` | Admin inbox that receives every new-order alert |
 | `ENABLE_REAL_NOTIFICATIONS` | `true` | Enables real OTP emails |
 | `PAYU_MERCHANT_KEY` | PayU merchant key | Required for online checkout |
 | `PAYU_MERCHANT_SALT` | PayU merchant salt | Required for server-side hash verification |

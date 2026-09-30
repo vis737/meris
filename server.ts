@@ -2162,7 +2162,9 @@ async function sendAdminVendorNotificationEmail(order: any) {
     const customerAddress = sanitizeString(order.customerInfo?.address || '', 300);
     const customerPincode = sanitizeString(order.customerInfo?.pincode || '', 10);
 
-    const adminEmail = sanitizeEmail(process.env.ADMIN_NOTIFICATION_EMAIL || process.env.SMTP_USER || process.env.BREVO_FROM_EMAIL || 'meriseshop.2025@gmail.com');
+    // Admin inbox for order notifications. Dedicated to meriseshop.2025@gmail.com —
+    // do NOT fall back to SMTP_USER/BREVO_FROM_EMAIL (sender accounts, not the admin inbox).
+    const adminEmail = sanitizeEmail(process.env.ADMIN_NOTIFICATION_EMAIL || 'meriseshop.2025@gmail.com');
     const subject = `New Order Received - Meris E-Shop (#${orderNum})`;
 
     let itemsHtml = '';
