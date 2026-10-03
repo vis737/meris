@@ -57,18 +57,12 @@ Go to your service → **Environment** tab → Add the following:
 | `SMTP_FROM_EMAIL` | `your@gmail.com` | Same as SMTP_USER |
 | `ADMIN_NOTIFICATION_EMAIL` | `meriseshop.2025@gmail.com` | Admin inbox that receives every new-order alert |
 | `ENABLE_REAL_NOTIFICATIONS` | `true` | Enables real OTP emails |
-| `PAYU_MERCHANT_KEY` | PayU merchant key | Required for online checkout |
-| `PAYU_MERCHANT_SALT` | PayU merchant salt | Required for server-side hash verification |
-| `PAYU_ENV` | `production` | Use `test` only for sandbox transactions |
 
 ### Optional Variables
 | Variable | Value | Notes |
 |---|---|---|
 | `DATA_DIR` | `/data` | Only if using a Railway persistent volume as a local fallback |
 | `GEMINI_API_KEY` | (your key) | For AI product recommendations |
-| `PAYU_SUCCESS_URL` | `https://your-app.onrender.com/api/payu/success` | Optional; defaults from `APP_URL` |
-| `PAYU_FAILURE_URL` | `https://your-app.onrender.com/api/payu/failure` | Optional; defaults from `APP_URL` |
-| `PAYU_WEBHOOK_URL` | `https://your-app.onrender.com/api/payu/webhook` | Configure this in PayU dashboard if webhooks are enabled |
 
 ---
 
@@ -90,7 +84,7 @@ After the first deploy:
 | App loads | Visit your Render URL |
 | Login works | Register → Login with password |
 | OTP works | Use "Email OTP" tab on login page |
-| PayU works | Place an online order and confirm redirect to PayU |
+| Razorpay works | Place an online order and complete the Razorpay window |
 | Admin panel | Visit `/admin` with your `ADMIN_USERNAME` / `ADMIN_PASSWORD` |
 | Health check | Visit `/api/health` — should return `{"status":"ok"}` |
 
@@ -106,11 +100,10 @@ The in-memory rate limiter triggered too many login attempts. **Redeploy** to re
 2. Check Gmail App Password is correct (must be 16 chars, generated from myaccount.google.com/apppasswords)
 3. Check Render logs: `npm run start` logs SMTP errors clearly
 
-### PayU does not redirect or returns verification failed
-1. Check `PAYU_MERCHANT_KEY` and `PAYU_MERCHANT_SALT` are set in Render
-2. Check `PAYU_ENV=production` for live payments or `PAYU_ENV=test` for sandbox
-3. Ensure `APP_URL` is your exact Render URL with no trailing slash
-4. In PayU, use `https://your-app.onrender.com/api/payu/success`, `/api/payu/failure`, and `/api/payu/webhook`
+### Razorpay checkout does not open or returns verification failed
+1. Check `RAZORPAY_KEY_ID` and `RAZORPAY_KEY_SECRET` are set in Render
+2. Ensure `APP_URL` is your exact Render URL with no trailing slash
+3. For webhook-driven updates, point Razorpay at `/api/razorpay/webhook` and set `RAZORPAY_WEBHOOK_SECRET`
 
 ### Login fails after deploy
 1. Ensure `SUPABASE_URL` and `SUPABASE_KEY` are set correctly

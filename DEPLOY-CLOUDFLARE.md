@@ -40,7 +40,7 @@ Open the Supabase SQL Editor and run:
 
 This adds the `otp_codes` and `activity_logs` tables plus the
 `free_shipping`/`gst_exempt` product flags, customer social-login columns and
-Razorpay/PayU order columns used by the Worker. It is idempotent — safe to
+Razorpay order columns used by the Worker. It is idempotent — safe to
 re-run. (`supabase_full_migration.sql` should already have been applied; if
 not, run that first.)
 

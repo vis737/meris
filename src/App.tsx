@@ -541,10 +541,7 @@ export default function App() {
     upiSenderName?: string,
     upiScreenshot?: string,
     upiNotes?: string,
-    payuTxnId?: string,
-    payuPaymentId?: string,
-    payuHash?: string,
-    payuStatus?: string,
+    orderNumber?: string,
     liveShippingCost?: number,
     razorpayPaymentId?: string,
     razorpayOrderId?: string,
@@ -562,7 +559,7 @@ export default function App() {
       return;
     }
 
-    const orderNum = payuTxnId || 'MR-' + Date.now().toString().substring(6, 12) + '-' + Math.floor(100 + Math.random() * 900);
+    const orderNum = orderNumber || 'MR-' + Date.now().toString().substring(6, 12) + '-' + Math.floor(100 + Math.random() * 900);
     
     // Call our premium calculator to get mathematically aligned numbers!
     const totals = calculateCartTotals(cartItems, activeCoupon, shippingMethod, giftWrapped, customer.pincode);
@@ -583,7 +580,7 @@ export default function App() {
 
     const isUpiPayment = paymentMethod === 'UPI QR Payment';
     const isCodPayment = paymentMethod === 'Cash on Delivery' || paymentMethod === 'COD';
-    const isPayUPayment = paymentMethod.toLowerCase().includes('payu');
+    
     const isRazorpayPayment = paymentMethod.toLowerCase().includes('razorpay');
 
     const newOrder: Order = {
@@ -606,7 +603,7 @@ export default function App() {
       // Razorpay orders reach this point only after the server verified the
       // payment signature, so they are recorded as paid immediately.
       paymentStatus: isRazorpayPayment && razorpayPaymentId ? 'paid'
-        : isUpiPayment || isPayUPayment || isRazorpayPayment ? 'pending'
+        : isUpiPayment || isRazorpayPayment ? 'pending'
         : (isCodPayment ? 'unpaid' : 'paid'),
       codStatus: isCodPayment ? 'pending' : undefined,
       giftWrappingRequested: giftWrapped,
@@ -620,10 +617,6 @@ export default function App() {
       upiSenderName,
       upiScreenshot,
       upiNotes,
-      payuTxnId: isPayUPayment ? orderNum : undefined,
-      payuPaymentId,
-      payuHash,
-      payuStatus,
       razorpayOrderId,
       razorpayPaymentId,
       razorpaySignature
@@ -647,9 +640,6 @@ export default function App() {
       }
     } catch (err) {
       console.error('Error saving order to backend database:', err);
-      if (isPayUPayment) {
-        throw err;
-      }
     }
 
     // Update real physical stock counts in database

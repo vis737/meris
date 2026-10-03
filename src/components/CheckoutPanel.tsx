@@ -24,10 +24,7 @@ interface CheckoutPanelProps {
     upiSenderName?: string,
     upiScreenshot?: string,
     upiNotes?: string,
-    payuTxnId?: string,
-    payuPaymentId?: string,
-    payuHash?: string,
-    payuStatus?: string,
+    orderNumber?: string,
     liveShippingCost?: number,
     razorpayPaymentId?: string,
     razorpayOrderId?: string,
@@ -242,9 +239,6 @@ export default function CheckoutPanel({
               undefined,
               undefined,
               orderNumber,
-              undefined,
-              undefined,
-              undefined,
               liveRateBase ?? undefined,
               response.razorpay_payment_id,
               response.razorpay_order_id,
@@ -297,9 +291,6 @@ export default function CheckoutPanel({
           undefined,
           undefined,
           undefined,
-          undefined,
-          undefined,
-          undefined,
           liveRateBase ?? undefined
         );
       } else if (paymentMethod === 'upi_qr') {
@@ -325,9 +316,6 @@ export default function CheckoutPanel({
           upiSenderName ? `${upiSenderName} (${paymentApp})` : paymentApp,
           upiScreenshot,
           upiNotes,
-          undefined,
-          undefined,
-          undefined,
           undefined,
           liveRateBase ?? undefined
         );

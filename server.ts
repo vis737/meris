@@ -709,7 +709,7 @@ app.use((req, res, next) => {
     `connect-src 'self' ${supabaseHttps} ${supabaseWs} https://*.clerk.accounts.dev https://*.clerk.com https://api.razorpay.com https://lumberjack.razorpay.com; ` +
     "worker-src 'self' blob:; " +
     "frame-src 'self' https://*.clerk.accounts.dev https://*.clerk.com https://api.razorpay.com https://checkout.razorpay.com; " +
-    "form-action 'self' https://test.payu.in https://secure.payu.in; " +
+    "form-action 'self'; " +
     "object-src 'none'; " +
     "base-uri 'self';"
   );
@@ -1733,7 +1733,7 @@ function writeOrdersDb(orders: any[]) {
         status: o.status,
         coupon_code: o.couponCode || null,
         date: o.date,
-        payment_method: o.paymentMethod || 'PayU Secure Online Payment',
+        payment_method: o.paymentMethod || 'Cash on Delivery',
         payment_status: o.paymentStatus || 'unpaid',
         gift_wrapping_requested: o.giftWrappingRequested || false,
         gift_wrapping_type: o.giftWrappingType || null,
@@ -3222,235 +3222,12 @@ app.get('/api/emails', verifyAdminToken, async (req, res) => {
   }
 });
 
-function getPayUActionUrl() {
-  return process.env.PAYU_ENV === 'production'
-    ? 'https://secure.payu.in/_payment'
-    : 'https://test.payu.in/_payment';
-}
-
 function getPublicAppUrl(req: any) {
   if (isConfigured(process.env.APP_URL)) {
     return process.env.APP_URL!.replace(/\/$/, '');
   }
   return `${req.protocol}://${req.get('host')}`;
 }
-
-function buildPayURequestHashString(params: Record<string, any>, merchantKey: string, merchantSalt: string) {
-  const amount = Number(params.amount).toFixed(2);
-  return [
-    merchantKey.trim(),
-    String(params.txnid || '').trim(),
-    amount,
-    String(params.productinfo || '').trim(),
-    String(params.firstname || '').trim(),
-    String(params.email || '').trim(),
-    String(params.udf1 || ''),
-    String(params.udf2 || ''),
-    String(params.udf3 || ''),
-    String(params.udf4 || ''),
-    String(params.udf5 || ''),
-    '',
-    '',
-    '',
-    '',
-    '',
-    merchantSalt.trim()
-  ].join('|');
-}
-
-function buildPayUResponseHashString(payload: Record<string, any>, merchantSalt: string) {
-  const amount = Number(payload.amount || 0).toFixed(2);
-  return [
-    merchantSalt.trim(),
-    String(payload.status || '').trim(),
-    '',
-    '',
-    '',
-    '',
-    '',
-    String(payload.udf5 || '').trim(),
-    String(payload.udf4 || '').trim(),
-    String(payload.udf3 || '').trim(),
-    String(payload.udf2 || '').trim(),
-    String(payload.udf1 || '').trim(),
-    String(payload.email || '').trim(),
-    String(payload.firstname || '').trim(),
-    String(payload.productinfo || '').trim(),
-    amount,
-    String(payload.txnid || '').trim(),
-    String(payload.key || '').trim()
-  ].join('|');
-}
-
-function verifyPayUResponse(payload: Record<string, any>) {
-  const merchantSalt = process.env.PAYU_MERCHANT_SALT;
-  if (!isConfigured(merchantSalt)) {
-    return { verified: false, calculatedHash: '', error: 'PayU salt is not configured.' };
-  }
-
-  const calculatedHash = crypto
-    .createHash('sha512')
-    .update(buildPayUResponseHashString(payload, merchantSalt!))
-    .digest('hex');
-
-  const receivedHash = String(payload.hash || '').toLowerCase();
-  return {
-    verified: Boolean(receivedHash) && calculatedHash.toLowerCase() === receivedHash,
-    calculatedHash
-  };
-}
-
-async function applyPayUResult(payload: Record<string, any>, fallbackStatus: 'success' | 'failure') {
-  const txnid = sanitizeString(payload.txnid || payload.udf1, 60);
-  if (!txnid) return null;
-
-  const dbOrders = readOrdersDb();
-  const index = dbOrders.findIndex(
-    o => String(o.orderNumber || '').toUpperCase() === txnid.toUpperCase() ||
-      String(o.payuTxnId || '').toUpperCase() === txnid.toUpperCase()
-  );
-
-  if (index < 0) return null;
-
-  const previousPaymentStatus = dbOrders[index].paymentStatus;
-  const gatewayStatus = String(payload.status || fallbackStatus).toLowerCase();
-  const paid = gatewayStatus === 'success';
-
-  dbOrders[index] = {
-    ...dbOrders[index],
-    paymentMethod: 'PayU Secure Online Payment',
-    paymentStatus: paid ? 'paid' : 'rejected',
-    status: paid ? 'processing' : dbOrders[index].status,
-    payuTxnId: txnid,
-    payuPaymentId: payload.mihpayid || payload.payuMoneyId || payload.bank_ref_num || dbOrders[index].payuPaymentId,
-    payuHash: payload.hash || dbOrders[index].payuHash,
-    payuStatus: gatewayStatus
-  };
-
-  writeOrdersDb(dbOrders);
-
-  if (previousPaymentStatus === 'pending' && paid) {
-    try {
-      await sendBookingEmail(dbOrders[index]);
-      await sendAdminVendorNotificationEmail(dbOrders[index]);
-      await sendSMSAlert(dbOrders[index]);
-    } catch (notifyErr) {
-      console.error('Failed to dispatch PayU confirmation notifications:', notifyErr);
-    }
-  }
-
-  return dbOrders[index];
-}
-
-app.post('/api/payu/hash', rateLimiter(20, 15 * 60 * 1000), (req, res) => {
-  try {
-    const merchantKey = process.env.PAYU_MERCHANT_KEY;
-    const merchantSalt = process.env.PAYU_MERCHANT_SALT;
-
-    if (!isConfigured(merchantKey) || !isConfigured(merchantSalt)) {
-      return res.status(503).json({
-        error: 'PayU is not configured yet. Set PAYU_MERCHANT_KEY and PAYU_MERCHANT_SALT in local .env and in Render Environment before accepting online payments.'
-      });
-    }
-
-    const txnid = sanitizeString(req.body?.txnid, 60);
-    const amount = Number(req.body?.amount);
-    const productinfo = sanitizeString(req.body?.productinfo, 120);
-    const firstname = sanitizeString(req.body?.firstname, 80);
-    const email = sanitizeEmail(req.body?.email);
-
-    if (!txnid || !Number.isFinite(amount) || amount <= 0 || !productinfo || !firstname || !email) {
-      return res.status(400).json({ error: 'Missing required PayU parameters.' });
-    }
-
-    const payload = {
-      txnid,
-      amount: amount.toFixed(2),
-      productinfo,
-      firstname,
-      email,
-      udf1: sanitizeString(req.body?.udf1 || txnid, 60),
-      udf2: sanitizeString(req.body?.udf2 || '', 60),
-      udf3: sanitizeString(req.body?.udf3 || '', 60),
-      udf4: sanitizeString(req.body?.udf4 || '', 60),
-      udf5: sanitizeString(req.body?.udf5 || '', 60),
-    };
-
-    const hash = crypto
-      .createHash('sha512')
-      .update(buildPayURequestHashString(payload, merchantKey!, merchantSalt!))
-      .digest('hex');
-
-    const appUrl = getPublicAppUrl(req);
-    res.json({
-      success: true,
-      key: merchantKey,
-      ...payload,
-      hash,
-      environment: process.env.PAYU_ENV === 'production' ? 'production' : 'test',
-      actionUrl: getPayUActionUrl(),
-      surl: process.env.PAYU_SUCCESS_URL || `${appUrl}/api/payu/success`,
-      furl: process.env.PAYU_FAILURE_URL || `${appUrl}/api/payu/failure`,
-    });
-  } catch (err) {
-    console.error('Failed to calculate PayU transaction hash:', err);
-    res.status(500).json({ error: 'Failed to calculate PayU transaction hash.' });
-  }
-});
-
-app.post('/api/payu/verify', rateLimiter(30, 15 * 60 * 1000), async (req, res) => {
-  try {
-    const verification = verifyPayUResponse(req.body || {});
-    const order = verification.verified ? await applyPayUResult(req.body, req.body?.status === 'success' ? 'success' : 'failure') : null;
-    res.json({
-      success: verification.verified,
-      verified: verification.verified,
-      status: req.body?.status,
-      txnid: req.body?.txnid,
-      payuMoneyId: req.body?.mihpayid,
-      order
-    });
-  } catch (err) {
-    console.error('PayU hash verification failed:', err);
-    res.status(500).json({ error: 'PayU hash verification failed.' });
-  }
-});
-
-app.all('/api/payu/success', rateLimiter(40, 15 * 60 * 1000), async (req, res) => {
-  const payload = { ...(req.query || {}), ...(req.body || {}) };
-  const verification = verifyPayUResponse(payload);
-  if (verification.verified) {
-    await applyPayUResult(payload, 'success');
-  }
-  const appUrl = getPublicAppUrl(req);
-  const order = encodeURIComponent(String(payload.txnid || payload.udf1 || ''));
-  res.redirect(`${appUrl}/?payu=${verification.verified ? 'success' : 'verification_failed'}&order=${order}`);
-});
-
-app.all('/api/payu/failure', rateLimiter(40, 15 * 60 * 1000), async (req, res) => {
-  const payload = { ...(req.query || {}), ...(req.body || {}) };
-  const verification = verifyPayUResponse(payload);
-  if (verification.verified) {
-    await applyPayUResult(payload, 'failure');
-  }
-  const appUrl = getPublicAppUrl(req);
-  const order = encodeURIComponent(String(payload.txnid || payload.udf1 || ''));
-  res.redirect(`${appUrl}/?payu=failure&order=${order}`);
-});
-
-app.post('/api/payu/webhook', rateLimiter(80, 15 * 60 * 1000), async (req, res) => {
-  try {
-    const verification = verifyPayUResponse(req.body || {});
-    if (!verification.verified) {
-      return res.status(400).json({ success: false, error: 'Invalid PayU hash.' });
-    }
-    const order = await applyPayUResult(req.body, req.body?.status === 'success' ? 'success' : 'failure');
-    res.json({ success: true, order });
-  } catch (err) {
-    console.error('PayU webhook handling failed:', err);
-    res.status(500).json({ error: 'PayU webhook handling failed.' });
-  }
-});
 
 // ============ RAZORPAY PAYMENT GATEWAY ============
 // Live keys are read from RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET (set in local .env
@@ -3603,7 +3380,7 @@ app.post('/api/razorpay/verify', rateLimiter(40, 15 * 60 * 1000), async (req, re
     if (!valid) {
       return res.status(400).json({ verified: false, error: 'Payment signature verification failed.' });
     }
-
+
     // If an order row already exists for this checkout (retry flows), mark it paid.
     await applyRazorpayResult({
       razorpayOrderId,
@@ -3612,7 +3389,7 @@ app.post('/api/razorpay/verify', rateLimiter(40, 15 * 60 * 1000), async (req, re
       paid: true,
       gatewayStatus: 'captured'
     });
-
+
     res.json({ verified: true, razorpayOrderId, razorpayPaymentId });
   } catch (err) {
     console.error('Razorpay verification failed:', err);

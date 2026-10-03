@@ -7,7 +7,7 @@ export interface Env {
   // Cloudflare static-assets binding (serves the Vite SPA from /dist)
   ASSETS: Fetcher;
 
-  // Public app URL — email links, PayU callbacks
+  // Public app URL — email links, payment callbacks
   APP_URL?: string;
   APP_NAME?: string;
 
@@ -34,12 +34,7 @@ export interface Env {
   RAZORPAY_KEY_SECRET?: string;
   RAZORPAY_WEBHOOK_SECRET?: string;
 
-  // PayU payments (legacy)
-  PAYU_MERCHANT_KEY?: string;
-  PAYU_MERCHANT_SALT?: string;
-  PAYU_ENV?: string;
-  PAYU_SUCCESS_URL?: string;
-  PAYU_FAILURE_URL?: string;
+  
 
   // ST Courier delivery rate proxy
   ST_COURIER_PICKUP_PINCODE?: string;

@@ -694,29 +694,6 @@ const AdminOrdersTab: React.FC<AdminOrdersTabProps> = ({
                         </div>
                       )}
 
-                      {selectedOrder.payuTxnId && (
-                        <div className="flex justify-between items-center pt-1 border-t border-slate-100">
-                          <span className="text-slate-400 font-mono">PayU Txn ID:</span>
-                          <span className="font-mono font-bold text-slate-800 bg-slate-100 px-2 py-0.5 rounded text-xs select-all">
-                            {selectedOrder.payuTxnId}
-                          </span>
-                        </div>
-                      )}
-
-                      {selectedOrder.payuPaymentId && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-slate-400 font-mono">PayU Payment ID:</span>
-                          <span className="font-mono font-medium text-slate-700 select-all">{selectedOrder.payuPaymentId}</span>
-                        </div>
-                      )}
-
-                      {selectedOrder.payuStatus && (
-                        <div className="flex justify-between items-center">
-                          <span className="text-slate-400 font-mono">Gateway Response:</span>
-                          <span className="font-mono text-xs font-semibold text-slate-700">{selectedOrder.payuStatus}</span>
-                        </div>
-                      )}
-
                       {selectedOrder.razorpayPaymentId && (
                         <div className="flex justify-between items-center pt-1 border-t border-slate-100">
                           <span className="text-slate-400 font-mono">Razorpay Payment ID:</span>

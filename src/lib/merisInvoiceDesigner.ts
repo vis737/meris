@@ -146,11 +146,10 @@ export function createMerisInvoiceDocument(order: Order) {
   doc.text(invoiceNumber, 190, 32, { align: 'right' });
   doc.text(`Issued ${text(order.date)}`, 190, 37, { align: 'right' });
 
-  // Payment reference line (Razorpay / PayU / UPI / COD).
+  // Payment reference line (Razorpay / UPI / COD).
   const methodName = prettifyMethod(order.paymentMethod);
   let paymentRef = '';
   if (order.razorpayPaymentId) paymentRef = text(order.razorpayPaymentId);
-  else if (order.payuPaymentId) paymentRef = text(order.payuPaymentId);
   else if (order.upiTxnId) paymentRef = text(order.upiTxnId);
   const refSuffix = paymentRef ? `  |  Ref: ${paymentRef.slice(0, 26)}${paymentRef.length > 26 ? '...' : ''}` : '';
   doc.setFontSize(7);

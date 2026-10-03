@@ -19,7 +19,7 @@ and Resend as the mail service.
 | Static hosting | Cloudflare Workers Assets (`dist/`, SPA fallback) |
 | Database | Supabase PostgreSQL (products, categories, coupons, campaigns, CMS, orders, customers, admin config, email logs, newsletter, OTP codes) |
 | Mail | Resend HTTPS API (`worker/mailer.ts`) — OTP, order confirmation, admin/vendor alerts, payment notices, welcome |
-| Payments | Razorpay (primary), PayU (legacy), UPI/COD |
+| Payments | Razorpay, UPI/COD |
 | AI | Google Gemini (smart search, recommendations, invoice greeting) |
 
 ## Quick start (Cloudflare)

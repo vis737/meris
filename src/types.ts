@@ -124,11 +124,7 @@ export interface Order {
   paymentStatus: 'paid' | 'unpaid' | 'pending' | 'rejected' | 'refunded';
   codStatus?: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
 
-  // PayU gateway parameters
-  payuTxnId?: string;
-  payuPaymentId?: string;
-  payuHash?: string;
-  payuStatus?: string;
+  // Razorpay gateway parameters
   razorpayOrderId?: string;
   razorpayPaymentId?: string;
   razorpaySignature?: string;

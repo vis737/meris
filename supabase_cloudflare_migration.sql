@@ -8,7 +8,7 @@
 --   * otp_codes table (email OTP login state, replaces the old in-memory store)
 --   * free_shipping / gst_exempt / free_shipping_ columns on products
 --   * clerk_id / phone / image_url / auth_provider / last_sign_in_at on customers
---   * razorpay / payu / cod columns on orders
+--   * razorpay / cod columns on orders
 --   * activity_logs table (admin audit trail)
 -- =============================================================================
 
@@ -28,10 +28,6 @@ ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS razorpay_order_id TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS razorpay_payment_id TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS razorpay_signature TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS razorpay_status TEXT;
-ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS payu_txn_id TEXT;
-ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS payu_payment_id TEXT;
-ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS payu_hash TEXT;
-ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS payu_status TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS cod_status TEXT;
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS vendor_notified BOOLEAN DEFAULT false;
 

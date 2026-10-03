@@ -8,7 +8,7 @@
 # =============================================================================
 
 # ---------------------------------------------------------------------------
-# Public app URL (used for email links, PayU callbacks, CORS)
+# Public app URL (used for email links, payment callbacks, CORS)
 # Local dev: http://localhost:8787 — Production: your workers.dev or custom domain
 # ---------------------------------------------------------------------------
 APP_URL="http://localhost:8787"
@@ -50,13 +50,6 @@ GEMINI_API_KEY=""
 RAZORPAY_KEY_ID=""
 RAZORPAY_KEY_SECRET=""
 RAZORPAY_WEBHOOK_SECRET=""
-
-# ---------------------------------------------------------------------------
-# PayU (optional — legacy online payments)
-# ---------------------------------------------------------------------------
-PAYU_MERCHANT_KEY=""
-PAYU_MERCHANT_SALT=""
-PAYU_ENV="test"
 
 # ---------------------------------------------------------------------------
 # ST Courier delivery-rate proxy (optional)

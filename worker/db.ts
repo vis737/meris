@@ -161,9 +161,6 @@ export function mapOrderRow(o: any) {
     razorpayOrderId: o.razorpay_order_id,
     razorpayPaymentId: o.razorpay_payment_id,
     razorpayStatus: o.razorpay_status,
-    payuTxnId: o.payu_txn_id,
-    payuPaymentId: o.payu_payment_id,
-    payuStatus: o.payu_status,
   };
 }
 
@@ -215,10 +212,6 @@ export function orderToRow(o: any) {
     razorpay_payment_id: o.razorpayPaymentId || null,
     razorpay_signature: o.razorpaySignature || null,
     razorpay_status: o.razorpayStatus || null,
-    payu_txn_id: o.payuTxnId || null,
-    payu_payment_id: o.payuPaymentId || null,
-    payu_hash: o.payuHash || null,
-    payu_status: o.payuStatus || null,
     vendor_notified: o.vendorNotified || false,
   };
 }

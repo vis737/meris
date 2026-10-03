@@ -150,9 +150,6 @@ export default function OrderSuccessModal({ order, onClose }: OrderSuccessModalP
               {order.codStatus && (
                 <p><span className="font-semibold text-navy-900">COD Status:</span> <span className="uppercase text-amber-600 font-bold">{order.codStatus}</span></p>
               )}
-              {order.payuPaymentId && (
-                <p><span className="font-semibold text-navy-900">PayU Ref:</span> {order.payuPaymentId}</p>
-              )}
             </div>
           </div>
 
