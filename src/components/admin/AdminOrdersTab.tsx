@@ -69,8 +69,9 @@ const AdminOrdersTab: React.FC<AdminOrdersTabProps> = ({
   const [selectedOrderIds, setSelectedOrderIds] = useState<Set<string>>(new Set());
 
   // Derived Data
-  const pendingUpiOrders = useMemo(() => 
-    orders.filter(o => o.paymentMethod === 'upi' && o.paymentStatus === 'pending'),
+  const pendingUpiOrders = useMemo(() =>
+    // Stored orders use the label 'UPI QR Payment', not 'upi'.
+    orders.filter(o => (o.paymentMethod || '').toLowerCase().includes('upi') && o.paymentStatus === 'pending'),
   [orders]);
 
   const filteredOrders = useMemo(() => {

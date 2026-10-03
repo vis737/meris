@@ -259,6 +259,33 @@ export default function App() {
   }, []);
 
   // Load and recover stored memory on startup mounts
+  // The backend is the source of truth for the admin shipments workspace.
+  // /api/orders is admin-authenticated, so this has to run again once the
+  // session cookie exists — fetching only on mount leaves the table empty
+  // whenever the page is loaded before signing in.
+  const syncOrdersFromBackend = async (): Promise<boolean> => {
+    try {
+      const res = await fetch('/api/orders', { credentials: 'include' });
+      // 401 simply means "not signed in as admin yet" — expected for shoppers.
+      if (!res.ok) return false;
+      const backendOrders: Order[] = await res.json();
+      if (!Array.isArray(backendOrders) || backendOrders.length === 0) return true;
+      setOrders(prev => {
+        // Merge: backend orders + any local-only orders not yet synced
+        const backendIds = new Set(backendOrders.map(o => o.orderNumber));
+        const localOnly = prev.filter(o => !backendIds.has(o.orderNumber));
+        // Deduplicate: backend wins for status, put newest first
+        return [...localOnly, ...backendOrders].sort(
+          (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+      });
+      return true;
+    } catch {
+      // Backend unreachable — localStorage orders are still loaded.
+      return false;
+    }
+  };
+
   useEffect(() => {
     const saved = loadInitialState();
     if (saved.cart) setCartItems(saved.cart);
@@ -269,22 +296,8 @@ export default function App() {
 
     // Sync orders from backend DB so admin panel always sees all placed orders,
     // even after a page reload or server restart (backend is source of truth).
-    fetch('/api/orders')
-      .then(res => res.ok ? res.json() : [])
-      .then((backendOrders: Order[]) => {
-        if (!Array.isArray(backendOrders) || backendOrders.length === 0) return;
-        setOrders(prev => {
-          // Merge: backend orders + any local-only orders not yet synced
-          const backendIds = new Set(backendOrders.map(o => o.orderNumber));
-          const localOnly = prev.filter(o => !backendIds.has(o.orderNumber));
-          // Deduplicate: backend wins for status, put newest first
-          const merged = [...localOnly, ...backendOrders].sort(
-            (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-          );
-          return merged;
-        });
-      })
-      .catch(() => { /* backend unavailable - localStorage orders are still loaded */ });
+    // A non-admin visitor gets 401 here and simply keeps their local orders.
+    void syncOrdersFromBackend();
 
     // Restore the success order screen if the page was reloaded right after checkout
     try {
@@ -1940,6 +1953,8 @@ export default function App() {
                       setAdminBypassed(true);
                       setShowAdminLoginPrompt(false);
                       setAdminLoginError('');
+                      // The session cookie now exists, so pull every order in.
+                      void syncOrdersFromBackend();
                       handleSwapView('admin');
                       handleLogActivity('Admin Login Successful', 'Secured key keyboard prompt entry authenticated on server.');
                     } else {
