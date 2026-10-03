@@ -101,6 +101,32 @@ npm run deploy        # vite build && wrangler deploy && node scripts/sync-secre
 The worker name comes from `wrangler.jsonc` (`meris1`), so a plain
 `npm run deploy` can no longer publish to the wrong worker.
 
+## 6b. Deploying from git (Cloudflare Workers Builds)
+
+Once connected, every push to `master` builds and deploys on Cloudflare's
+side. Settings to enter under **Workers & Pages → meris1 → Settings →
+Builds → Connect repository**:
+
+| Setting | Value |
+|---|---|
+| Repository | `vis737/meris` |
+| Production branch | `master` |
+| Root directory | `/` (the repo root is the project root) |
+| Build command | `npm run build` |
+| Deploy command | `npx wrangler deploy` |
+| Environment variable | `NODE_VERSION=22` (must satisfy `engines.node >= 20`) |
+
+Use `npx wrangler deploy` and **not** `npm run deploy`: the deploy script also
+runs `scripts/sync-secrets.mjs`, which reads your local `.env` and does not
+exist on Cloudflare's builders. Worker secrets already live on the worker, so
+they survive a Git deploy untouched — only the non-secret `vars` in
+`wrangler.jsonc` are re-applied.
+
+The build does not need a `.env`: `vite build` succeeds without one and
+produces a byte-identical bundle, because the only `import.meta.env` lookup
+(`VITE_CLERK_PUBLISHABLE_KEY` in `src/main.tsx`) falls back to a hardcoded
+development key.
+
 First deploy gives you `https://meris-eshop.<your-subdomain>.workers.dev`.
 Add a custom domain in the Cloudflare dashboard (**Workers & Pages →
 meris-eshop → Settings → Domains & Routes**) when ready, then
