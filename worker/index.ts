@@ -1090,9 +1090,18 @@ app.post('/api/admin/login', async (c) => {
   const password = typeof body?.password === 'string' ? body.password.slice(0, 256) : '';
   if (!username || !password) return jsonError('Username and password fields are required.');
 
-  const config = await loadAdminCredentials(c.env, username);
-  if (!config) return jsonError('Administrative credentials are not provisioned yet.', 503);
+  const lookup = await loadAdminCredentials(c.env, username);
+  if (lookup.status === 'unprovisioned') {
+    return jsonError('Administrative credentials are not provisioned yet.', 503);
+  }
+  if (lookup.status === 'unavailable') {
+    return jsonError('Credential store is unreachable. Please try again.', 503);
+  }
+  if (lookup.status !== 'found') {
+    return jsonError('Invalid administrative credentials.', 401);
+  }
 
+  const config = lookup.credentials;
   const usernameMatch = username.length === config.username.length &&
     username === config.username;
   if (usernameMatch && verifyAdminPassword(password, config.password)) {

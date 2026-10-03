@@ -1942,18 +1942,20 @@ export default function App() {
                       body: JSON.stringify({ username: adminLoginUser, password: adminLoginPass })
                     });
                     const data = await res.json();
-                    
-                    // Clear inputs immediately
-                    setAdminLoginUser('');
-                    setAdminLoginPass('');
-                    
+
                     if (res.ok && data.success) {
+                      // Clear inputs only once the session is actually established.
+                      setAdminLoginUser('');
+                      setAdminLoginPass('');
                       setAdminBypassed(true);
                       setShowAdminLoginPrompt(false);
                       setAdminLoginError('');
                       handleSwapView('admin');
                       handleLogActivity('Admin Login Successful', 'Secured key keyboard prompt entry authenticated on server.');
                     } else {
+                      // Keep the username so a failed attempt can be retried,
+                      // but never leave a rejected password sitting in the field.
+                      setAdminLoginPass('');
                       setAdminLoginError(data.error || 'Invalid administrative user credentials.');
                     }
                   } catch (err) {
@@ -1986,7 +1988,7 @@ export default function App() {
                     placeholder="--------"
                     className="w-full px-3 py-2 bg-navy-800 border border-white/10 focus:outline-none focus:border-gold-400 rounded-xl text-white"
                   />
-                  <p className="text-[9px] text-navy-400 mt-1 font-mono">Hint: User 'admin' / Pass 'password' or 'admin123'</p>
+                  <p className="text-[9px] text-navy-400 mt-1 font-mono">Hint: User 'admin' / Pass = ADMIN_PASSWORD from .env (Supabase admin_config)</p>
                 </div>
 
                 {adminLoginError && (

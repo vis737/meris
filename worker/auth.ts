@@ -101,22 +101,55 @@ export async function getAdminSession(request: Request, env: Env): Promise<Recor
   return payload;
 }
 
+export interface AdminCredentials {
+  username: string;
+  password: string;
+}
+
+/**
+ * Outcome of an admin credential lookup — distinguishes "no admin exists yet"
+ * from "this username is wrong" from "the credential store is unreachable",
+ * so the login route can answer with an honest status code instead of telling
+ * every typo that credentials are "not provisioned".
+ */
+export type AdminCredentialLookup =
+  | { status: 'found'; credentials: AdminCredentials }
+  /** No credential store is configured at all (fresh deployment). */
+  | { status: 'unprovisioned' }
+  /** Stores are configured and readable, but none hold this username. */
+  | { status: 'unknown-user' }
+  /** A store is configured but could not be read — retryable. */
+  | { status: 'unavailable' };
+
 /**
  * Load admin credentials for a specific username. Looks up the matching
  * admin_config row first (so any provisioned admin row can sign in), falling
  * back to environment variables for fresh deployments.
  */
-export async function loadAdminCredentials(env: Env, username: string): Promise<{ username: string; password: string } | null> {
+export async function loadAdminCredentials(env: Env, username: string): Promise<AdminCredentialLookup> {
   const supabase = getSupabase(env);
+  const envCredentials: AdminCredentials | null =
+    env.ADMIN_USERNAME && env.ADMIN_PASSWORD
+      ? { username: env.ADMIN_USERNAME, password: env.ADMIN_PASSWORD }
+      : null;
+
+  let storeReadFailed = false;
+
   if (supabase) {
     const { data, error } = await supabase.from('admin_config').select('username, password').eq('username', username).maybeSingle();
-    if (!error && data?.username && data?.password) {
-      return { username: data.username, password: data.password };
+    if (error) {
+      storeReadFailed = true;
+    } else if (data?.username && data?.password) {
+      return { status: 'found', credentials: { username: data.username, password: data.password } };
     }
   }
+
   // Fresh-deployment fallback: environment variables.
-  if (env.ADMIN_USERNAME && env.ADMIN_PASSWORD && username === env.ADMIN_USERNAME) {
-    return { username: env.ADMIN_USERNAME, password: env.ADMIN_PASSWORD };
+  if (envCredentials && username === envCredentials.username) {
+    return { status: 'found', credentials: envCredentials };
   }
-  return null;
+
+  if (!supabase && !envCredentials) return { status: 'unprovisioned' };
+  if (storeReadFailed) return { status: 'unavailable' };
+  return { status: 'unknown-user' };
 }
