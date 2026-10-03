@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "meris-eshop",
+  "name": "meris1",
   "main": "worker/index.ts",
   "compatibility_date": "2026-09-01",
   "compatibility_flags": ["nodejs_compat"],
@@ -11,7 +11,12 @@
     "binding": "ASSETS"
   },
   "vars": {
-    "APP_NAME": "Meris E-Shop"
+    "APP_NAME": "Meris E-Shop",
+    // Non-secret connection details, committed so every deploy re-applies
+    // them. If the worker is ever recreated these come back automatically.
+    "SUPABASE_URL": "https://zzwxnnzzwxsdvggpumze.supabase.co",
+    "SUPABASE_STORAGE_BUCKET": "product-images",
+    "APP_URL": "https://meris1.acvwebz.workers.dev"
   },
   "observability": {
     "enabled": true

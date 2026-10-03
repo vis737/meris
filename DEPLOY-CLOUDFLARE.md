@@ -61,11 +61,21 @@ proxy: { '/api': 'http://localhost:8787', '/uploads': 'http://localhost:8787' }
 
 ## 5. Production secrets
 
-Every secret is stored as a Cloudflare Workers secret (never in git):
+The Supabase connection is permanent, and comes from two places:
+
+| Value | Where it lives | Restored by |
+|---|---|---|
+| `SUPABASE_URL`, `SUPABASE_STORAGE_BUCKET`, `APP_URL` | `vars` in `wrangler.jsonc` (not sensitive) | every `wrangler deploy` |
+| `SUPABASE_KEY` (service_role) and the other credentials | Worker secrets | `npm run deploy` via `scripts/sync-secrets.mjs` |
+
+Keep those sensitive values in `.env` (gitignored) and every deploy re-binds
+them, so the worker stays linked to Supabase even if it is deleted and
+recreated. `npm run deploy:check` validates `.env` without pushing anything.
+
+To bind a secret by hand instead:
 
 ```bash
 npx wrangler secret put JWT_SECRET            # node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
-npx wrangler secret put SUPABASE_URL          # https://<project>.supabase.co
 npx wrangler secret put SUPABASE_KEY          # service_role key
 npx wrangler secret put RESEND_API_KEY        # re_xxxxxxxx
 npx wrangler secret put RESEND_FROM_EMAIL     # "Meris E-Shop <orders@yourdomain.com>"
@@ -77,14 +87,19 @@ npx wrangler secret put GEMINI_API_KEY
 npx wrangler secret put RAZORPAY_KEY_ID
 npx wrangler secret put RAZORPAY_KEY_SECRET
 npx wrangler secret put RAZORPAY_WEBHOOK_SECRET
-npx wrangler secret put APP_URL               # after first deploy, set to your final URL
 ```
+
+Never put `SUPABASE_URL` or `APP_URL` in as secrets — they are vars in
+`wrangler.jsonc`, and Cloudflare rejects a var and a secret sharing a name.
 
 ## 6. Deploy
 
 ```bash
-npm run deploy        # vite build && wrangler deploy
+npm run deploy        # vite build && wrangler deploy && node scripts/sync-secrets.mjs
 ```
+
+The worker name comes from `wrangler.jsonc` (`meris1`), so a plain
+`npm run deploy` can no longer publish to the wrong worker.
 
 First deploy gives you `https://meris-eshop.<your-subdomain>.workers.dev`.
 Add a custom domain in the Cloudflare dashboard (**Workers & Pages →
