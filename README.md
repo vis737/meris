@@ -1,75 +1,57 @@
 <div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
 
 # Meris E-Shop
 
-This contains everything needed to run the Meris storefront locally or deploy it on Render.
+</div>
 
-View your app in AI Studio: https://ai.studio/apps/788f1ad2-4042-4d49-8ed5-11c198962539
+Premium e-commerce platform for handcrafted kids toys, wood gifts, luxury
+handbags, and festive Kolam stencils.
 
-## Run Locally
+**Now deployable to Cloudflare Workers** with Supabase as the admin database
+and Resend as the mail service.
 
-**Prerequisites:** Node.js 20+
+## Architecture
 
-1. Install dependencies:
-   ```bash
-   npm install
-   ```
-2. Copy `.env.example` to `.env` and set your keys:
-   ```bash
-   cp .env.example .env
-   ```
-3. Run the app:
-   ```bash
-   npm run dev
-   ```
+| Layer | Technology |
+| :--- | :--- |
+| Frontend | React 19 + Vite SPA (Tailwind CSS, dark luxury theme) |
+| API | Hono on Cloudflare Workers (`worker/index.ts`) |
+| Static hosting | Cloudflare Workers Assets (`dist/`, SPA fallback) |
+| Database | Supabase PostgreSQL (products, categories, coupons, campaigns, CMS, orders, customers, admin config, email logs, newsletter, OTP codes) |
+| Mail | Resend HTTPS API (`worker/mailer.ts`) — OTP, order confirmation, admin/vendor alerts, payment notices, welcome |
+| Payments | Razorpay (primary), PayU (legacy), UPI/COD |
+| AI | Google Gemini (smart search, recommendations, invoice greeting) |
 
-## Render Payments And Email OTP
-
-The storefront uses PayU for online checkout and email OTP for account login.
-
-### Required Render Variables
-
-Set these in Render after the first deploy:
-
-```env
-NODE_ENV="production"
-APP_URL="https://your-app.onrender.com"
-ENABLE_REAL_NOTIFICATIONS="true"
-SMTP_HOST="smtp.gmail.com"
-SMTP_PORT="587"
-SMTP_SECURE="false"
-SMTP_USER="your-email@gmail.com"
-SMTP_PASS="your-16-character-gmail-app-password"
-SMTP_FROM_NAME="Meris E-Shop"
-SMTP_FROM_EMAIL="your-email@gmail.com"
-PAYU_MERCHANT_KEY="your-payu-key"
-PAYU_MERCHANT_SALT="your-payu-salt"
-PAYU_ENV="production"
-```
-
-PayU callback URLs default from `APP_URL`:
-
-```text
-https://your-app.onrender.com/api/payu/success
-https://your-app.onrender.com/api/payu/failure
-https://your-app.onrender.com/api/payu/webhook
-```
-
-### How To Verify
-
-1. Open the deployed Render URL and request an email OTP from the login page.
-2. Confirm the OTP email arrives, then sign in with the code.
-3. Place a PayU test order and confirm the browser redirects to PayU.
-4. After PayU redirects back, check the order payment status in the admin panel.
-
-In production, OTP simulation is disabled. If SMTP is missing or Gmail rejects the app password, `/api/send-otp` returns an error instead of pretending the email was sent.
-
-## Useful Commands
+## Quick start (Cloudflare)
 
 ```bash
-npm run lint
-npm run build
-npm start
+npm install
+cp .dev.vars.example .dev.vars    # fill in Supabase + Resend + admin credentials
+npm run deploy
 ```
+
+Full setup steps, secrets list and verification checklist:
+**[DEPLOY-CLOUDFLARE.md](DEPLOY-CLOUDFLARE.md)**
+
+## Local development
+
+```bash
+npm run dev          # Vite SPA on :5173
+npm run dev:worker   # Cloudflare Worker on :8787 (needs .dev.vars)
+npm run build && npm run dev:worker   # full-stack test on :8787
+```
+
+## Useful commands
+
+```bash
+npm run lint        # typecheck web + worker
+npm run build       # production SPA build to dist/
+npm run deploy      # build + wrangler deploy
+npx wrangler tail   # stream live Worker logs
+```
+
+## Legacy Node server
+
+The original Express server (`server.ts`) remains in the repo for reference.
+The Cloudflare deployment does not use it — all backend logic lives in
+`worker/` and persists exclusively to Supabase.

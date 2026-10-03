@@ -30,5 +30,10 @@ take_screenshot.cjs
 check_dashboard_error.cjs
 test_login.cjs
 
+# Cloudflare Workers local state & secrets
+.wrangler/
+.dev.vars
+dist-worker-check/
+
 # Supabase migration (already applied — keep out of repo clutter)
 # supabase_full_migration.sql  # Keep this in repo for reference

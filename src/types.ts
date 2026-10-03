@@ -45,7 +45,7 @@ export interface Product {
   availability: 'in-stock' | 'low-stock' | 'out-of-stock';
   
   // Marketing & Multi-vendor Additions:
-  vendorId?: string; // Links to Vendor
+  vendorId?: string | null; // Links to Vendor
   isFlashSale?: boolean;
   flashSaleEndTime?: string; // ISO String Date
   bundleSuggestedIds?: string[]; // IDs of products suggested as bundle
