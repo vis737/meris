@@ -155,11 +155,12 @@ app.post('/api/catalog/products', async (c) => {
 
   // Canonical category names — the display label is re-derived from the slug
   // on every save, so a stale or slug-ish label (e.g. "home" instead of
-  // "Home Organizers") can never reach the database.
-  const { data: catRows } = await supabase.from('categories').select('id, name');
+  // "Home Organizers") can never reach the database. Key by `slug || id` to
+  // match mapCategoryRow (live schema uses a uuid PK with the slug in `slug`).
+  const { data: catRows } = await supabase.from('categories').select('*'); // tiny table; schema-agnostic
   const categoryNameBySlug = new Map<string, string>(
-    ((catRows || []) as Array<{ id: string; name: string }>).map(
-      (cat) => [String(cat.id), String(cat.name)] as [string, string]
+    ((catRows || []) as Array<{ id: string; slug?: string | null; name: string }>).map(
+      (cat) => [String(cat.slug || cat.id), String(cat.name)] as [string, string]
     )
   );
 
