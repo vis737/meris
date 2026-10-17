@@ -153,30 +153,43 @@ app.post('/api/catalog/products', async (c) => {
   const supabase = getSupabase(c.env);
   if (!supabase) return jsonError('Supabase is not configured.', 503);
 
-  const mapped = productsList.map((p: any) => ({
-    id: p.id,
-    sku: p.sku || `SKU-${p.id}`,
-    name: p.name || 'Handcrafted Product',
-    category: p.category || 'Handbags',
-    category_slug: p.categorySlug || p.category?.toLowerCase().replace(/\s+/g, '-') || 'handbags',
-    price: p.price,
-    discount_price: p.discountPrice || null,
-    stock: p.stock !== undefined ? p.stock : 10,
-    rating: p.rating || 5,
-    rating_count: p.ratingCount || 1,
-    images: p.images || [],
-    short_description: p.shortDescription || p.name || '',
-    description: p.description || p.name || '',
-    specifications: { ...(p.specifications || {}), Weight: parseProductWeightKg(p) ? `${parseProductWeightKg(p)} kg` : p.specifications?.Weight },
-    reviews: p.reviews || [],
-    is_new: p.isNew || false,
-    is_bestseller: p.isBestseller || false,
-    brand: p.brand || 'MERIS',
-    availability: p.availability || 'in-stock',
-    vendor_id: p.vendorId || null,
-    free_shipping: Boolean(p.freeShipping),
-    gst_exempt: Boolean(p.gstExempt),
-  }));
+  // Canonical category names — the display label is re-derived from the slug
+  // on every save, so a stale or slug-ish label (e.g. "home" instead of
+  // "Home Organizers") can never reach the database.
+  const { data: catRows } = await supabase.from('categories').select('id, name');
+  const categoryNameBySlug = new Map<string, string>(
+    ((catRows || []) as Array<{ id: string; name: string }>).map(
+      (cat) => [String(cat.id), String(cat.name)] as [string, string]
+    )
+  );
+
+  const mapped = productsList.map((p: any) => {
+    const categorySlug = String(p.categorySlug || p.category?.toLowerCase().replace(/\s+/g, '-') || 'handbags');
+    return {
+      id: p.id,
+      sku: p.sku || `SKU-${p.id}`,
+      name: p.name || 'Handcrafted Product',
+      category: categoryNameBySlug.get(categorySlug) || p.category || 'Handbags',
+      category_slug: categorySlug,
+      price: p.price,
+      discount_price: p.discountPrice || null,
+      stock: p.stock !== undefined ? p.stock : 10,
+      rating: p.rating || 5,
+      rating_count: p.ratingCount || 1,
+      images: p.images || [],
+      short_description: p.shortDescription || p.name || '',
+      description: p.description || p.name || '',
+      specifications: { ...(p.specifications || {}), Weight: parseProductWeightKg(p) ? `${parseProductWeightKg(p)} kg` : p.specifications?.Weight },
+      reviews: p.reviews || [],
+      is_new: p.isNew || false,
+      is_bestseller: p.isBestseller || false,
+      brand: p.brand || 'MERIS',
+      availability: p.availability || 'in-stock',
+      vendor_id: p.vendorId || null,
+      free_shipping: Boolean(p.freeShipping),
+      gst_exempt: Boolean(p.gstExempt),
+    };
+  });
 
   const { error: upsertErr } = await supabase.from('products').upsert(mapped);
   if (upsertErr) {
