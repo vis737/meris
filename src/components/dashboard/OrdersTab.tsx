@@ -121,8 +121,12 @@ export default function OrdersTab({ orders, setTrackingInput, setSearchedOrder, 
                       }
 
                       if (onResubmitUpiDetails) {
-                        onResubmitUpiDetails(ord.id, txnId, screenshotUrl);
-                        toast.success("UPI details resubmitted successfully. Pending administrative validation.");
+                        const ok = await onResubmitUpiDetails(ord.id, txnId, screenshotUrl);
+                        if (ok === false) {
+                          toast.error("Could not reach the server — your payment proof was not saved. Please retry.");
+                        } else {
+                          toast.success("UPI details resubmitted successfully. Pending administrative validation.");
+                        }
                       }
                     }}
                     className="space-y-3.5 pt-2"

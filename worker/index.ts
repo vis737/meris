@@ -185,9 +185,13 @@ app.post('/api/catalog/products', async (c) => {
   }
 
   // Clean up deleted products so removed rows do not reappear.
-  const currentIds = productsList.map((p: any) => p.id).filter(Boolean);
+  const currentIds = productsList.map((p: any) => p.id).filter(Boolean).map(String);
   if (currentIds.length > 0) {
-    const { error: delErr } = await supabase.from('products').delete().not('id', 'in', `(${currentIds.join(',')})`);
+    // PostgREST requires text ids to be double-quoted inside an in-list; an
+    // unquoted list 400s, which used to make this cleanup silently fail and
+    // deleted products reappear on the next load.
+    const idList = currentIds.map((id) => `"${id.replace(/"/g, '""')}"`).join(',');
+    const { error: delErr } = await supabase.from('products').delete().not('id', 'in', `(${idList})`);
     if (delErr) console.warn('[Catalog] Product cleanup notice:', delErr.message);
   }
 
@@ -992,6 +996,45 @@ app.post('/api/orders', async (c) => {
   return c.json({ success: true, order: newOrder }, 201);
 });
 
+// Customers resubmit UPI payment proof for their own order. Public but
+// rate-limited and strictly whitelisted: a caller can only attach proof and
+// push the order back to `pending` review — never self-approve (paid) or alter
+// fulfilment status. (The admin-only PUT above rejects anonymous callers with
+// 401, which used to make customer resubmissions silently vanish.)
+app.post('/api/orders/:orderNumber/upi-resubmit', async (c) => {
+  const limit = checkRateLimit(c.req.raw, '/api/orders/upi-resubmit', 10, 15 * 60 * 1000);
+  if (!limit.ok) {
+    c.header('Retry-After', String(limit.retryAfterSec));
+    return jsonError(`Too many requests. Please try again in ${limit.retryAfterSec} seconds.`, 429);
+  }
+
+  const orderNum = sanitizeString(c.req.param('orderNumber'), 30).toUpperCase();
+  if (!orderNum || !/^[A-Z0-9\-_]+$/.test(orderNum)) return jsonError('Invalid order number format.');
+
+  const body = await c.req.json().catch(() => null);
+  const txnId = sanitizeString(body?.upiTxnId, 120);
+  const screenshot = typeof body?.upiScreenshot === 'string' ? body.upiScreenshot.slice(0, 7_000_000) : '';
+  if (!txnId) return jsonError('A UPI transaction reference is required.');
+
+  const supabase = getSupabase(c.env);
+  if (!supabase) return jsonError('Supabase is not configured.', 503);
+
+  const { data } = await supabase.from('orders').select('*').or(`order_number.eq.${orderNum},id.eq.${orderNum}`).limit(1);
+  const row = (data || [])[0];
+  if (!row) return jsonError(`Order ${orderNum} not found.`, 404);
+
+  const { data: updated, error } = await supabase.from('orders').update({
+    upi_txn_id: txnId,
+    upi_screenshot: screenshot || row.upi_screenshot || null,
+    payment_status: 'pending',
+  }).eq('id', row.id).select().single();
+  if (error) {
+    console.error('[Orders] UPI resubmit failed:', error.message);
+    return jsonError('Failed to save payment proof', 500);
+  }
+  return c.json({ success: true, order: mapOrderRow(updated) });
+});
+
 app.post('/api/orders/:orderNumber/status', async (c) => {
   const admin = await getAdminSession(c.req.raw, c.env);
   if (!admin) return jsonError('Unauthenticated administrative request.', 401);
@@ -1115,6 +1158,13 @@ app.post('/api/admin/login', async (c) => {
 app.get('/api/admin/session', async (c) => {
   const admin = await getAdminSession(c.req.raw, c.env);
   if (!admin) return jsonError('Administrative session expired or invalid.', 401);
+  // Sliding expiry: re-issue the cookie on every valid check so an active
+  // admin console never goes dark mid-session (the client pings this endpoint
+  // periodically while signed in).
+  if (admin.username) {
+    const refreshed = await signJwt({ username: admin.username, role: 'admin' }, c.env.JWT_SECRET, 2 * 60 * 60);
+    c.header('Set-Cookie', adminCookie(refreshed));
+  }
   return c.json({ authenticated: true, username: admin.username });
 });
 

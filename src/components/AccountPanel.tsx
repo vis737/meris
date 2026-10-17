@@ -31,7 +31,7 @@ interface AccountPanelProps {
   onRemoveFromWishlist: (productId: string) => void;
   onRequestRefund: (orderId: string, itemName: string, reason: string) => void;
   onSelectProduct: (productId: string) => void;
-  onResubmitUpiDetails?: (orderId: string, txnId: string, screenshot: string) => void;
+  onResubmitUpiDetails?: (orderId: string, txnId: string, screenshot: string) => void | boolean | Promise<boolean>;
   products: Product[];
   rewardsEnabled?: boolean;
 }

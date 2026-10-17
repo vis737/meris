@@ -33,9 +33,9 @@ interface AdminDashboardProps {
   cms: CMSConfig;
   orders: Order[];
   logs: ActivityLog[];
-  onAddProduct: (product: Product) => void;
-  onEditProduct: (product: Product) => void;
-  onDeleteProduct: (productId: string) => void;
+  onAddProduct: (product: Product) => void | boolean | Promise<boolean>;
+  onEditProduct: (product: Product) => void | boolean | Promise<boolean>;
+  onDeleteProduct: (productId: string) => void | boolean | Promise<boolean>;
   onAddCoupon: (coupon: Coupon) => void;
   onDeleteCoupon: (code: string) => void;
   onBulkDeleteCoupons?: (codes: string[]) => void;
@@ -54,6 +54,7 @@ interface AdminDashboardProps {
   onEditReview?: (productId: string, reviewId: string, updated: Partial<Review>) => void;
   onLogActivity: (action: string, details: string) => void;
   autoAuthenticated?: boolean;
+  onAdminAuthenticated?: () => void;
   onLogoutAdmin?: () => void;
 }
 
@@ -85,6 +86,7 @@ export default function AdminDashboard({
   onEditReview,
   onLogActivity,
   autoAuthenticated = false,
+  onAdminAuthenticated,
   onLogoutAdmin
 }: AdminDashboardProps) {
 
@@ -175,6 +177,8 @@ export default function AdminDashboard({
       });
       if (res.ok) {
         setIsAuthenticated(true);
+        // Let the app know the cookie now exists so catalog writes + orders load start.
+        onAdminAuthenticated?.();
         addToast('Admin authentication successful.', 'success');
         onLogActivity('Admin Login Success', `Administrative console unlocked by ${adminUsername}`);
       } else {

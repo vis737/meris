@@ -323,6 +323,66 @@ export default function App() {
 
   const isCatalogLoadedRef = useRef(false);
 
+  // --- Durable backend writes --------------------------------------------------
+  // The worker's catalog endpoint upserts the posted list AND deletes rows that
+  // are missing from it, so two concurrent writes carrying different snapshots
+  // can silently delete freshly added products. Every admin write therefore
+  // flows through one serialized chain, and every write checks res.ok so a
+  // failed save can never be mistaken for a successful one.
+  const writeChainRef = useRef<Promise<unknown>>(Promise.resolve());
+  // Mirror of `products` so rapid successive updates (bulk edit loops) always
+  // build on the latest snapshot without side effects inside setProducts.
+  const productsRef = useRef(products);
+  useEffect(() => { productsRef.current = products; }, [products]);
+  const applyProducts = (updater: (prev: typeof products) => typeof products): typeof products => {
+    const next = updater(productsRef.current);
+    productsRef.current = next;
+    setProducts(next);
+    return next;
+  };
+
+  const buildWriteHeaders = (): Record<string, string> => {
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    const token = localStorage.getItem('adminToken');
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return headers;
+  };
+
+  /** Serialized, cookie-authenticated admin write. Resolves only on res.ok. */
+  const adminWrite = (path: string, init: RequestInit = {}): Promise<unknown> => {
+    const run = async (): Promise<unknown> => {
+      const res = await fetch(path, {
+        method: init.method || 'POST',
+        body: init.body,
+        headers: { ...buildWriteHeaders(), ...((init.headers as Record<string, string> | undefined) || {}) },
+        credentials: 'include',
+      });
+      if (!res.ok) {
+        let detail = '';
+        try { detail = (await res.json())?.error || ''; } catch { /* non-JSON error body */ }
+        const error = new Error(detail || `Server rejected the change (HTTP ${res.status}).`) as Error & { status?: number };
+        error.status = res.status;
+        throw error;
+      }
+      try { return await res.json(); } catch { return { success: true }; }
+    };
+    const queued = writeChainRef.current.then(run, run);
+    // Keep the chain flowing after a failed write so one error cannot block the rest.
+    writeChainRef.current = queued.catch(() => undefined);
+    return queued;
+  };
+
+  /** Persist the full product catalog after a local change. Never rejects. */
+  const persistProducts = async (): Promise<boolean> => {
+    try {
+      await adminWrite('/api/catalog/products', { body: JSON.stringify(productsRef.current) });
+      return true;
+    } catch (err) {
+      console.error('Product sync to backend failed:', err);
+      return false;
+    }
+  };
+
   // Fetch centralized catalog data (products, coupons, campaigns, cms config) from server database on mount
   useEffect(() => {
     const loadCatalogFromBackend = async () => {
@@ -379,52 +439,39 @@ export default function App() {
     loadCatalogFromBackend();
   }, []);
 
-  // Save products, coupons, campaigns, cms changes back to local storage and sync to backend server database
+  // Save products, coupons, campaigns, cms changes back to local storage and sync to backend server database.
+  // Writes are debounced (bulk edits touch many products in a row) and routed
+  // through adminWrite so snapshots reach the server in order, with res.ok checked.
   useEffect(() => {
     saveStoredDb({ products, coupons, campaigns, cms });
-    
+
     if (!isCatalogLoadedRef.current || !adminBypassed) return;
 
-    const syncCatalogToBackend = async () => {
+    const syncTimer = setTimeout(async () => {
       try {
-        const adminToken = localStorage.getItem('adminToken') || '';
-        const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-        if (adminToken) {
-          headers['Authorization'] = `Bearer ${adminToken}`;
-        }
         await Promise.all([
-          fetch('/api/catalog/products', {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: JSON.stringify(products)
-          }),
-          fetch('/api/catalog/coupons', {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: JSON.stringify(coupons)
-          }),
-          fetch('/api/catalog/campaigns', {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: JSON.stringify(campaigns)
-          }),
-          fetch('/api/catalog/cms', {
-            method: 'POST',
-            headers,
-            credentials: 'include',
-            body: JSON.stringify(cms)
-          })
+          adminWrite('/api/catalog/products', { body: JSON.stringify(products) }),
+          adminWrite('/api/catalog/coupons', { body: JSON.stringify(coupons) }),
+          adminWrite('/api/catalog/campaigns', { body: JSON.stringify(campaigns) }),
+          adminWrite('/api/catalog/cms', { body: JSON.stringify(cms) }),
         ]);
       } catch (err) {
         console.error('Failed to sync catalog changes to backend:', err);
       }
-    };
-
-    syncCatalogToBackend();
+    }, 700);
+    return () => clearTimeout(syncTimer);
   }, [products, coupons, campaigns, cms, adminBypassed]);
+
+  // Sliding admin session: while the console is open, ping the session endpoint
+  // so the short-lived cookie gets re-issued before it expires. Without this,
+  // every save after two hours fails with a silent 401.
+  useEffect(() => {
+    if (!adminBypassed) return;
+    const keepAlive = setInterval(() => {
+      fetch('/api/admin/session', { cache: 'no-store', credentials: 'include' }).catch(() => undefined);
+    }, 10 * 60 * 1000);
+    return () => clearInterval(keepAlive);
+  }, [adminBypassed]);
 
   // Pick hero products whenever catalog finishes loading or updating
   useEffect(() => {
@@ -635,24 +682,38 @@ export default function App() {
       razorpaySignature
     };
 
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...newOrder,
-          account: {
-            email: currentUser.email,
-            name: currentUser.name
-          }
-        })
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data?.error || 'Order registration failed');
+    // Never let a transient failure silently drop the order: retry the server
+    // save with backoff (client errors are not retryable), then log honestly.
+    const orderPayload = {
+      ...newOrder,
+      account: {
+        email: currentUser.email,
+        name: currentUser.name
       }
-    } catch (err) {
-      console.error('Error saving order to backend database:', err);
+    };
+    let orderSaveError: unknown = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      if (attempt > 0) await new Promise((resolve) => setTimeout(resolve, 700 * attempt));
+      try {
+        const res = await fetch('/api/orders', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(orderPayload)
+        });
+        const data = await res.json().catch(() => null);
+        if (res.ok) {
+          orderSaveError = null;
+          break;
+        }
+        orderSaveError = new Error(data?.error || `Order registration failed (HTTP ${res.status})`);
+        // 4xx validation/auth errors will not be fixed by retrying (429 may).
+        if (res.status >= 400 && res.status < 500 && res.status !== 429) break;
+      } catch (err) {
+        orderSaveError = err;
+      }
+    }
+    if (orderSaveError) {
+      console.error('Error saving order to backend database:', orderSaveError);
     }
 
     // Update real physical stock counts in database
@@ -761,31 +822,33 @@ export default function App() {
     });
   };
 
-  const handleResubmitUpiDetails = (orderId: string, txnId: string, screenshot: string) => {
-    setOrders((prev) => {
-      const next = prev.map((o) => {
-        if (o.id === orderId) {
-          const updated = {
-            ...o,
-            upiTxnId: txnId,
-            upiScreenshot: screenshot || o.upiScreenshot,
-            paymentStatus: 'pending' as const
-          };
-          
-          // Sync update back to server database
-          fetch(`/api/orders/${o.orderNumber}`, {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(updated)
-          }).catch(err => console.error('Failed to sync resubmission:', err));
-          
-          return updated;
-        }
-        return o;
+  const handleResubmitUpiDetails = async (orderId: string, txnId: string, screenshot: string): Promise<boolean> => {
+    const target = orders.find((o) => o.id === orderId);
+    if (!target) return false;
+    const updated: Order = {
+      ...target,
+      upiTxnId: txnId,
+      upiScreenshot: screenshot || target.upiScreenshot,
+      paymentStatus: 'pending' as const,
+    };
+    setOrders((prev) => prev.map((o) => (o.id === orderId ? updated : o)));
+    try {
+      // The admin-only PUT route rejects anonymous customers with 401, so the
+      // proof never persisted. Use the public, whitelisted resubmit endpoint.
+      const res = await fetch(`/api/orders/${encodeURIComponent(target.orderNumber)}/upi-resubmit`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ upiTxnId: txnId, upiScreenshot: updated.upiScreenshot }),
       });
-      return next;
-    });
-    handleLogActivity('UPI Resubmit', `Resubmitted UPI reference ID: ${txnId} for order ID: ${orderId}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      handleLogActivity('UPI Resubmit', `Resubmitted UPI reference ID: ${txnId} for order ID: ${orderId}`);
+      return true;
+    } catch (err) {
+      console.error('Failed to sync resubmission:', err);
+      // Roll back so the account panel never shows proof the server rejected.
+      setOrders((prev) => prev.map((o) => (o.id === orderId ? target : o)));
+      return false;
+    }
   };
 
   // Add custom user reviews dynamically
@@ -1700,37 +1763,16 @@ export default function App() {
                 orders={orders}
                 logs={activityLogs}
                 onAddProduct={(added) => {
-                  setProducts((prev) => {
-                    const updated = [added, ...prev.filter(p => p.id !== added.id)];
-                    fetch('/api/catalog/products', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(updated)
-                    }).catch(err => console.error('Product add sync error:', err));
-                    return updated;
-                  });
+                  applyProducts((prev) => [added, ...prev.filter(p => p.id !== added.id)]);
+                  return persistProducts();
                 }}
                 onEditProduct={(edited) => {
-                  setProducts((prev) => {
-                    const updated = prev.map((p) => (p.id === edited.id ? edited : p));
-                    fetch('/api/catalog/products', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(updated)
-                    }).catch(err => console.error('Product edit sync error:', err));
-                    return updated;
-                  });
+                  applyProducts((prev) => prev.map((p) => (p.id === edited.id ? edited : p)));
+                  return persistProducts();
                 }}
                 onDeleteProduct={(delId) => {
-                  setProducts((prev) => {
-                    const updated = prev.filter((p) => p.id !== delId);
-                    fetch('/api/catalog/products', {
-                      method: 'POST',
-                      headers: { 'Content-Type': 'application/json' },
-                      body: JSON.stringify(updated)
-                    }).catch(err => console.error('Product delete sync error:', err));
-                    return updated;
-                  });
+                  applyProducts((prev) => prev.filter((p) => p.id !== delId));
+                  return persistProducts();
                 }}
                 onAddCoupon={(c) => setCoupons((prev) => [c, ...prev])}
                 onDeleteCoupon={async (codeStr) => {
@@ -1769,41 +1811,46 @@ export default function App() {
                 onDeleteOrder={async (ordId, ordNum) => {
                   setOrders((prev) => prev.filter((o) => o.id !== ordId));
                   try {
-                    await fetch(`/api/orders/${ordNum}`, { method: 'DELETE' });
+                    await adminWrite(`/api/orders/${encodeURIComponent(ordNum)}`, { method: 'DELETE' });
                   } catch (err) {
                     console.error('Failed to delete order from backend:', err);
                   }
                 }}
                 onDeleteLog={(logId) => setActivityLogs((prev) => prev.filter((l) => l.id !== logId))}
                 onClearLogs={() => setActivityLogs([])}
-                onUpdateOrderStatus={(ordId, nextStatus) =>
+                onUpdateOrderStatus={(ordId, nextStatus) => {
+                  const target = orders.find((o) => o.id === ordId);
                   setOrders((prev) =>
                     prev.map((o) => (o.id === ordId ? { ...o, status: nextStatus } : o))
-                  )
-                }
+                  );
+                  if (!target) return;
+                  // Order status changes used to be local-only, which made them
+                  // vanish after a reload. Persist them, with rollback on failure.
+                  adminWrite(`/api/orders/${encodeURIComponent(target.orderNumber)}/status`, {
+                    body: JSON.stringify({ status: nextStatus }),
+                  }).catch((err) => {
+                    console.error('Order status sync failed:', err);
+                    setOrders((prev) => prev.map((o) => (o.id === ordId ? { ...o, status: target.status } : o)));
+                  });
+                }}
                 onUpdatePaymentStatus={(ordId, nextPaymentStatus, reason) => {
-                  setOrders((prev) => {
-                    const next = prev.map((o) => {
-                      if (o.id === ordId) {
-                        const updated = {
-                          ...o,
-                          paymentStatus: nextPaymentStatus,
-                          upiRejectionReason: reason || '',
-                          status: nextPaymentStatus === 'paid' ? ('processing' as const) : o.status
-                        };
-                        
-                        // Sync updates back to server database
-                        fetch(`/api/orders/${o.orderNumber}`, {
-                          method: 'PUT',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify(updated)
-                        }).catch(err => console.error('Failed to sync payment validation:', err));
-                        
-                        return updated;
-                      }
-                      return o;
-                    });
-                    return next;
+                  const target = orders.find((o) => o.id === ordId);
+                  if (!target) return;
+                  const updated: Order = {
+                    ...target,
+                    paymentStatus: nextPaymentStatus,
+                    upiRejectionReason: reason || '',
+                    status: nextPaymentStatus === 'paid' ? ('processing' as const) : target.status,
+                  };
+                  setOrders((prev) => prev.map((o) => (o.id === ordId ? updated : o)));
+                  // Persist payment validation (serialized + res.ok checked), with
+                  // rollback so the table never shows a status the server rejected.
+                  adminWrite(`/api/orders/${encodeURIComponent(target.orderNumber)}`, {
+                    method: 'PUT',
+                    body: JSON.stringify(updated),
+                  }).catch((err) => {
+                    console.error('Failed to sync payment validation:', err);
+                    setOrders((prev) => prev.map((o) => (o.id === ordId ? target : o)));
                   });
                 }}
                  onApproveReview={handleApproveReviewContent}
@@ -1814,6 +1861,12 @@ export default function App() {
                  onUpdateCMS={(cM) => setCms(cM)}
                 onLogActivity={handleLogActivity}
                 autoAuthenticated={adminBypassed}
+                onAdminAuthenticated={() => {
+                  // The AdminDashboard login gate just established the cookie:
+                  // start catalog writes and pull orders in immediately.
+                  setAdminBypassed(true);
+                  void syncOrdersFromBackend();
+                }}
                 onLogoutAdmin={async () => {
                   try {
                     await fetch('/api/admin/logout', { method: 'POST', credentials: 'include' });

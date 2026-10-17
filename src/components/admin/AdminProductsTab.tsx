@@ -7,9 +7,9 @@ import { getProductWeightKg } from '../../utils/premiumData';
 export interface AdminProductsTabProps {
   products: Product[];
   categories: Category[];
-  onAddProduct: (product: Product) => void;
-  onEditProduct: (product: Product) => void;
-  onDeleteProduct: (productId: string) => void;
+  onAddProduct: (product: Product) => void | boolean | Promise<boolean>;
+  onEditProduct: (product: Product) => void | boolean | Promise<boolean>;
+  onDeleteProduct: (productId: string) => void | boolean | Promise<boolean>;
   onLogActivity: (action: string, details: string) => void;
   addToast: (text: string, type?: 'success' | 'error' | 'warning' | 'info') => void;
 }
@@ -49,6 +49,7 @@ export default function AdminProductsTab({
 
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);  const [editingProduct, setEditingProduct] = useState<Partial<Product> | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
   
   // AI listing assistant state
   const [isAiGenerating, setIsAiGenerating] = useState(false);
@@ -137,10 +138,15 @@ export default function AdminProductsTab({
     setIsModalOpen(true);
   };
 
-  const handleDuplicate = (product: Product) => {
+  const handleDuplicate = async (product: Product) => {
     const safeId = 'prod_' + Date.now() + '_' + Math.random().toString(36).substring(2, 9);
     const duplicated = { ...product, id: safeId, name: `${product.name} (Copy)`, sku: `${product.sku}-COPY` };
-    onAddProduct(duplicated as Product);
+    let ok = true;
+    try { ok = (await onAddProduct(duplicated as Product)) !== false; } catch { ok = false; }
+    if (!ok) {
+      addToast('Duplicate could not be saved to the server. Check your admin session and retry.', 'error');
+      return;
+    }
     onLogActivity('Duplicate Product', `Duplicated ${product.name}`);
     addToast('Product duplicated successfully', 'success');
   };
@@ -224,55 +230,74 @@ Do not add any other text, explanations, or markdown formatting.`;
     setIsAiModalOpen(false);
   };
 
-  const handleDelete = (id: string, name: string) => {
+  const handleDelete = async (id: string, name: string) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      onDeleteProduct(id);
+      let ok = true;
+      try { ok = (await onDeleteProduct(id)) !== false; } catch { ok = false; }
+      if (!ok) {
+        addToast(`Could not delete ${name} — the server rejected the change.`, 'error');
+        return;
+      }
       onLogActivity('Delete Product', `Deleted ${name}`);
       addToast('Product deleted', 'success');
     }
   };
 
-  const handleBulkPriceUpdate = () => {
+  const handleBulkPriceUpdate = async () => {
     const percent = parseFloat(bulkPricePercent);
     if (isNaN(percent)) return;
-    
-    selectedIds.forEach(id => {
-      const product = products.find(p => p.id === id);
-      if (product) {
-        const newPrice = product.price * (1 + percent / 100);
-        onEditProduct({ ...product, price: newPrice });
-      }
-    });
-    
+
+    const pending = selectedIds
+      .map((id) => products.find((p) => p.id === id))
+      .filter((p): p is Product => Boolean(p))
+      .map((product) => onEditProduct({ ...product, price: product.price * (1 + percent / 100) }));
+    const results = await Promise.all(pending.map(async (r) => {
+      try { return (await r) !== false; } catch { return false; }
+    }));
+
     onLogActivity('Bulk Price Update', `Updated prices for ${selectedIds.length} products by ${percent}%`);
-    addToast(`Prices updated for ${selectedIds.length} products`, 'success');
+    if (results.some((ok) => !ok)) {
+      addToast('Some price updates failed to reach the server — check the admin session.', 'warning');
+    } else {
+      addToast(`Prices updated for ${selectedIds.length} products`, 'success');
+    }
     setBulkPricePercent('');
     setSelectedIds([]);
   };
 
-  const handleBulkStockUpdate = () => {
+  const handleBulkStockUpdate = async () => {
     const adjust = parseInt(bulkStockAdjust, 10);
     if (isNaN(adjust)) return;
-    
-    selectedIds.forEach(id => {
-      const product = products.find(p => p.id === id);
-      if (product) {
-        const newStock = Math.max(0, product.stock + adjust);
-        onEditProduct({ ...product, stock: newStock });
-      }
-    });
-    
+
+    const pending = selectedIds
+      .map((id) => products.find((p) => p.id === id))
+      .filter((p): p is Product => Boolean(p))
+      .map((product) => onEditProduct({ ...product, stock: Math.max(0, product.stock + adjust) }));
+    const results = await Promise.all(pending.map(async (r) => {
+      try { return (await r) !== false; } catch { return false; }
+    }));
+
     onLogActivity('Bulk Stock Update', `Adjusted stock for ${selectedIds.length} products by ${adjust}`);
-    addToast(`Stock updated for ${selectedIds.length} products`, 'success');
+    if (results.some((ok) => !ok)) {
+      addToast('Some stock updates failed to reach the server — check the admin session.', 'warning');
+    } else {
+      addToast(`Stock updated for ${selectedIds.length} products`, 'success');
+    }
     setBulkStockAdjust('');
     setSelectedIds([]);
   };
 
-  const handleBulkDelete = () => {
+  const handleBulkDelete = async () => {
     if (window.confirm(`Are you sure you want to delete ${selectedIds.length} selected products?`)) {
-      selectedIds.forEach(id => onDeleteProduct(id));
+      const results = await Promise.all(selectedIds.map(async (id) => {
+        try { return (await onDeleteProduct(id)) !== false; } catch { return false; }
+      }));
       onLogActivity('Bulk Delete', `Deleted ${selectedIds.length} products`);
-      addToast(`${selectedIds.length} products deleted`, 'success');
+      if (results.some((ok) => !ok)) {
+        addToast('Server rejected some deletes — those products may reappear after a reload.', 'warning');
+      } else {
+        addToast(`${selectedIds.length} products deleted`, 'success');
+      }
       setSelectedIds([]);
     }
   };
@@ -614,7 +639,8 @@ Do not add any other text, explanations, or markdown formatting.`;
                   Cancel
                 </button>
                 <button
-                  onClick={() => {
+                  onClick={async () => {
+                    if (isSaving) return;
                     if (!editingProduct?.name || !editingProduct?.sku || editingProduct?.price === undefined) {
                       addToast('Please fill all required fields (Name, SKU, Price)', 'error');
                       return;
@@ -649,20 +675,31 @@ Do not add any other text, explanations, or markdown formatting.`;
                     };
 
                     const exists = products.some(p => p.id === fullProduct.id);
+                    setIsSaving(true);
+                    try {
+                      const result = exists ? await onEditProduct(fullProduct) : await onAddProduct(fullProduct);
+                      if (result === false) {
+                        addToast('Could not save the product to the server — check your admin session and try again.', 'error');
+                        return;
+                      }
+                    } finally {
+                      setIsSaving(false);
+                    }
                     if (exists) {
-                      onEditProduct(fullProduct);
                       onLogActivity('Edit Product', `Updated product ${fullProduct.name}`);
                       addToast('Product updated successfully', 'success');
                     } else {
-                      onAddProduct(fullProduct);
                       onLogActivity('Add Product', `Added product ${fullProduct.name}`);
                       addToast('Product added successfully', 'success');
                     }
                     setIsModalOpen(false);
                   }}
-                  className="px-6 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold transition-colors"
+                  disabled={isSaving}
+                  className="px-6 py-2 rounded-lg bg-yellow-500 hover:bg-yellow-600 text-slate-900 font-bold transition-colors disabled:opacity-60 disabled:cursor-not-allowed"
                 >
-                  Save Product
+                  {isSaving ? (
+                    <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Saving&hellip;</span>
+                  ) : 'Save Product'}
                 </button>
               </div>
             </motion.div>
