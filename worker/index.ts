@@ -662,17 +662,18 @@ app.post('/api/send-otp', async (c) => {
   await supabase.from('otp_codes').upsert(otpToRow(email, record));
 
   // Dispatch via Resend (awaited so the UI only asks for the code once it is sent).
-  const sent = await sendOtpEmail(c.env, email, code);
-  if (!sent && !c.env.RESEND_API_KEY) {
-    return jsonError('Email service is not configured. Set RESEND_API_KEY.', 503);
+  const otp = await sendOtpEmail(c.env, email, code);
+  if (!otp.ok) {
+    // Never claim the code was sent when Resend rejected it — a silent false
+    // success is exactly how a dead sending domain stays invisible.
+    if (!c.env.RESEND_API_KEY) return jsonError('Email service is not configured. Set RESEND_API_KEY.', 503);
+    return jsonError(`We could not send the verification email: ${otp.error || 'unknown error'}`, 502);
   }
 
   return c.json({
     success: true,
     requiresOtp: true,
-    message: sent
-      ? `Passcode sent to ${email}. Please check your inbox.`
-      : `Passcode generated for ${email}, but delivery is delayed. Please wait a moment.`,
+    message: `Passcode sent to ${email}. Please check your inbox.`,
     emailMode: 'live',
     expiresInSec: OTP_EXPIRY_MS / 1000,
   });
@@ -1302,9 +1303,12 @@ app.post('/api/admin/test-email', async (c) => {
   const targetEmail = sanitizeEmail(body?.email || body?.to);
   if (!targetEmail) return jsonError('Valid target email address is required.');
 
-  const sent = await sendTestEmail(c.env, targetEmail);
-  if (sent) return c.json({ success: true, message: `Test email successfully delivered to ${targetEmail}!` });
-  return jsonError('Failed to dispatch test email. Check RESEND_API_KEY and the verified sender domain.', 500);
+  const result = await sendTestEmail(c.env, targetEmail);
+  if (result.ok) return c.json({ success: true, message: `Test email successfully delivered to ${targetEmail}!` });
+  return jsonError(
+    `Failed to dispatch test email: ${result.error || 'Check RESEND_API_KEY and the verified sender domain.'}`,
+    500,
+  );
 });
 
 /* ---------------------------------------------------------------------------

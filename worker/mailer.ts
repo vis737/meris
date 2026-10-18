@@ -55,16 +55,31 @@ export function resendConfigured(env: Env): boolean {
   return isConfigured(env.RESEND_API_KEY);
 }
 
+/** Outcome of a dispatch attempt. `error` is a human-readable reason on failure. */
+export interface SendResult {
+  ok: boolean;
+  error?: string;
+}
+
 /**
- * Send an email through Resend. Returns true when Resend accepted the message.
- * Also logs the message into the Supabase email_logs table (visible in the
- * admin panel's email log viewer).
+ * Send an email through Resend and report why it failed when it did.
+ *
+ * Resend rejections (unverified sending domain, revoked API key, invalid
+ * recipient) are returned verbatim so the admin test endpoint can surface
+ * them instead of a generic "failed" — they were what hid the last outage.
+ * Every attempt is also logged into the Supabase email_logs table.
  */
-export async function sendEmail(env: Env, to: string, subject: string, html: string, orderNumber = 'SYSTEM'): Promise<boolean> {
+export async function sendEmailDetailed(
+  env: Env,
+  to: string,
+  subject: string,
+  html: string,
+  orderNumber = 'SYSTEM',
+): Promise<SendResult> {
   const recipient = sanitizeEmail(to);
   if (!recipient) {
     console.warn('[Mailer] Invalid recipient email, skipping dispatch.');
-    return false;
+    return { ok: false, error: 'Invalid recipient email address.' };
   }
 
   const record: EmailLogRecord = {
@@ -82,7 +97,7 @@ export async function sendEmail(env: Env, to: string, subject: string, html: str
     console.warn(`[Mailer] RESEND_API_KEY not configured — email to ${recipient} skipped (logged only).`);
     record.status = 'Skipped (no API key)';
     await logEmailToSupabase(env, record);
-    return false;
+    return { ok: false, error: 'RESEND_API_KEY is not configured on the worker.' };
   }
 
   try {
@@ -105,19 +120,26 @@ export async function sendEmail(env: Env, to: string, subject: string, html: str
       console.log(`[Mailer] Email delivered to ${recipient} via Resend (ID: ${data.id}).`);
       record.status = 'Delivered';
       await logEmailToSupabase(env, record);
-      return true;
+      return { ok: true };
     }
 
-    console.warn(`[Mailer] Resend rejected email to ${recipient}:`, data);
-    record.status = `Failed: ${data?.message || response.status}`;
+    const reason = String(data?.message || `Resend returned HTTP ${response.status}`).slice(0, 400);
+    console.warn(`[Mailer] Resend rejected email to ${recipient}:`, reason);
+    record.status = `Failed: ${reason}`;
     await logEmailToSupabase(env, record);
-    return false;
+    return { ok: false, error: reason };
   } catch (err: any) {
+    const reason = `Could not reach the Resend API: ${err?.message || err}`;
     console.error('[Mailer] Resend dispatch exception:', err?.message || err);
     record.status = 'Failed: exception';
     await logEmailToSupabase(env, record);
-    return false;
+    return { ok: false, error: reason.slice(0, 400) };
   }
+}
+
+/** Boolean convenience wrapper around sendEmailDetailed. */
+export async function sendEmail(env: Env, to: string, subject: string, html: string, orderNumber = 'SYSTEM'): Promise<boolean> {
+  return (await sendEmailDetailed(env, to, subject, html, orderNumber)).ok;
 }
 
 /* ---------------------------------------------------------------------------
@@ -161,7 +183,7 @@ function emailShell(subject: string, bodyHtml: string): string {
  * 1. OTP verification code
  * ------------------------------------------------------------------------- */
 
-export async function sendOtpEmail(env: Env, email: string, code: string): Promise<boolean> {
+export async function sendOtpEmail(env: Env, email: string, code: string): Promise<SendResult> {
   const subject = 'Your Meris verification code';
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 520px; margin: 0 auto; padding: 24px; border: 1px solid #e5e7eb; border-radius: 16px;">
@@ -171,7 +193,7 @@ export async function sendOtpEmail(env: Env, email: string, code: string): Promi
       <p style="color: #64748b; font-size: 12px;">If you did not request this code, no action is needed.</p>
     </div>
   `;
-  return sendEmail(env, email, subject, html, 'OTP_LOGIN');
+  return sendEmailDetailed(env, email, subject, html, 'OTP_LOGIN');
 }
 
 /* ---------------------------------------------------------------------------
@@ -528,7 +550,7 @@ export async function sendWelcomeEmail(env: Env, email: string, name: string): P
  * 6. Admin test email
  * ------------------------------------------------------------------------- */
 
-export async function sendTestEmail(env: Env, targetEmail: string): Promise<boolean> {
+export async function sendTestEmail(env: Env, targetEmail: string): Promise<SendResult> {
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px;">
       <h2 style="color: #0f172a; margin-top: 0;">Live Email Dispatch Successful!</h2>
@@ -536,5 +558,5 @@ export async function sendTestEmail(env: Env, targetEmail: string): Promise<bool
       <p style="color: #64748b; font-size: 12px; margin-bottom: 0;">Dispatched at ${new Date().toLocaleString()}</p>
     </div>
   `;
-  return sendEmail(env, targetEmail, 'Meris E-Shop: Live Email Dispatch Test', html, 'ADMIN_TEST');
+  return sendEmailDetailed(env, targetEmail, 'Meris E-Shop: Live Email Dispatch Test', html, 'ADMIN_TEST');
 }
