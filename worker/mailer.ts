@@ -200,7 +200,23 @@ export async function sendOtpEmail(env: Env, email: string, code: string): Promi
  * 2. Customer order confirmation
  * ------------------------------------------------------------------------- */
 
-export async function sendBookingEmail(env: Env, order: any): Promise<EmailLogRecord | null> {
+/**
+ * Order received / order confirmed email for the customer.
+ *
+ * sendBookingEmail is used in two places:
+ *   - immediately after an order is placed              → phase 'received'
+ *     (subject "Order Received"), and
+ *   - after the UPI/instant-QR payment is approved      → phase 'confirmed'
+ *     (subject "Order Confirmed").
+ *
+ * One template serves both events; `phase` selects the subject and the intro
+ * copy so the customer always sees wording that matches the actual event.
+ */
+export async function sendBookingEmail(
+  env: Env,
+  order: any,
+  phase: 'received' | 'confirmed' = 'confirmed',
+): Promise<EmailLogRecord | null> {
   try {
     const recipientEmail = sanitizeEmail(order.customerInfo?.email || order.accountEmail || order.email);
     if (!recipientEmail) {
@@ -209,7 +225,9 @@ export async function sendBookingEmail(env: Env, order: any): Promise<EmailLogRe
     }
     const customerName = sanitizeString(order.customerInfo?.name || order.accountName || order.name || 'Valued Customer', 100);
     const orderNum = order.orderNumber || order.id || 'ORDER';
-    const subject = `Order Confirmation - Meris E-Shop (#${orderNum})`;
+    const subject = phase === 'received'
+      ? `Order Received - Meris E-Shop (#${orderNum})`
+      : `Order Confirmed - Meris E-Shop (#${orderNum})`;
 
     let itemsHtml = '';
     if (order.items && Array.isArray(order.items)) {
@@ -251,7 +269,9 @@ export async function sendBookingEmail(env: Env, order: any): Promise<EmailLogRe
     <div style="padding: 32px 24px 20px 24px;">
       <h2 style="font-size: 18px; color: #0f172a; margin-top: 0; margin-bottom: 12px; font-weight: 600;">Dear ${escapeHtml(customerName)},</h2>
       <p style="font-size: 14px; line-height: 1.6; color: #475569; margin: 0;">
-        Thank you for choosing <strong>Meris E-Shop</strong>. We are thrilled to confirm that your artisanal booking is officially registered under our workshop ledger. Our master craftspeople are preparing your order right now inside our certified cottage works.
+        ${phase === 'received'
+          ? `Thank you for choosing <strong>Meris E-Shop</strong>. We have received your order and it is now registered under our workshop ledger.${(order.paymentMethod || '').toLowerCase().includes('upi') ? ' Our team will verify your instant UPI QR payment shortly and will email you a confirmation as soon as it is approved.' : ' Our master craftspeople will begin preparing your order right away.'}`
+          : `Thank you for choosing <strong>Meris E-Shop</strong>. We are thrilled to confirm that your artisanal booking is officially registered under our workshop ledger. Our master craftspeople are preparing your order right now inside our certified cottage works.`}
       </p>
     </div>
     <div style="padding: 0 24px;">
@@ -448,8 +468,8 @@ export async function sendPaymentEmail(env: Env, order: any, type: 'approved' | 
     const customerName = sanitizeString(order.customerInfo?.name || 'Valued Customer', 100);
     const isApproved = type === 'approved';
     const subject = isApproved
-      ? `Meris E-Shop: Payment Approved - Order #${order.orderNumber}`
-      : `Meris E-Shop: Payment Verification Failed - Order #${order.orderNumber}`;
+      ? `Order Confirmed - Meris E-Shop (#${order.orderNumber})`
+      : `Order Rejected - Meris E-Shop (#${order.orderNumber})`;
 
     const html = emailShell(subject, `
     ${brandHeader(isApproved ? '#10b981' : '#ef4444')}
@@ -463,7 +483,7 @@ export async function sendPaymentEmail(env: Env, order: any, type: 'approved' | 
           Your order has been moved to <strong>Processing</strong> status. Our master artisans have begun handcrafting your items. You will receive another notification once your package is dispatched.
         </p>` : `
         <p style="font-size: 14px; line-height: 1.6; color: #475569; margin: 0;">
-          We regret to inform you that we could not verify your UPI payment for order <strong>#${escapeHtml(order.orderNumber)}</strong>.
+          We regret to inform you that your order <strong>#${escapeHtml(order.orderNumber)}</strong> has been rejected because we could not verify the UPI payment submitted for it.
         </p>
         <div style="background-color: #fef2f2; border-radius: 12px; padding: 16px; margin: 16px 0; border: 1px solid #fee2e2;">
           <p style="font-size: 13px; color: #991b1b; margin: 0; font-weight: bold;">Rejection Reason:</p>

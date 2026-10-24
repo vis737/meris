@@ -923,12 +923,29 @@ app.get('/api/emails', async (c) => {
 
 app.get('/api/orders', async (c) => {
   const admin = await getAdminSession(c.req.raw, c.env);
-  if (!admin) return jsonError('Unauthenticated administrative request.', 401);
+  // Admins get the full ledger. Signed-in customers may fetch only their own
+  // orders by presenting the account email — the same trust model the order
+  // lookup route already uses — so their Orders tab is live across devices.
+  const emailParam = sanitizeEmail(c.req.query('email'));
+  const scopedEmail = emailParam && /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/.test(emailParam) ? emailParam : '';
+  if (!admin && !scopedEmail) return jsonError('Unauthenticated administrative request.', 401);
 
   const supabase = getSupabase(c.env);
   if (!supabase) return jsonError('Supabase is not configured.', 503);
 
-  const { data, error } = await supabase.from('orders').select('*').order('created_at', { ascending: false });
+  if (!admin) {
+    const limit = checkRateLimit(c.req.raw, '/api/orders/my-orders', 60, 15 * 60 * 1000);
+    if (!limit.ok) {
+      c.header('Retry-After', String(limit.retryAfterSec));
+      return jsonError(`Too many requests. Please try again in ${limit.retryAfterSec} seconds.`, 429);
+    }
+  }
+
+  let query = supabase.from('orders').select('*');
+  if (!admin && scopedEmail) {
+    query = query.or(`account_email.eq.${scopedEmail},customer_info->>email.eq.${scopedEmail}`);
+  }
+  const { data, error } = await query.order('created_at', { ascending: false });
   if (error) return jsonError('Failed to read orders database', 500);
   return c.json((data || []).map(mapOrderRow));
 });
@@ -971,6 +988,10 @@ app.post('/api/orders', async (c) => {
   if (!newOrder || !newOrder.orderNumber) return jsonError('Invalid order data.');
 
   newOrder.orderNumber = sanitizeString(newOrder.orderNumber, 30);
+  // orders.id is NOT NULL and doubles as our idempotency key for duplicate
+  // submits: normalise whatever the client sent to a safe charset so a raw
+  // value can never 500 the insert, generating one only when absent.
+  newOrder.id = String(newOrder.id || '').replace(/[^A-Za-z0-9_-]/g, '').slice(0, 64) || 'ord-' + Date.now();
 
   const accountEmail = sanitizeEmail(newOrder.account?.email || newOrder.accountEmail);
   const customerEmail = sanitizeEmail(newOrder.customerInfo?.email);
@@ -997,6 +1018,11 @@ app.post('/api/orders', async (c) => {
   const supabase = getSupabase(c.env);
   if (!supabase) return jsonError('Supabase is not configured.', 503);
 
+  // Detect a re-submit (fetch retry, tracking fallback re-POST) so the
+  // Order Received email is only ever dispatched once per order.
+  const { data: existingOrder } = await supabase.from('orders').select('id').eq('id', newOrder.id).maybeSingle();
+  const isFirstInsert = !existingOrder;
+
   const { error: upsertErr } = await supabase.from('orders').upsert(orderToRow(newOrder));
   if (upsertErr) {
     console.error('[Orders] Upsert failed:', upsertErr.message);
@@ -1004,9 +1030,25 @@ app.post('/api/orders', async (c) => {
   }
   console.log(`[Orders] Registered new secure order: ${newOrder.orderNumber} (Method: ${newOrder.paymentMethod})`);
 
-  // Dispatch confirmation emails via Resend (non-blocking).
-  sendBookingEmail(c.env, newOrder).catch((err) => console.error('[Orders] Booking email failed:', err));
-  sendAdminVendorNotificationEmail(c.env, newOrder).catch((err) => console.error('[Orders] Admin email failed:', err));
+  // Dispatch transactional email via Resend. waitUntil keeps the isolate alive
+  // after this 201 is returned — without it Cloudflare cancels the in-flight
+  // fetch the moment the response ships and the customer never receives the
+  // mail (the "no live mails" bug). First insert only, so client retries and
+  // the tracking re-POST can never duplicate the Order Received email.
+  if (isFirstInsert) {
+    const notify = Promise.all([
+      sendBookingEmail(c.env, newOrder, newOrder.paymentStatus === 'paid' ? 'confirmed' : 'received')
+        .catch((err) => console.error('[Orders] Booking email failed:', err)),
+      sendAdminVendorNotificationEmail(c.env, newOrder)
+        .catch((err) => console.error('[Orders] Admin email failed:', err)),
+    ]);
+    try {
+      c.executionCtx.waitUntil(notify);
+    } catch {
+      // No execution context available — hold the response until mail settles.
+      await notify;
+    }
+  }
 
   return c.json({ success: true, order: newOrder }, 201);
 });
@@ -1103,7 +1145,7 @@ app.put('/api/orders/:orderNumber', async (c) => {
   // Payment-status transition emails via Resend.
   if (oldPaymentStatus === 'pending' && newPaymentStatus === 'paid') {
     try {
-      await sendBookingEmail(c.env, merged);
+      await sendBookingEmail(c.env, merged, 'confirmed');
       await sendAdminVendorNotificationEmail(c.env, merged);
     } catch (emailErr) {
       console.error('[Orders] Confirmation email failed:', emailErr);
@@ -1898,5 +1940,20 @@ app.post('/api/upload-image', async (c) => {
  * ------------------------------------------------------------------------- */
 
 app.all('/api/*', (c) => jsonError('API route not found.', 404));
+
+/* --------------------------------------------------------------------------- */
+/* SPA fallback: any other GET/HEAD is a client-side route or static asset.   */
+/* Delegating to the ASSETS binding lets not_found_handling (single-page-     */
+/* application) return dist/index.html for deep links like /admin, so         */
+/* reloading a client route no longer 404s.                                   */
+/* ------------------------------------------------------------------------- */
+
+app.notFound(async (c) => {
+  const method = c.req.method.toUpperCase();
+  if (method === 'GET' || method === 'HEAD') {
+    return c.env.ASSETS.fetch(c.req.raw);
+  }
+  return jsonError('Not found.', 404);
+});
 
 export default app;

@@ -479,7 +479,11 @@ export default function AccountPanel({
     setTrackingError('');
 
     try {
-      const res = await fetch(`/api/orders/${query}`);
+      // Scope the lookup to the signed-in account so the server accepts it
+      // (the route requires the owner's email) — this is what makes Track Live
+      // hit the database instead of always falling back to local rows.
+      const emailQuery = currentUser?.email ? `?email=${encodeURIComponent(currentUser.email)}` : '';
+      const res = await fetch(`/api/orders/${encodeURIComponent(query)}${emailQuery}`);
       if (res.ok) {
         const backendOrder = await res.json();
         setSearchedOrder(backendOrder);

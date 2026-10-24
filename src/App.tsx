@@ -263,19 +263,30 @@ export default function App() {
   // /api/orders is admin-authenticated, so this has to run again once the
   // session cookie exists — fetching only on mount leaves the table empty
   // whenever the page is loaded before signing in.
-  const syncOrdersFromBackend = async (): Promise<boolean> => {
+  const syncOrdersFromBackend = async (emailHint?: string): Promise<boolean> => {
     try {
-      const res = await fetch('/api/orders', { credentials: 'include' });
-      // 401 simply means "not signed in as admin yet" — expected for shoppers.
+      // Admins (session cookie) receive the full ledger; signed-in customers
+      // scope the query to their own account email so their Orders tab is
+      // live too. Passing '' forces the unauthenticated full-ledger attempt.
+      const email = emailHint !== undefined ? emailHint : (currentUser?.email || '');
+      const url = email ? `/api/orders?email=${encodeURIComponent(email)}` : '/api/orders';
+      const res = await fetch(url, { credentials: 'include' });
+      // 401 = guest with nothing to fetch, or an expired admin session.
       if (!res.ok) return false;
       const backendOrders: Order[] = await res.json();
-      if (!Array.isArray(backendOrders) || backendOrders.length === 0) return true;
+      if (!Array.isArray(backendOrders)) return true;
       setOrders(prev => {
-        // Merge: backend orders + any local-only orders not yet synced
+        // The server is the source of truth on every successful sync: replace
+        // instead of merging, so stale localStorage-only rows left over from
+        // earlier broken deployments can never pollute the admin verification
+        // tab. Locally placed orders from the last day (server save failed)
+        // are kept until they catch up.
         const backendIds = new Set(backendOrders.map(o => o.orderNumber));
-        const localOnly = prev.filter(o => !backendIds.has(o.orderNumber));
-        // Deduplicate: backend wins for status, put newest first
-        return [...localOnly, ...backendOrders].sort(
+        const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+        const recentLocalOnly = prev.filter(
+          o => !backendIds.has(o.orderNumber) && o.date >= yesterday
+        );
+        return [...recentLocalOnly, ...backendOrders].sort(
           (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
         );
       });
@@ -296,8 +307,9 @@ export default function App() {
 
     // Sync orders from backend DB so admin panel always sees all placed orders,
     // even after a page reload or server restart (backend is source of truth).
-    // A non-admin visitor gets 401 here and simply keeps their local orders.
-    void syncOrdersFromBackend();
+    // A guest gets 401 here and simply keeps their local orders; the effect
+    // below re-syncs scoped to the account email once the user materialises.
+    void syncOrdersFromBackend(adminBypassed ? '' : (saved.currentUser?.email));
 
     // Restore the success order screen if the page was reloaded right after checkout
     try {
@@ -472,6 +484,29 @@ export default function App() {
     }, 10 * 60 * 1000);
     return () => clearInterval(keepAlive);
   }, [adminBypassed]);
+
+  // Live orders feed: the admin verification/orders tabs and the customer's
+  // own Orders tab both read this state, so refresh it whenever the signed-in
+  // identity changes and on a slow timer while signed in — previously new
+  // orders and payment verdicts only appeared after a full page reload.
+  const lastSyncedEmailRef = useRef<string | null | undefined>(undefined);
+  useEffect(() => {
+    // A signed-in admin always wants the full ledger; a customer wants only
+    // their own rows; a guest has nothing to fetch (401).
+    const key = adminBypassed ? '__admin__' : (currentUser?.email ?? null);
+    if (lastSyncedEmailRef.current === key) return;
+    lastSyncedEmailRef.current = key;
+    void syncOrdersFromBackend(adminBypassed ? '' : (currentUser?.email ?? undefined));
+  }, [adminBypassed, currentUser?.email]);
+
+  useEffect(() => {
+    if (!adminBypassed && !currentUser) return;
+    const intervalMs = adminBypassed ? 60 * 1000 : 120 * 1000;
+    const poll = setInterval(() => {
+      void syncOrdersFromBackend(adminBypassed ? '' : currentUser?.email);
+    }, intervalMs);
+    return () => clearInterval(poll);
+  }, [adminBypassed, currentUser?.email]);
 
   // Pick hero products whenever catalog finishes loading or updating
   useEffect(() => {
@@ -1865,7 +1900,7 @@ export default function App() {
                   // The AdminDashboard login gate just established the cookie:
                   // start catalog writes and pull orders in immediately.
                   setAdminBypassed(true);
-                  void syncOrdersFromBackend();
+                  void syncOrdersFromBackend('');
                 }}
                 onLogoutAdmin={async () => {
                   try {
@@ -2007,7 +2042,7 @@ export default function App() {
                       setShowAdminLoginPrompt(false);
                       setAdminLoginError('');
                       // The session cookie now exists, so pull every order in.
-                      void syncOrdersFromBackend();
+                      void syncOrdersFromBackend('');
                       handleSwapView('admin');
                       handleLogActivity('Admin Login Successful', 'Secured key keyboard prompt entry authenticated on server.');
                     } else {
